@@ -55,13 +55,6 @@ public class Connection implements IConnection {
 	private Timer timer;
 	
 	/**
-	 * Commutator container
-	 * 
-	 * @author Joris Berthelot <joris.berthelot@gmail.com>
-	 */
-	private AutoCommutator commutator;
-	
-	/**
 	 * Message forwarding between the two connected lines
 	 * 
 	 * @author Joris Berthelot <joris.berthelot@gmail.com>

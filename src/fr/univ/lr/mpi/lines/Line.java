@@ -22,13 +22,6 @@ public class Line implements ILine {
 	private String phoneNumber;
 	
 	/**
-	 * Commutator container
-	 * 
-	 * @author Joris Berthelot <joris.berthelot@gmail.com>
-	 */
-	private AutoCommutator commutator;
-	
-	/**
 	 * Connection container
 	 * 
 	 * @author Joris Berthelot <joris.berthelot@gmail.com>
