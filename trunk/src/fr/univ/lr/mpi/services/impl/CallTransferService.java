@@ -38,8 +38,8 @@ public class CallTransferService implements IService {
 	}
 
 	/**
-	 * @author FAUCHER Tony
 	 * Add a rule about the originalPhoneNumber, "original phone number => new phone number"
+	 * @author FAUCHER Tony
 	 * @param originalPhoneNumber
 	 * @param newPhoneNumber
 	 */
@@ -49,7 +49,7 @@ public class CallTransferService implements IService {
 	}
 	
 	/**
-	 * remove a call transfert rule
+	 * Remove a call transfert rule
 	 * @param originalPhoneNumber
 	 */
 	public void removeTransferCallRule(String originalPhoneNumber)

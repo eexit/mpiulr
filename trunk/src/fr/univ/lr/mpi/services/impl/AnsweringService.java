@@ -18,16 +18,16 @@ public class AnsweringService implements IService {
 
 	// constructor
 	/**
-	 * @author FAUCHER Tony constructor of an Answering Service
+ 	 *  Constructor of an Answering Service
 	 */
 	public AnsweringService() {
 		this.messages = new ArrayList<AnsweringMachineMessage>();
 	}
 
-	// méthodes
+	// mÃ©thodes
 
 	/**
-	 * @author FAUCHER Tony Add an Answering Machine Message
+	 * Add an Answering Machine Message
 	 * @param AnsweringMachineMessage
 	 * 
 	 */
@@ -36,7 +36,7 @@ public class AnsweringService implements IService {
 	}
 
 	/**
-	 * @author FAUCHER Tony return the list of the answering machine message
+	 * Return the list of the answering machine message
 	 * @return message list
 	 */
 	public List<AnsweringMachineMessage> getMessages() {

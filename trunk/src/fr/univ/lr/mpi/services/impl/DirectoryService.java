@@ -18,14 +18,13 @@ public class DirectoryService implements IService {
 	/**
 	 * Constructor
 	 * 
-	 * @author FAUCHER Tony
 	 */
 	public DirectoryService() {
 		this.directory = new ArrayList<String>();
 	}
 
 	/**
-	 * @author FAUCHER Tony Add a phone number in the directory
+	 * Add a phone number in the directory
 	 * @param phoneNumber
 	 */
 	public void addPhoneNumber(String phoneNumber) {
@@ -33,7 +32,6 @@ public class DirectoryService implements IService {
 	}
 
 	/**
-	 * @author FAUCHER Tony
 	 * @param phoneNumber
 	 * @return if the phone number is in the directory or not
 	 */
