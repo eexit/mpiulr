@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import fr.univ.lr.mpi.exchanges.IEvent;
 import fr.univ.lr.mpi.services.IService;
 
 /**
@@ -38,5 +39,10 @@ public class BillingService implements IService {
 			Date date, double duration) {
 		this.entries.add(new BillingEntry(callerPhoneNumber,
 				recipientPhoneNumber, date, duration));
+	}
+
+	@Override
+	public void receiveEvent(IEvent event) {
+		// TODO Auto-generated method stub
 	}
 }

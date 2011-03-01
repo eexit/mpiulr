@@ -1,5 +1,11 @@
 package fr.univ.lr.mpi.services;
 
-public interface IService {
+import fr.univ.lr.mpi.handlers.EventHandler;
+
+/**
+ * @author Elian ORIOU <elian.oriou@gmail.com>
+ */
+
+public interface IService extends EventHandler {
 
 }

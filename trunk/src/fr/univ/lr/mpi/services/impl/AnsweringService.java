@@ -3,6 +3,7 @@ package fr.univ.lr.mpi.services.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.univ.lr.mpi.exchanges.IEvent;
 import fr.univ.lr.mpi.services.IService;
 
 /**
@@ -18,7 +19,7 @@ public class AnsweringService implements IService {
 
 	// constructor
 	/**
- 	 *  Constructor of an Answering Service
+	 * Constructor of an Answering Service
 	 */
 	public AnsweringService() {
 		this.messages = new ArrayList<AnsweringMachineMessage>();
@@ -28,6 +29,7 @@ public class AnsweringService implements IService {
 
 	/**
 	 * Add an Answering Machine Message
+	 * 
 	 * @param AnsweringMachineMessage
 	 * 
 	 */
@@ -37,10 +39,16 @@ public class AnsweringService implements IService {
 
 	/**
 	 * Return the list of the answering machine message
+	 * 
 	 * @return message list
 	 */
 	public List<AnsweringMachineMessage> getMessages() {
 		return this.messages;
 	}
 
+	@Override
+	public void receiveEvent(IEvent event) {
+		// TODO Auto-generated method stub
+
+	}
 }
