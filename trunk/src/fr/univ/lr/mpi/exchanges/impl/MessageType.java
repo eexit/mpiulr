@@ -48,6 +48,11 @@ public enum MessageType {
 	VOICE_EXCHANGE,
 	/**
 	 * When the caller OR the recipient hang up their phones
+	 * new connection is refused
 	 */
-	HANGUP;
+	HANGUP,
+	/**
+	 * When too many connections have been established on the AutoCommutator, a
+	 */
+	TOO_MANY_CONNECTIONS;
 }

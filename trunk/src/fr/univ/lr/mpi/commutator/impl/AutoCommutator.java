@@ -58,8 +58,6 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 		return INSTANCE;
 	}
 
-	/* Private Methods */
-
 	/**
 	 * Instantiates a new connection thread and pull it into the pool of threads
 	 * 
@@ -68,13 +66,12 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 	 */
 
 	private void launchConnection(String callerPhoneNumber) {
-		/* TODO new Connection(); */
-		IConnection connection = new Connection();
-		connections.add(connection);
+		//IConnection connection = new Connection(callerPhoneNumber);
+		//connections.add(connection);
 	}
 
 	/**
-	 * Returns a line that corresponds the phone number
+	 * Returns a phone line that corresponds to the phone number
 	 * 
 	 * @param phoneNumber
 	 *            the line phone number
@@ -88,8 +85,6 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 		}
 		return null;
 	}
-
-	/* Public Methods */
 
 	/**
 	 * Returns the number of active connections (it must not exceed the
@@ -221,7 +216,6 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 	@Override
 	public void receiveMessage(IMessage message) {
 		String callerPhoneNumber = message.getCallerPhoneNumber();
-		// String recipientPhoneNumber = message.getRecipientPhoneNumber();
 
 		switch (message.getMessageType()) {
 		case PICKUP:
@@ -230,27 +224,16 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 			if (callerPhoneNumber == null) {
 				return;
 			}
+			/* If too many connections have been established */
+			if (connections.size() > MAX_CONNECTIONS) {
+				getLine(callerPhoneNumber).receiveMessage(
+						new Message(MessageType.TOO_MANY_CONNECTIONS, null,
+								null));
+			}
+			launchConnection(callerPhoneNumber);
 			getLine(callerPhoneNumber).receiveMessage(
 					new Message(MessageType.BACKTONE, null, null));
 			break;
-		/* Reserved for Connection */
-		// case NUMBERING:
-		// // When numbering from caller => check phone number to directory
-		// if (callerPhoneNumber == null || recipientPhoneNumber == null) {
-		// return;
-		// }
-		// IEvent e = new Event(EventType.PHONE_NUMBER_REQUEST);
-		// e.addAttributes(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER,
-		// recipientPhoneNumber);
-		// sendEvent(e);
-		// // Send search signal to the caller
-		// getLine(callerPhoneNumber).receiveMessage(
-		// new Message(MessageType.SEARCH, null, null));
-		// break;
-		// case VOICE_EXCHANGE:
-		// break;
-		// case HANGUP:
-		// break;
 		default:
 			break;
 		}
