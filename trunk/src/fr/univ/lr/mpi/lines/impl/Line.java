@@ -82,7 +82,7 @@ public class Line implements ILine {
 	 * @param message
 	 */
 	public void receiveMessage(IMessage message) {
-
+		System.out.println(message);
 	}
 
 	/**
