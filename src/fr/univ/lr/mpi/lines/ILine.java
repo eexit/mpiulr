@@ -38,14 +38,6 @@ public interface ILine extends MessageHandler {
 	public LineState getState();
 	
 	/**
-	 * Sets the line current state
-	 * 
-	 * @author Joris Berthelot <joris.berthelot@gmail.com>
-	 * @param state
-	 */
-	public void setState(LineState state);
-	
-	/**
 	 * Line pick up action:
 	 * 
 	 * @author Joris Berthelot <joris.berthelot@gmail.com>
