@@ -27,7 +27,7 @@ public class LineTest {
 	}
 
 	/**
-	 * Test method for {@link fr.univ.lr.mpi.lines.Line#getPhoneNumber()}.
+	 * Test method for {@link fr.univ.lr.mpi.lines.impl.Line#getPhoneNumber()}.
 	 */
 	@Test
 	public void testGetPhoneNumber() {
@@ -35,7 +35,7 @@ public class LineTest {
 	}
 
 	/**
-	 * Test method for {@link fr.univ.lr.mpi.lines.Line#setConnection(fr.univ.lr.mpi.commutator.IConnection)}.
+	 * Test method for {@link fr.univ.lr.mpi.lines.impl.Line#setConnection(fr.univ.lr.mpi.commutator.IConnection)}.
 	 */
 	@Test
 	public void testSetConnection() {
@@ -43,7 +43,7 @@ public class LineTest {
 	}
 
 	/**
-	 * Test method for {@link fr.univ.lr.mpi.lines.Line#getLineState()}.
+	 * Test method for {@link fr.univ.lr.mpi.lines.impl.Line#getLineState()}.
 	 */
 	@Test
 	public void testGetLineState() {
@@ -51,7 +51,7 @@ public class LineTest {
 	}
 
 	/**
-	 * Test method for {@link fr.univ.lr.mpi.lines.Line#setState(fr.univ.lr.mpi.lines.LineState)}.
+	 * Test method for {@link fr.univ.lr.mpi.lines.impl.Line#setState(fr.univ.lr.mpi.lines.LineState)}.
 	 */
 	@Test
 	public void testSetState() {
@@ -59,7 +59,7 @@ public class LineTest {
 	}
 
 	/**
-	 * Test method for {@link fr.univ.lr.mpi.lines.Line#receiveMessage(fr.univ.lr.mpi.exchanges.IMessage)}.
+	 * Test method for {@link fr.univ.lr.mpi.lines.impl.Line#receiveMessage(fr.univ.lr.mpi.exchanges.IMessage)}.
 	 */
 	@Test
 	public void testReceiveMessage() {
@@ -67,7 +67,7 @@ public class LineTest {
 	}
 
 	/**
-	 * Test method for {@link fr.univ.lr.mpi.lines.Line#pickUp()}.
+	 * Test method for {@link fr.univ.lr.mpi.lines.impl.Line#pickUp()}.
 	 */
 	@Test
 	public void testPickUp() {
@@ -75,7 +75,7 @@ public class LineTest {
 	}
 
 	/**
-	 * Test method for {@link fr.univ.lr.mpi.lines.Line#hangUp()}.
+	 * Test method for {@link fr.univ.lr.mpi.lines.impl.Line#hangUp()}.
 	 */
 	@Test
 	public void testHangUp() {
@@ -83,7 +83,7 @@ public class LineTest {
 	}
 
 	/**
-	 * Test method for {@link fr.univ.lr.mpi.lines.Line#dialTo(java.lang.String)}.
+	 * Test method for {@link fr.univ.lr.mpi.lines.impl.Line#dialTo(java.lang.String)}.
 	 */
 	@Test
 	public void testDialTo() {
