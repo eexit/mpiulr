@@ -1,5 +1,5 @@
 package fr.univ.lr.mpi.services;
 
-public class CalledTransferService {
+public class DirectoryService {
 
 }
