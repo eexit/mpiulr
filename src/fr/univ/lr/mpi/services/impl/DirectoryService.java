@@ -1,5 +1,5 @@
 package fr.univ.lr.mpi.services.impl;
 
-public interface IService {
+public class DirectoryService {
 
 }

@@ -1,4 +1,4 @@
-package fr.univ.lr.mpi.services;
+package fr.univ.lr.mpi.services.impl;
 
 public class CallTransferService {
 
