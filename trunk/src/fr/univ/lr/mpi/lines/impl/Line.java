@@ -2,6 +2,7 @@ package fr.univ.lr.mpi.lines.impl;
 
 import fr.univ.lr.mpi.commutator.IConnection;
 import fr.univ.lr.mpi.exchanges.IMessage;
+import fr.univ.lr.mpi.exchanges.impl.PhoneNumberValidator;
 import fr.univ.lr.mpi.lines.ILine;
 import fr.univ.lr.mpi.lines.LineState;
 
@@ -43,7 +44,11 @@ public class Line implements ILine {
 	 * @param number
 	 */
 	public Line(String number) {
+		if (false == PhoneNumberValidator.isValid(number)) {
+			return;
+		}
 		this.phoneNumber = number;
+		this.state = LineState.FREE;
 	}
 
 	/**
@@ -64,17 +69,7 @@ public class Line implements ILine {
 	 */
 	public void setConnection(IConnection connection) {
 		this.connection = connection;
-		this.setState(LineState.BUSY);
-	}
-	
-	/**
-	 * Sets the line current state
-	 * 
-	 * @author Joris Berthelot <joris.berthelot@gmail.com>
-	 * @param state
-	 */
-	public void setState(LineState state) {
-		
+		this.state = LineState.BUSY;
 	}
 	
 	/**
@@ -93,7 +88,7 @@ public class Line implements ILine {
 	 * @author Joris Berthelot <joris.berthelot@gmail.com>
 	 */
 	public void pickUp() {
-		
+		this.state = LineState.BUSY;
 	}
 	
 	/**
@@ -102,7 +97,7 @@ public class Line implements ILine {
 	 * @author Joris Berthelot <joris.berthelot@gmail.com>
 	 */
 	public void hangUp() {
-		
+		this.state = LineState.FREE;
 	}
 	
 	/**
@@ -122,6 +117,6 @@ public class Line implements ILine {
 	 * @return
 	 */
 	public LineState getState() {
-		return null;
+		return this.state;
 	}
 }
