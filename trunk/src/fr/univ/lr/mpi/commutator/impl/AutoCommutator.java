@@ -6,6 +6,9 @@ import java.util.List;
 import fr.univ.lr.mpi.commutator.IConnection;
 import fr.univ.lr.mpi.exchanges.IEvent;
 import fr.univ.lr.mpi.exchanges.IMessage;
+import fr.univ.lr.mpi.exchanges.impl.Event;
+import fr.univ.lr.mpi.exchanges.impl.EventType;
+import fr.univ.lr.mpi.exchanges.impl.ExchangeAttributeNames;
 import fr.univ.lr.mpi.handlers.EventHandler;
 import fr.univ.lr.mpi.handlers.MessageHandler;
 import fr.univ.lr.mpi.lines.ILine;
@@ -53,6 +56,20 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 		return INSTANCE;
 	}
 
+	/* Private Methods */
+
+	/**
+	 * Instantiates a new connection thread and pull it into the pool of threads
+	 */
+
+	private void launchConnection(String callPhoneNumber) {
+		/* new Connection(); */
+		IConnection connection = new Connection();
+		connections.add(connection);
+	}
+
+	/* Public Methods */
+
 	/**
 	 * Returns the number of active connections (it must not exceed the
 	 * MAX_CONNECTIONS)
@@ -94,6 +111,10 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 	 */
 
 	public void registerLine(ILine line) {
+		IEvent event = new Event(EventType.LINE_CREATION);
+		event.addAttributes(ExchangeAttributeNames.CALLER_PHONE_NUMER, line
+				.getPhoneNumber());
+		this.sendEvent(event);
 		this.lines.add(line);
 	}
 
@@ -105,6 +126,10 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 	 */
 
 	public void unregisterLine(ILine line) {
+		IEvent event = new Event(EventType.LINE_DELETION);
+		event.addAttributes(ExchangeAttributeNames.CALLER_PHONE_NUMER, line
+				.getPhoneNumber());
+		this.sendEvent(event);
 		this.lines.remove(line);
 	}
 
@@ -130,7 +155,14 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 
 	@Override
 	public void receiveEvent(IEvent event) {
-
+		switch (event.getEventType()) {
+		case CONNECTION_ESTABLISHED:
+			break;
+		case CONNECTION_CLOSED:
+			break;
+		case PHONE_NUMBER_REQUEST:
+			break;
+		}
 	}
 
 	/**
@@ -142,6 +174,25 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 
 	@Override
 	public void receiveMessage(IMessage message) {
-
+		switch (message.getMessageType()) {
+		case PICKUP:
+			break;
+		case BACKTONE:
+			break;
+		case NUMEROTATION:
+			break;
+		case SEARCH:
+			break;
+		case RING:
+			break;
+		case ECHO:
+			break;
+		case VOICE_EXCHANGE:
+			break;
+		case HANGUP:
+			break;
+		default:
+			break;
+		}
 	}
 }
