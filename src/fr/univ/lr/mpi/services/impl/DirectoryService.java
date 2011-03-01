@@ -35,7 +35,7 @@ public class DirectoryService implements IService {
 	 * @param phoneNumber
 	 * @return if the phone number is in the directory or not
 	 */
-	public boolean isExisting(String phoneNumber) {
+	public boolean exist(String phoneNumber) {
 		boolean exist = false;
 		for (int i = 0; i < this.directory.size() && !exist; i++) {
 			if (phoneNumber.equals(this.directory.get(i))) {
