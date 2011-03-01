@@ -67,7 +67,8 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 
 	private void launchConnection(String callerPhoneNumber) {
 		// IConnection connection = new Connection(callerPhoneNumber);
-		// connections.add(connection);
+		connections.add(new Connection());
+		//FIXME
 	}
 
 	/**
@@ -215,9 +216,9 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 
 	@Override
 	public synchronized void receiveMessage(IMessage message) {
-		// FOR TEST ONLY
+		// FIXME FOR TEST ONLY
 		System.out.println(message);
-
+	
 		String callerPhoneNumber = message.getCallerPhoneNumber();
 
 		switch (message.getMessageType()) {

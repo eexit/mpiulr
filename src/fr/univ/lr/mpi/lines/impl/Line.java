@@ -91,7 +91,7 @@ public class Line implements ILine {
 	 * @author Joris Berthelot <joris.berthelot@gmail.com>
 	 */
 	public void pickUp() {
-		if (!this.state.equals(LineState.FREE)) {
+		if (this.state != null && !this.state.equals(LineState.FREE)) {
 			return;
 		}
 		this.state = LineState.BUSY;
