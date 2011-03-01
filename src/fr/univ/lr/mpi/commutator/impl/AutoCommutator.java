@@ -1,5 +1,6 @@
 package fr.univ.lr.mpi.commutator.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import fr.univ.lr.mpi.commutator.IConnection;
@@ -11,11 +12,16 @@ import fr.univ.lr.mpi.lines.ILine;
 import fr.univ.lr.mpi.services.IService;
 
 /**
+ * The AutoCommunicator Object, the central point of communications between
+ * lines
  * 
- * @author Elian ORIOU
- * 
+ * @version 1.0
+ * @author Elian ORIOU <elian.oriou@gmail.com>
  */
+
 public class AutoCommutator implements MessageHandler, EventHandler {
+
+	private static AutoCommutator INSTANCE;
 
 	private static final int MAX_CONNECTIONS = 10;
 
@@ -23,40 +29,111 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 	private List<ILine> lines;
 	private List<IService> services;
 
-	private int getActiveConnections() {
-		return -1;
+	private AutoCommutator() {
+		this.connections = new ArrayList<IConnection>();
+		this.lines = new ArrayList<ILine>();
+		this.services = new ArrayList<IService>();
 	}
 
-	private void registerService(IService service) {
+	/**
+	 * Singleton Pattern Method
+	 * 
+	 * @return the current instance (with static access)
+	 */
 
+	public static AutoCommutator getInstance() {
+		if (INSTANCE == null) {
+			INSTANCE = new AutoCommutator();
+		}
+		return INSTANCE;
 	}
 
-	private void unregisterEvent(IService service) {
+	/**
+	 * Returns the number of active connections (it must not exceed the
+	 * MAX_CONNECTIONS)
+	 * 
+	 * @return The active number of connections
+	 */
 
+	public int getActiveConnections() {
+		return this.connections.size();
 	}
 
-	private void registerLine(ILine line) {
+	/**
+	 * Registers a service into the service pool
+	 * 
+	 * @param service
+	 *            The service to register
+	 */
 
+	public void registerService(IService service) {
+		this.services.add(service);
 	}
 
-	private void unregisterLine(ILine line) {
+	/**
+	 * Unregisters a service from the service pool
+	 * 
+	 * @param service
+	 *            The service to unregister
+	 */
 
+	public void unregisterService(IService service) {
+		this.services.remove(service);
 	}
+
+	/**
+	 * Registers a phone line
+	 * 
+	 * @param line
+	 *            The new phone line
+	 */
+
+	public void registerLine(ILine line) {
+		this.lines.add(line);
+	}
+
+	/**
+	 * Unregisters a phone line
+	 * 
+	 * @param line
+	 *            The service to unregister
+	 */
+
+	public void unregisterLine(ILine line) {
+		this.lines.remove(line);
+	}
+
+	/**
+	 * Send an event to all registered services
+	 * 
+	 * @param event
+	 *            The event to be sent
+	 */
+
+	public void sendEvent(IEvent event) {
+		for (IService service : this.services) {
+			service.receiveEvent(event);
+		}
+	}
+
+	/**
+	 * Receives an event from all registered service
+	 * 
+	 * @param event
+	 *            The received event
+	 */
 
 	@Override
 	public void receiveEvent(IEvent event) {
-		// TODO Auto-generated method stub
 
 	}
 
-	private void sendEvent(IEvent event) {
-
-	}
+	/**
+	 * 
+	 */
 
 	@Override
 	public void receiveMessage(IMessage message) {
-		// TODO Auto-generated method stub
 
 	}
-
 }

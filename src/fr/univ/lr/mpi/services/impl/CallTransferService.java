@@ -3,12 +3,14 @@ package fr.univ.lr.mpi.services.impl;
 import java.util.HashMap;
 import java.util.Map;
 
+import fr.univ.lr.mpi.exchanges.IEvent;
 import fr.univ.lr.mpi.services.IService;
 
 /**
  * Call Transfert Service
+ * 
  * @author FAUCHER Tony
- *
+ * 
  */
 public class CallTransferService implements IService {
 
@@ -38,7 +40,9 @@ public class CallTransferService implements IService {
 	}
 
 	/**
-	 * Add a rule about the originalPhoneNumber, "original phone number => new phone number"
+	 * Add a rule about the originalPhoneNumber,
+	 * "original phone number => new phone number"
+	 * 
 	 * @author FAUCHER Tony
 	 * @param originalPhoneNumber
 	 * @param newPhoneNumber
@@ -47,17 +51,20 @@ public class CallTransferService implements IService {
 			String newPhoneNumber) {
 		this.transferRulesTables.put(originalPhoneNumber, newPhoneNumber);
 	}
-	
+
 	/**
 	 * Remove a call transfert rule
+	 * 
 	 * @param originalPhoneNumber
 	 */
-	public void removeTransferCallRule(String originalPhoneNumber)
-	{
-		if(this.transferRulesTables.containsKey(originalPhoneNumber)){
+	public void removeTransferCallRule(String originalPhoneNumber) {
+		if (this.transferRulesTables.containsKey(originalPhoneNumber)) {
 			this.transferRulesTables.remove(originalPhoneNumber);
 		}
-		
 	}
 
+	@Override
+	public void receiveEvent(IEvent event) {
+		// TODO Auto-generated method stub
+	}
 }

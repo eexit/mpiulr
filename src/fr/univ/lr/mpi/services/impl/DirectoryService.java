@@ -3,6 +3,7 @@ package fr.univ.lr.mpi.services.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.univ.lr.mpi.exchanges.IEvent;
 import fr.univ.lr.mpi.services.IService;
 
 /**
@@ -25,6 +26,7 @@ public class DirectoryService implements IService {
 
 	/**
 	 * Add a phone number in the directory
+	 * 
 	 * @param phoneNumber
 	 */
 	public void addPhoneNumber(String phoneNumber) {
@@ -43,5 +45,10 @@ public class DirectoryService implements IService {
 			}
 		}
 		return exist;
+	}
+
+	@Override
+	public void receiveEvent(IEvent event) {
+		// TODO Auto-generated method stub
 	}
 }
