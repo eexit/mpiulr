@@ -1,4 +1,6 @@
-package fr.univ.lr.mpi.exchanges;
+package fr.univ.lr.mpi.exchanges.impl;
+
+import fr.univ.lr.mpi.exchanges.IMessage;
 
 public class Message implements IMessage {
 

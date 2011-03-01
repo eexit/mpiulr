@@ -1,4 +1,4 @@
-package fr.univ.lr.mpi;
+package fr.univ.lr.mpi.handlers;
 
 public interface EventHandler {
 

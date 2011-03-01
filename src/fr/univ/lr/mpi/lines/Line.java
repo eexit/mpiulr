@@ -1,4 +1,4 @@
-package fr.univ.lr.mpi;
+package fr.univ.lr.mpi.lines;
 
 public class Line implements ILine{
 
