@@ -23,16 +23,21 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 
 	private static AutoCommutator INSTANCE;
 
-	private static final int MAX_CONNECTIONS = 10;
+	private int MAX_CONNECTIONS;
 
 	private List<IConnection> connections;
 	private List<ILine> lines;
 	private List<IService> services;
 
 	private AutoCommutator() {
+		this(10);
+	}
+
+	private AutoCommutator(int maxConnections) {
 		this.connections = new ArrayList<IConnection>();
 		this.lines = new ArrayList<ILine>();
 		this.services = new ArrayList<IService>();
+		this.MAX_CONNECTIONS = maxConnections;
 	}
 
 	/**
@@ -129,7 +134,10 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 	}
 
 	/**
+	 * Receives a message from lines
 	 * 
+	 * @param message
+	 *            The message sent by lines
 	 */
 
 	@Override
