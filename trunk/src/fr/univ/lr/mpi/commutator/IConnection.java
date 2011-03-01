@@ -1,4 +1,4 @@
-package fr.univ.lr.mpi;
+package fr.univ.lr.mpi.commutator;
 
 public interface IConnection {
 
