@@ -4,6 +4,7 @@ import java.util.List;
 
 import fr.univ.lr.mpi.commutator.IConnection;
 import fr.univ.lr.mpi.exchanges.IEvent;
+import fr.univ.lr.mpi.exchanges.IMessage;
 import fr.univ.lr.mpi.handlers.EventHandler;
 import fr.univ.lr.mpi.handlers.MessageHandler;
 import fr.univ.lr.mpi.lines.ILine;
@@ -27,7 +28,7 @@ public class AutoCommutator implements MessageHandler, EventHandler{
 		
 	}
 	@Override
-	public void receiveMessage() {
+	public void receiveMessage(IMessage message) {
 		// TODO Auto-generated method stub
 		
 	}
