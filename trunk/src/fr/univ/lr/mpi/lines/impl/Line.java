@@ -1,7 +1,6 @@
 package fr.univ.lr.mpi.lines.impl;
 
 import fr.univ.lr.mpi.commutator.IConnection;
-import fr.univ.lr.mpi.commutator.impl.AutoCommutator;
 import fr.univ.lr.mpi.exchanges.IMessage;
 import fr.univ.lr.mpi.lines.ILine;
 
@@ -37,6 +36,16 @@ public class Line implements ILine {
 	private LineState state;
 	
 	/**
+	 * Line contructor
+	 * 
+	 * @author Joris Berthelot <joris.berthelot@gmail.com>
+	 * @param number
+	 */
+	public Line(String number) {
+		this.phoneNumber = number;
+	}
+
+	/**
 	 * Gets the line phone number
 	 * 
 	 * @author Joris Berthelot <joris.berthelot@gmail.com>
@@ -53,7 +62,8 @@ public class Line implements ILine {
 	 * @param connection
 	 */
 	public void setConnection(IConnection connection) {
-		
+		this.connection = connection;
+		this.setState(LineState.)
 	}
 	
 	/**
