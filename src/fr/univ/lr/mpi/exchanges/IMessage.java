@@ -6,6 +6,7 @@ import fr.univ.lr.mpi.exchanges.impl.MessageType;
  * @author Tony FAUCHER
  */
 public interface IMessage {
+	
 	/**
 	 * Gets the message type
 	 * 
