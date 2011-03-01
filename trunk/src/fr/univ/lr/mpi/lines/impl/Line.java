@@ -1,7 +1,10 @@
 package fr.univ.lr.mpi.lines.impl;
 
 import fr.univ.lr.mpi.commutator.IConnection;
+import fr.univ.lr.mpi.commutator.impl.AutoCommutator;
 import fr.univ.lr.mpi.exchanges.IMessage;
+import fr.univ.lr.mpi.exchanges.impl.Message;
+import fr.univ.lr.mpi.exchanges.impl.MessageType;
 import fr.univ.lr.mpi.exchanges.impl.PhoneNumberValidator;
 import fr.univ.lr.mpi.lines.ILine;
 import fr.univ.lr.mpi.lines.LineState;
@@ -9,34 +12,34 @@ import fr.univ.lr.mpi.lines.LineState;
 /**
  * 
  * MPI_PROJECT/fr.univ.lr.mpi.lines/Line.java
- *
+ * 
  * @author Joris Berthelot <joris.berthelot@gmail.com>
  * @date Mar 1, 2011
- *
+ * 
  */
 public class Line implements ILine {
-	
+
 	/**
 	 * Phone number assigned to the line
 	 * 
 	 * @author Joris Berthelot <joris.berthelot@gmail.com>
 	 */
 	private String phoneNumber;
-	
+
 	/**
 	 * Connection container
 	 * 
 	 * @author Joris Berthelot <joris.berthelot@gmail.com>
 	 */
 	private IConnection connection;
-	
+
 	/**
 	 * Line current state
 	 * 
 	 * @author Joris Berthelot <joris.berthelot@gmail.com>
 	 */
 	private LineState state;
-	
+
 	/**
 	 * Line contructor
 	 * 
@@ -60,7 +63,7 @@ public class Line implements ILine {
 	public String getPhoneNumber() {
 		return this.phoneNumber;
 	}
-	
+
 	/**
 	 * Sets a new connection to the line
 	 * 
@@ -71,7 +74,7 @@ public class Line implements ILine {
 		this.connection = connection;
 		this.state = LineState.BUSY;
 	}
-	
+
 	/**
 	 * Message receiver of commutator
 	 * 
@@ -79,18 +82,23 @@ public class Line implements ILine {
 	 * @param message
 	 */
 	public void receiveMessage(IMessage message) {
-		
+
 	}
-	
+
 	/**
 	 * Line pick up action:
 	 * 
 	 * @author Joris Berthelot <joris.berthelot@gmail.com>
 	 */
 	public void pickUp() {
+		if (!this.state.equals(LineState.FREE)) {
+			return;
+		}
 		this.state = LineState.BUSY;
+		AutoCommutator.getInstance().receiveMessage(
+				new Message(MessageType.PICKUP, this.phoneNumber, null));
 	}
-	
+
 	/**
 	 * Line hang up action
 	 * 
@@ -98,8 +106,10 @@ public class Line implements ILine {
 	 */
 	public void hangUp() {
 		this.state = LineState.FREE;
+		AutoCommutator.getInstance().receiveMessage(
+				new Message(MessageType.HANGUP, this.phoneNumber, null));
 	}
-	
+
 	/**
 	 * Dial action
 	 * 
@@ -107,7 +117,11 @@ public class Line implements ILine {
 	 * @param phoneNumber
 	 */
 	public void dialTo(String phoneNumber) {
-		
+		if (!this.state.equals(LineState.BUSY)) {
+			return;
+		}
+		AutoCommutator.getInstance().receiveMessage(
+				new Message(MessageType.HANGUP, this.phoneNumber, null));
 	}
 
 	/**

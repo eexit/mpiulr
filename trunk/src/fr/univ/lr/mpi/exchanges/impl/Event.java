@@ -4,10 +4,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import fr.univ.lr.mpi.exchanges.IEvent;
+
 /**
  * Event Class
+ * 
  * @author FAUCHER Tony
- *
+ * 
  */
 public class Event implements IEvent {
 
@@ -50,17 +52,19 @@ public class Event implements IEvent {
 	public Map<String, String> getAttributes() {
 		return attributes;
 	}
-	
-	
+
 	/**
 	 * 
 	 * @param attributeName
 	 * @param attributeValue
 	 */
-	public void addAttributes(String attributeName, String attributeValue)
-	{
+	public void addAttributes(String attributeName, String attributeValue) {
 		this.attributes.put(attributeName, attributeName);
 	}
 
+	@Override
+	public String toString() {
+		return "Event [attributes=" + attributes + ", type=" + type + "]";
+	}
 
 }

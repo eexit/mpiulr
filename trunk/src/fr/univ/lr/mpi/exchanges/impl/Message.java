@@ -5,12 +5,12 @@ import fr.univ.lr.mpi.exchanges.IMessage;
 /**
  * 
  * @author FAUCHER Tony
- *
+ * 
  */
 public class Message implements IMessage {
 
 	// attributs
-	private MessageType type; 
+	private MessageType type;
 	private String callerPhoneNumber;
 	private String recipientPhoneNumber;
 
@@ -22,16 +22,15 @@ public class Message implements IMessage {
 		this.recipientPhoneNumber = recipientPhoneNumber;
 	}
 
-
 	// getter and setter
 
 	/**
 	 * @return the message type
 	 */
-	public MessageType getMessageType(){
+	public MessageType getMessageType() {
 		return this.type;
 	}
-	
+
 	// called phone number
 	/**
 	 * @return caller phone number
@@ -48,5 +47,11 @@ public class Message implements IMessage {
 		return recipientPhoneNumber;
 	}
 
+	@Override
+	public String toString() {
+		return "Message [callerPhoneNumber=" + callerPhoneNumber
+				+ ", recipientPhoneNumber=" + recipientPhoneNumber + ", type="
+				+ type + "]";
+	}
 
 }

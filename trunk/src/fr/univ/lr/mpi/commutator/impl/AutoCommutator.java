@@ -170,7 +170,7 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 	 */
 
 	@Override
-	public void receiveEvent(IEvent event) {
+	public synchronized void receiveEvent(IEvent event) {
 
 		switch (event.getEventType()) {
 		/* In the case of a Directory Service Response */
@@ -214,7 +214,11 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 	 */
 
 	@Override
-	public void receiveMessage(IMessage message) {
+	public synchronized void receiveMessage(IMessage message) {
+		
+		//FOR TEST ONLY
+		System.out.println(message);
+		
 		String callerPhoneNumber = message.getCallerPhoneNumber();
 
 		switch (message.getMessageType()) {
