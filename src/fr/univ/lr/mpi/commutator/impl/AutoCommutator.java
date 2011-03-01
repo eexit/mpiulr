@@ -66,8 +66,8 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 	 */
 
 	private void launchConnection(String callerPhoneNumber) {
-		//IConnection connection = new Connection(callerPhoneNumber);
-		//connections.add(connection);
+		// IConnection connection = new Connection(callerPhoneNumber);
+		// connections.add(connection);
 	}
 
 	/**
@@ -215,10 +215,9 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 
 	@Override
 	public synchronized void receiveMessage(IMessage message) {
-		
-		//FOR TEST ONLY
+		// FOR TEST ONLY
 		System.out.println(message);
-		
+
 		String callerPhoneNumber = message.getCallerPhoneNumber();
 
 		switch (message.getMessageType()) {
@@ -231,12 +230,12 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 			/* If too many connections have been established */
 			if (connections.size() > MAX_CONNECTIONS) {
 				getLine(callerPhoneNumber).receiveMessage(
-						new Message(MessageType.TOO_MANY_CONNECTIONS, null,
-								null));
+						new Message(MessageType.TOO_MANY_CONNECTIONS,
+								callerPhoneNumber, null));
 			}
 			launchConnection(callerPhoneNumber);
 			getLine(callerPhoneNumber).receiveMessage(
-					new Message(MessageType.BACKTONE, null, null));
+					new Message(MessageType.BACKTONE, callerPhoneNumber, null));
 			break;
 		default:
 			break;
