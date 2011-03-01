@@ -14,6 +14,10 @@ public enum MessageType {
 	 */
 	PICKUP,
 	/**
+	 * When the recipient picks up his phone
+	 */
+	RECIPIENT_PICKUP,
+	/**
 	 * When the AutoCommutator returns the tone (the connection between the
 	 * caller and the AutoCommutator) to the caller
 	 */
@@ -21,7 +25,7 @@ public enum MessageType {
 	/**
 	 * When the caller compose a phone number
 	 */
-	NUMEROTATION,
+	NUMBERING,
 	/**
 	 * When the AutoCommutator searches for a recipient and returns this signal
 	 * to the caller
