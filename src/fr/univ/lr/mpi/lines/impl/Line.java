@@ -3,6 +3,7 @@ package fr.univ.lr.mpi.lines.impl;
 import fr.univ.lr.mpi.commutator.IConnection;
 import fr.univ.lr.mpi.exchanges.IMessage;
 import fr.univ.lr.mpi.lines.ILine;
+import fr.univ.lr.mpi.lines.LineState;
 
 /**
  * 
@@ -63,7 +64,7 @@ public class Line implements ILine {
 	 */
 	public void setConnection(IConnection connection) {
 		this.connection = connection;
-		this.setState(LineState.)
+		this.setState(LineState.BUSY);
 	}
 	
 	/**

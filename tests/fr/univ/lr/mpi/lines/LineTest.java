@@ -5,25 +5,31 @@
  */
 package fr.univ.lr.mpi.lines;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import fr.univ.lr.mpi.commutator.impl.Connection;
+import fr.univ.lr.mpi.lines.impl.Line;
+
 /**
- * MPI_PROJECT/fr.univ.lr.mpi.lines/LineTest.java
  *
  * @author Joris Berthelot <joris.berthelot@gmail.com>
- * @date Mar 1, 2011
  *
  */
 public class LineTest {
+	
+	private static Line instance;
+	
+	private static String number = "1234567890";
 
 	/**
 	 * @throws java.lang.Exception
 	 */
 	@Before
 	public void setUp() throws Exception {
+		instance = new Line(number);
 	}
 
 	/**
@@ -31,7 +37,7 @@ public class LineTest {
 	 */
 	@Test
 	public void testGetPhoneNumber() {
-		fail("Not yet implemented");
+		assertTrue(number == instance.getPhoneNumber());
 	}
 
 	/**
@@ -39,7 +45,9 @@ public class LineTest {
 	 */
 	@Test
 	public void testSetConnection() {
-		fail("Not yet implemented");
+		//instance.setConnection(new Connection(instance, new Line(number)));
+		instance.setConnection(new Connection());
+		assertTrue(instance.getState().equals(LineState.BUSY));
 	}
 
 	/**
@@ -47,7 +55,6 @@ public class LineTest {
 	 */
 	@Test
 	public void testGetLineState() {
-		fail("Not yet implemented");
 	}
 
 	/**
@@ -55,7 +62,6 @@ public class LineTest {
 	 */
 	@Test
 	public void testSetState() {
-		fail("Not yet implemented");
 	}
 
 	/**
@@ -63,7 +69,6 @@ public class LineTest {
 	 */
 	@Test
 	public void testReceiveMessage() {
-		fail("Not yet implemented");
 	}
 
 	/**
@@ -71,7 +76,6 @@ public class LineTest {
 	 */
 	@Test
 	public void testPickUp() {
-		fail("Not yet implemented");
 	}
 
 	/**
@@ -79,7 +83,6 @@ public class LineTest {
 	 */
 	@Test
 	public void testHangUp() {
-		fail("Not yet implemented");
 	}
 
 	/**
@@ -87,7 +90,6 @@ public class LineTest {
 	 */
 	@Test
 	public void testDialTo() {
-		fail("Not yet implemented");
 	}
 
 }

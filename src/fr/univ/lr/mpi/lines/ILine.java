@@ -2,7 +2,6 @@ package fr.univ.lr.mpi.lines;
 
 import fr.univ.lr.mpi.commutator.IConnection;
 import fr.univ.lr.mpi.handlers.MessageHandler;
-import fr.univ.lr.mpi.lines.impl.LineState;
 
 /**
  * 
