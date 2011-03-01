@@ -28,5 +28,17 @@ public enum EventType {
 	/**
 	 * When a caller requests a recipient number
 	 */
-	PHONE_NUMBER_REQUEST;
+	PHONE_NUMBER_REQUEST,
+	/**
+	 * When the directory service delivers its response
+	 */
+	PHONE_NUMBER_RESPONSE,
+	/**
+	 * Before recipient phone ringing we have to check if a call transfer exists
+	 */
+	CALL_TRANSFER_REQUEST,
+	/**
+	 * When the call transfer service delivers its response
+	 */
+	CALL_TRANSFER_RESPONSE;
 }

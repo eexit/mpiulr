@@ -9,6 +9,8 @@ import fr.univ.lr.mpi.exchanges.IMessage;
 import fr.univ.lr.mpi.exchanges.impl.Event;
 import fr.univ.lr.mpi.exchanges.impl.EventType;
 import fr.univ.lr.mpi.exchanges.impl.ExchangeAttributeNames;
+import fr.univ.lr.mpi.exchanges.impl.Message;
+import fr.univ.lr.mpi.exchanges.impl.MessageType;
 import fr.univ.lr.mpi.handlers.EventHandler;
 import fr.univ.lr.mpi.handlers.MessageHandler;
 import fr.univ.lr.mpi.lines.ILine;
@@ -60,12 +62,31 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 
 	/**
 	 * Instantiates a new connection thread and pull it into the pool of threads
+	 * 
+	 * @param callerPhoneNumber
+	 *            the caller phone number
 	 */
 
-	private void launchConnection(String callPhoneNumber) {
-		/* new Connection(); */
+	private void launchConnection(String callerPhoneNumber) {
+		/* TODO new Connection(); */
 		IConnection connection = new Connection();
 		connections.add(connection);
+	}
+
+	/**
+	 * Returns a line that corresponds the phone number
+	 * 
+	 * @param phoneNumber
+	 *            the line phone number
+	 */
+
+	private ILine getLine(String phoneNumber) {
+		for (ILine line : this.lines) {
+			if (line.getPhoneNumber().equals(phoneNumber)) {
+				return line;
+			}
+		}
+		return null;
 	}
 
 	/* Public Methods */
@@ -112,7 +133,7 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 
 	public void registerLine(ILine line) {
 		IEvent event = new Event(EventType.LINE_CREATION);
-		event.addAttributes(ExchangeAttributeNames.CALLER_PHONE_NUMER, line
+		event.addAttributes(ExchangeAttributeNames.CALLER_PHONE_NUMBER, line
 				.getPhoneNumber());
 		this.sendEvent(event);
 		this.lines.add(line);
@@ -127,7 +148,7 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 
 	public void unregisterLine(ILine line) {
 		IEvent event = new Event(EventType.LINE_DELETION);
-		event.addAttributes(ExchangeAttributeNames.CALLER_PHONE_NUMER, line
+		event.addAttributes(ExchangeAttributeNames.CALLER_PHONE_NUMBER, line
 				.getPhoneNumber());
 		this.sendEvent(event);
 		this.lines.remove(line);
@@ -155,12 +176,37 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 
 	@Override
 	public void receiveEvent(IEvent event) {
+
 		switch (event.getEventType()) {
-		case CONNECTION_ESTABLISHED:
+		/* In the case of a Directory Service Response */
+		case PHONE_NUMBER_RESPONSE:
+			/*
+			 * => The Directory Service returns TRUE OR FALSE (if the recipient
+			 * phone number exists or not)
+			 */
+			if (event.getAttributeValue(ExchangeAttributeNames.EXISTS).equals(
+					Boolean.toString(false))) {
+				/* The recipient number doesn't exists */
+				return;
+			}
+			String recipientPhoneNumber = event
+					.getAttributeValue(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER);
+			/* => Checks if call transfer rules exists */
+			IEvent e = new Event(EventType.CALL_TRANSFER_REQUEST);
+			e.addAttributes(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER,
+					recipientPhoneNumber);
+			sendEvent(e);
 			break;
-		case CONNECTION_CLOSED:
-			break;
-		case PHONE_NUMBER_REQUEST:
+		/* In the case of a Call Transfer Service Response */
+		case CALL_TRANSFER_RESPONSE:
+			// => Send Rings Message to the recipient
+			String callerPhoneNumber = event
+					.getAttributeValue(ExchangeAttributeNames.CALLER_PHONE_NUMBER);
+			recipientPhoneNumber = event
+					.getAttributeValue(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER);
+			getLine(recipientPhoneNumber).receiveMessage(
+					new Message(MessageType.RING, callerPhoneNumber,
+							recipientPhoneNumber));
 			break;
 		}
 	}
@@ -174,23 +220,37 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 
 	@Override
 	public void receiveMessage(IMessage message) {
+		String callerPhoneNumber = message.getCallerPhoneNumber();
+		// String recipientPhoneNumber = message.getRecipientPhoneNumber();
+
 		switch (message.getMessageType()) {
 		case PICKUP:
+			// When pickup from caller => send a tone to it to notify the
+			// connection
+			if (callerPhoneNumber == null) {
+				return;
+			}
+			getLine(callerPhoneNumber).receiveMessage(
+					new Message(MessageType.BACKTONE, null, null));
 			break;
-		case BACKTONE:
-			break;
-		case NUMEROTATION:
-			break;
-		case SEARCH:
-			break;
-		case RING:
-			break;
-		case ECHO:
-			break;
-		case VOICE_EXCHANGE:
-			break;
-		case HANGUP:
-			break;
+		/* Reserved for Connection */
+		// case NUMBERING:
+		// // When numbering from caller => check phone number to directory
+		// if (callerPhoneNumber == null || recipientPhoneNumber == null) {
+		// return;
+		// }
+		// IEvent e = new Event(EventType.PHONE_NUMBER_REQUEST);
+		// e.addAttributes(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER,
+		// recipientPhoneNumber);
+		// sendEvent(e);
+		// // Send search signal to the caller
+		// getLine(callerPhoneNumber).receiveMessage(
+		// new Message(MessageType.SEARCH, null, null));
+		// break;
+		// case VOICE_EXCHANGE:
+		// break;
+		// case HANGUP:
+		// break;
 		default:
 			break;
 		}
