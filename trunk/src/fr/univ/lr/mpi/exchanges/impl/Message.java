@@ -2,29 +2,42 @@ package fr.univ.lr.mpi.exchanges.impl;
 
 import fr.univ.lr.mpi.exchanges.IMessage;
 
+/**
+ * 
+ * @author FAUCHER Tony
+ *
+ */
 public class Message implements IMessage {
 
 	// attributs
-	private String calledPhoneNumber;
+	private MessageType type; 
+	private String callerPhoneNumber;
 	private String recipientPhoneNumber;
 
 	// constructor
-	public Message() {
-
+	public Message(MessageType type, String callerPhoneNumber,
+			String recipientPhoneNumber) {
+		this.type = type;
+		this.callerPhoneNumber = callerPhoneNumber;
+		this.recipientPhoneNumber = recipientPhoneNumber;
 	}
+
 
 	// getter and setter
 
+	/**
+	 * @return the message type
+	 */
+	public MessageType getMessageType(){
+		return this.type;
+	}
+	
 	// called phone number
 	/**
-	 * @return the called phone number
+	 * @return caller phone number
 	 */
-	public String getCalledPhoneNumber() {
-		return calledPhoneNumber;
-	}
-
-	public void setCalledPhoneNumber(String calledPhoneNumber) {
-		this.calledPhoneNumber = calledPhoneNumber;
+	public String getCallerPhoneNumber() {
+		return this.callerPhoneNumber;
 	}
 
 	// recipient phone number
@@ -35,8 +48,5 @@ public class Message implements IMessage {
 		return recipientPhoneNumber;
 	}
 
-	public void setRecipientPhoneNumber(String recipientPhoneNumber) {
-		this.recipientPhoneNumber = recipientPhoneNumber;
-	}
 
 }
