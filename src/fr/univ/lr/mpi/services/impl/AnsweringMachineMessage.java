@@ -26,7 +26,7 @@ public class AnsweringMachineMessage {
 	}
 
 
-	//méthodes
+	//mÃ©thodes
 	
 	/**
 	 * @return Post Date

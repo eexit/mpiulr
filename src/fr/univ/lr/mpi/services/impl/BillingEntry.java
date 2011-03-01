@@ -17,7 +17,6 @@ public class BillingEntry {
 	/**
 	 * Constructor
 	 * 
-	 * @author FAUCHER Tony
 	 * @param callerPhoneNumber
 	 * @param recipientPhoneNumber
 	 * @param date
@@ -32,7 +31,6 @@ public class BillingEntry {
 	}
 
 	/**
-	 * @author FAUCHER Tony
 	 * @return phone number called
 	 */
 	public String getCallerPhoneNumber() {
@@ -40,7 +38,6 @@ public class BillingEntry {
 	}
 
 	/**
-	 * @author FAUCHER Tony
 	 * @return phone number recipient
 	 */
 	public String getRecipientPhoneNumber() {
@@ -48,7 +45,6 @@ public class BillingEntry {
 	}
 
 	/**
-	 * @author FAUCHER Tony
 	 * @return call duration
 	 */
 	public double getDuration() {
@@ -56,7 +52,6 @@ public class BillingEntry {
 	}
 
 	/**
-	 * @author FAUCHER Tony
 	 * @return call date
 	 */
 	public Date getDate() {

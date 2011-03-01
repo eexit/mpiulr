@@ -21,7 +21,6 @@ public class BillingService implements IService {
 	/**
 	 * Constructor
 	 * 
-	 * @author FAUCHER Tony
 	 */
 	public BillingService() {
 		this.entries = new ArrayList<BillingEntry>();
@@ -29,7 +28,7 @@ public class BillingService implements IService {
 	}
 
 	/**
-	 * @author FAUCHER Tony Create and Add an entry in the list
+	 * Create and Add an entry in the list
 	 * @param callerPhoneNumber
 	 * @param recipientPhoneNumber
 	 * @param date
