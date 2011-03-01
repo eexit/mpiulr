@@ -13,27 +13,50 @@ import fr.univ.lr.mpi.services.IService;
 /**
  * 
  * @author Elian ORIOU
- *
+ * 
  */
-public class AutoCommutator implements MessageHandler, EventHandler{
+public class AutoCommutator implements MessageHandler, EventHandler {
 
 	private static final int MAX_CONNECTIONS = 10;
-	
+
 	private List<IConnection> connections;
 	private List<ILine> lines;
 	private List<IService> services;
+
+	private int getActiveConnections() {
+		return -1;
+	}
+
+	private void registerService(IService service) {
+
+	}
+
+	private void unregisterEvent(IService service) {
+
+	}
+
+	private void registerLine(ILine line) {
+
+	}
+
+	private void unregisterLine(ILine line) {
+
+	}
+
 	@Override
 	public void receiveEvent(IEvent event) {
 		// TODO Auto-generated method stub
-		
+
 	}
+
+	private void sendEvent(IEvent event) {
+
+	}
+
 	@Override
 	public void receiveMessage(IMessage message) {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
-	
-	
-	
+
 }
