@@ -1,9 +1,6 @@
 package fr.univ.lr.mpi.lines.impl;
 
-import fr.univ.lr.mpi.commutator.IConnection;
-import fr.univ.lr.mpi.commutator.impl.AutoCommutator;
-import fr.univ.lr.mpi.exceptions.LineException;
-import fr.univ.lr.mpi.exceptions.PhoneNumberValidatorException;
+import fr.univ.lr.mpi.commutator.impl.Concentrator;
 import fr.univ.lr.mpi.exchanges.IMessage;
 import fr.univ.lr.mpi.exchanges.impl.Message;
 import fr.univ.lr.mpi.exchanges.impl.MessageType;
@@ -33,7 +30,7 @@ public class Line implements ILine {
 	 * 
 	 * @author Joris Berthelot <joris.berthelot@gmail.com>
 	 */
-	private IConnection connection;
+//	private IConnection connection;
 
 	/**
 	 * Line current state
@@ -41,22 +38,30 @@ public class Line implements ILine {
 	 * @author Joris Berthelot <joris.berthelot@gmail.com>
 	 */
 	private LineState state;
-
+	
+	private Concentrator concentrator;
+	
+	
 	/**
 	 * Line contructor
 	 * 
 	 * @author Joris Berthelot <joris.berthelot@gmail.com>
 	 * @param number
-	 * @throws PhoneNumberValidatorException 
 	 */
-	public Line(String number) throws PhoneNumberValidatorException {
+	public Line(String number) {
 		if (false == PhoneNumberValidator.isValid(number)) {
-			throw new PhoneNumberValidatorException(PhoneNumberValidatorException.ERROR_WRONG_FORMAT);
+			return;
 		}
 		this.phoneNumber = number;
 		this.state = LineState.FREE;
 	}
 
+	public void setConnector(Concentrator c)
+	{
+		concentrator = c;
+	}
+	
+	
 	/**
 	 * Gets the line phone number
 	 * 
@@ -73,10 +78,10 @@ public class Line implements ILine {
 	 * @author Joris Berthelot <joris.berthelot@gmail.com>
 	 * @param connection
 	 */
-	public void setConnection(IConnection connection) {
-		this.connection = connection;
-		this.state = LineState.BUSY;
-	}
+//	public void setConnection(IConnection connection) {
+//		this.connection = connection;
+//		this.state = LineState.BUSY;
+//	}
 
 	/**
 	 * Message receiver of commutator
@@ -92,15 +97,17 @@ public class Line implements ILine {
 	 * Line pick up action:
 	 * 
 	 * @author Joris Berthelot <joris.berthelot@gmail.com>
-	 * @throws LineException 
 	 */
-	public void pickUp() throws LineException {
-		if (!this.state.equals(LineState.FREE)) {
-			throw new LineException(LineException.ERROR_BUSY);
+	public void pickUp() {
+		if (this.state != null && !this.state.equals(LineState.FREE)) {
+			return;
 		}
 		this.state = LineState.BUSY;
-		AutoCommutator.getInstance().receiveMessage(
-				new Message(MessageType.PICKUP, this.phoneNumber));
+
+		concentrator.receiveMessage(new Message(MessageType.PICKUP,
+				this.phoneNumber, null));
+		// AutoCommutator.getInstance().receiveMessage(
+		// new Message(MessageType.PICKUP, this.phoneNumber, null));
 	}
 
 	/**
@@ -110,8 +117,12 @@ public class Line implements ILine {
 	 */
 	public void hangUp() {
 		this.state = LineState.FREE;
-		AutoCommutator.getInstance().receiveMessage(
-				new Message(MessageType.HANGUP, this.phoneNumber));
+		
+		concentrator.receiveMessage(new Message(MessageType.HANGUP,
+				this.phoneNumber, null));	
+		
+//		AutoCommutator.getInstance().receiveMessage(
+//				new Message(MessageType.HANGUP, this.phoneNumber, null));
 	}
 
 	/**
@@ -119,18 +130,16 @@ public class Line implements ILine {
 	 * 
 	 * @author Joris Berthelot <joris.berthelot@gmail.com>
 	 * @param phoneNumber
-	 * @throws LineException 
 	 */
-	public void dialTo(String phoneNumber) throws PhoneNumberValidatorException, LineException {
-		if (false == PhoneNumberValidator.isValid(phoneNumber)) {
-			throw new PhoneNumberValidatorException(PhoneNumberValidatorException.ERROR_WRONG_FORMAT);
-		}
-		
+	public void dialTo(String phoneNumber) {
 		if (!this.state.equals(LineState.BUSY)) {
-			throw new LineException(LineException.ERROR_FREE);
+			return;
 		}
-		AutoCommutator.getInstance().receiveMessage(
-				new Message(MessageType.HANGUP, this.phoneNumber));
+		concentrator.receiveMessage(new Message(MessageType.NUMBERING,
+				this.phoneNumber, null));
+		
+//		AutoCommutator.getInstance().receiveMessage(
+//				new Message(MessageType.NUMBERING, this.phoneNumber, null));
 	}
 
 	/**
