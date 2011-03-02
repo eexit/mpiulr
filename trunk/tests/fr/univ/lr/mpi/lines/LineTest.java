@@ -12,6 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import fr.univ.lr.mpi.commutator.impl.Connection;
+import fr.univ.lr.mpi.exceptions.LineException;
 import fr.univ.lr.mpi.lines.impl.Line;
 
 /**
@@ -65,9 +66,10 @@ public class LineTest {
 
 	/**
 	 * Test method for {@link fr.univ.lr.mpi.lines.impl.Line#pickUp()}.
+	 * @throws LineException 
 	 */
 	@Test
-	public void testPickUp() {
+	public void testPickUp() throws LineException {
 		/**
 		 * TODO add more stuff here
 		 */
@@ -78,9 +80,10 @@ public class LineTest {
 
 	/**
 	 * Test method for {@link fr.univ.lr.mpi.lines.impl.Line#hangUp()}.
+	 * @throws LineException 
 	 */
 	@Test
-	public void testHangUp() {
+	public void testHangUp() throws LineException {
 		/**
 		 * TODO add more stuff here
 		 */

@@ -7,8 +7,15 @@ package fr.univ.lr.mpi.exceptions;
  */
 public class PhoneNumberValidatorException extends Exception {
 	
-	final public static String WRONG_FORMAT = "Wrong phone number format!";
-
+	/**
+	 * Error message when the phone number doesn't respect the good format
+	 */
+	final public static String ERROR_WRONG_FORMAT = "Wrong phone number format!";
+	
+	/**
+	 * Constructor
+	 * @param message
+	 */
 	public PhoneNumberValidatorException(String message) {
 		System.out.println(message);
 	}

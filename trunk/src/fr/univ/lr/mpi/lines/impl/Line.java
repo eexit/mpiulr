@@ -51,7 +51,7 @@ public class Line implements ILine {
 	 */
 	public Line(String number) throws PhoneNumberValidatorException {
 		if (false == PhoneNumberValidator.isValid(number)) {
-			throw new PhoneNumberValidatorException(PhoneNumberValidatorException.WRONG_FORMAT);
+			throw new PhoneNumberValidatorException(PhoneNumberValidatorException.ERROR_WRONG_FORMAT);
 		}
 		this.phoneNumber = number;
 		this.state = LineState.FREE;
@@ -123,7 +123,7 @@ public class Line implements ILine {
 	 */
 	public void dialTo(String phoneNumber) throws PhoneNumberValidatorException, LineException {
 		if (false == PhoneNumberValidator.isValid(phoneNumber)) {
-			throw new PhoneNumberValidatorException(PhoneNumberValidatorException.WRONG_FORMAT);
+			throw new PhoneNumberValidatorException(PhoneNumberValidatorException.ERROR_WRONG_FORMAT);
 		}
 		
 		if (!this.state.equals(LineState.BUSY)) {
