@@ -40,10 +40,12 @@ public class DirectoryService extends Thread implements IService {
 		while (true) {
 			String phoneNumber;
 			if (eventStack.isEmpty()) {
-				try {
-					wait();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
+				synchronized (this) {
+					try {
+						wait();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
 				}
 			}
 			IEvent event = eventStack.pop();
