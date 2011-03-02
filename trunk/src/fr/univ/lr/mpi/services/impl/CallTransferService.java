@@ -19,7 +19,7 @@ import fr.univ.lr.mpi.services.IService;
 public class CallTransferService implements IService {
 
 	/**
-	 * Map to know the different transfert rule between two lines 
+	 * Map to know the different transfert rule between two lines
 	 */
 	private Map<String, String> transferRulesTables;
 
@@ -72,6 +72,9 @@ public class CallTransferService implements IService {
 	@Override
 	public void receiveEvent(IEvent event) {
 		switch (event.getEventType()) {
+		/**
+		 * Test if a transfert exist from a line
+		 */
 		case CALL_TRANSFER_REQUEST:
 			String recipientPhoneNumber = event
 					.getAttributeValue(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER);
@@ -86,6 +89,27 @@ public class CallTransferService implements IService {
 				AutoCommutator.getInstance().receiveEvent(newEvent);
 			}
 
+			break;
+
+		/**
+		 * Create a transfert from line 1 to line 2
+		 */
+		case CREATE_TRANSFERT:
+
+			String oldPhoneNumber = event
+					.getAttributeValue(ExchangeAttributeNames.CALLER_PHONE_NUMBER);
+			String newPhoneNumber = event
+					.getAttributeValue(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER);
+			this.addTransferCallRule(oldPhoneNumber, newPhoneNumber);
+			break;
+
+		/**
+		 * Remove a transfert from a line
+		 */
+		case REMOVE_TRANSFERT:
+			String phoneNumber = event
+					.getAttributeValue(ExchangeAttributeNames.CALLER_PHONE_NUMBER);
+			this.removeTransferCallRule(phoneNumber);
 			break;
 		}
 	}

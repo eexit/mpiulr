@@ -42,6 +42,14 @@ public enum EventType {
 	 */
 	CALL_TRANSFER_RESPONSE,
 	/**
+	 * When we want create a transfert between two lines
+	 */
+	CREATE_TRANSFERT,
+	/**
+	 * When we want to remove a transfert
+	 */
+	REMOVE_TRANSFERT,
+	/**
 	 * When there is no answer from the recipient
 	 */
 	UNAVAILABLE_RECIPIENT;

@@ -39,4 +39,8 @@ public class ExchangeAttributeNames {
 	 * 
 	 */
 	public static final String DATE = "DATE";
+	
+	/**
+	 * 
+	 */
 }
