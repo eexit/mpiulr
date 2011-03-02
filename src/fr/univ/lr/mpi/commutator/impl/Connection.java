@@ -147,10 +147,9 @@ public class Connection extends Thread implements IConnection {
 					// Sends an UNKNOWN_NUMBER to the caller
 					AutoCommutator.getInstance().sendMessage(this.callerPhoneNumber, new Message(
 						MessageType.UNKNOWN_NUMBER,
-						recipientPhoneNumber
+						recipientPhoneNumber,recipientPhoneNumber
 					));
 				}
-				
 				// Sends a call transfer exist request
 				IEvent call_trans_event = new Event(EventType.CALL_TRANSFER_REQUEST);
 				call_trans_event.addAttribute(ExchangeAttributeNames.CALLER_PHONE_NUMBER, this.callerPhoneNumber);
@@ -185,11 +184,12 @@ public class Connection extends Thread implements IConnection {
 			case NUMBERING :
 				// Sends to the caller a SEARCH message
 				AutoCommutator.getInstance().sendMessage(this.callerPhoneNumber, new Message(
-					MessageType.SEARCH, this.callerPhoneNumber
+					MessageType.SEARCH, this.callerPhoneNumber, recipientPhoneNumber
 				));
 				
 				// Sends to the directory service a phone number exist request
 				IEvent num_req_event = new Event(EventType.PHONE_NUMBER_REQUEST);
+				num_req_event.addAttribute(ExchangeAttributeNames.CALLER_PHONE_NUMBER, callerPhoneNumber);
 				num_req_event.addAttribute(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER, recipientPhoneNumber);
 				AutoCommutator.getInstance().sendEvent(num_req_event);				
 				break;

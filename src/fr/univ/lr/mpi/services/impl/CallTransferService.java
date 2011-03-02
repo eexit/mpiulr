@@ -34,6 +34,7 @@ public class CallTransferService extends Thread implements IService {
 		this.eventStack = new Stack<IEvent>();
 	}
 
+	@Override
 	public void run() {
 		while (true) {
 			if (eventStack.isEmpty()) {
@@ -48,7 +49,7 @@ public class CallTransferService extends Thread implements IService {
 			IEvent event = eventStack.pop();
 			switch (event.getEventType()) {
 			/**
-			 * Test if a transfert exist from a line
+			 * Test if a transfer exists from a line
 			 */
 			case CALL_TRANSFER_REQUEST:
 				String recipientPhoneNumber = event
@@ -62,7 +63,6 @@ public class CallTransferService extends Thread implements IService {
 				if (this.transferRulesTables.containsKey(recipientPhoneNumber)) {
 					recipientPhoneNumber = this.transferRulesTables
 							.get(recipientPhoneNumber);
-
 				}
 				/**
 				 * Create event

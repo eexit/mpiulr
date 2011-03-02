@@ -13,7 +13,7 @@ public class ExchangeAttributeNames {
 	/**
 	 * 
 	 */
-	public static final String CALLER_PHONE_NUMBER = "CALL_PHONE_NUMBER";
+	public static final String CALLER_PHONE_NUMBER = "CALLER_PHONE_NUMBER";
 
 	/**
 	 * 
