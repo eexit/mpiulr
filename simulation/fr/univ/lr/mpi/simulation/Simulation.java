@@ -3,6 +3,7 @@ package fr.univ.lr.mpi.simulation;
 import java.util.Date;
 
 import fr.univ.lr.mpi.commutator.impl.AutoCommutator;
+import fr.univ.lr.mpi.commutator.impl.Concentrator;
 import fr.univ.lr.mpi.exceptions.LineException;
 import fr.univ.lr.mpi.exceptions.PhoneNumberValidatorException;
 import fr.univ.lr.mpi.exchanges.impl.Event;
@@ -28,10 +29,13 @@ public class Simulation {
 		Line l3 = new Line("0304050607");
 		Line l4 = new Line("0405060708");
 
-		commutator.registerLine(l1);
-		commutator.registerLine(l2);
-		commutator.registerLine(l3);
-		commutator.registerLine(l4);
+		Concentrator concentrator = new Concentrator();
+		commutator.setConcentrator(concentrator);
+		
+		concentrator.registerLine(l1);
+		concentrator.registerLine(l2);
+		concentrator.registerLine(l3);
+		concentrator.registerLine(l4);
 
 		l1.pickUp();
 		l2.pickUp();
@@ -45,6 +49,9 @@ public class Simulation {
 		e.addAttribute(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER,
 				"0203040506");
 		AutoCommutator.getInstance().sendEvent(e);
+		
+		
+		
 
 		/* Billing Service test */
 		e = new Event(EventType.CONNECTION_CLOSED);
