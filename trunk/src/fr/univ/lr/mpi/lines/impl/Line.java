@@ -56,7 +56,7 @@ public class Line implements ILine {
 		this.state = LineState.FREE;
 	}
 
-	public void setConnector(Concentrator c)
+	public void setConcentrator(Concentrator c)
 	{
 		concentrator = c;
 	}
