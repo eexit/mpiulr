@@ -54,7 +54,9 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 		directory.start();
 		registerService(directory);
 
-		registerService(new AnsweringService());
+		AnsweringService answering = new AnsweringService();
+		answering.start();
+		registerService(answering);
 
 		registerService(new BillingService());
 
@@ -102,7 +104,6 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 
 	public int getActiveConnections() {
 		return this.concentrator.getActiveLines().size();
-		// return this.connections.size();
 	}
 
 	/**
@@ -158,45 +159,10 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 
 	@Override
 	public synchronized void receiveEvent(IEvent event) {
-
-		switch (event.getEventType()) {
-		/* In the case of a Directory Service Response */
-		case PHONE_NUMBER_RESPONSE:
-			/*
-			 * => The Directory Service returns TRUE OR FALSE (if the recipient
-			 * phone number exists or not)
-			 */
-			if (event.getAttributeValue(ExchangeAttributeNames.EXISTS).equals(
-					Boolean.toString(false))) {
-				/* The recipient number doesn't exists */
-				return;
-			}
-			System.out.println("The phone number exists !");
-			String recipientPhoneNumber = event
-					.getAttributeValue(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER);
-			/* => Checks if call transfer rules exists */
-			IEvent e = new Event(EventType.CALL_TRANSFER_REQUEST);
-			e
-					.addAttribute(
-							ExchangeAttributeNames.CALLER_PHONE_NUMBER,
-							event
-									.getAttributeValue(ExchangeAttributeNames.CALLER_PHONE_NUMBER));
-			e.addAttribute(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER,
-					recipientPhoneNumber);
-			sendEvent(e);
-			break;
-		/* In the case of a Call Transfer Service Response */
-		case CALL_TRANSFER_RESPONSE:
-			// => Send Rings Message to the recipient
-			String callerPhoneNumber = event
-					.getAttributeValue(ExchangeAttributeNames.CALLER_PHONE_NUMBER);
-			recipientPhoneNumber = event
-					.getAttributeValue(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER);
-			this.concentrator.sendMessage(callerPhoneNumber, new Message(
-					MessageType.RING, callerPhoneNumber, recipientPhoneNumber));
-
-			break;
-		}
+		getConnection(
+				event
+						.getAttributeValue(ExchangeAttributeNames.CALLER_PHONE_NUMBER))
+				.receiveEvent(event);
 	}
 
 	/**
@@ -258,7 +224,8 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 
 	public IConnection getConnection(String phoneNumber) {
 		for (IConnection connection : connections) {
-			if (((Connection) connection).getCaller().equals(phoneNumber)) {
+			if (((Connection) connection).getCallerPhoneNumber().equals(
+					phoneNumber)) {
 				return connection;
 			}
 		}

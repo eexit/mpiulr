@@ -1,5 +1,6 @@
 package fr.univ.lr.mpi.commutator;
 
+import fr.univ.lr.mpi.handlers.EventHandler;
 import fr.univ.lr.mpi.handlers.MessageHandler;
 
 /**
@@ -10,6 +11,6 @@ import fr.univ.lr.mpi.handlers.MessageHandler;
  * @date Mar 1, 2011
  *
  */
-public interface IConnection extends MessageHandler {
+public interface IConnection extends MessageHandler, EventHandler {
 
 }

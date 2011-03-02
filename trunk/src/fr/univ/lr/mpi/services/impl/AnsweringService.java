@@ -17,7 +17,7 @@ import fr.univ.lr.mpi.services.IService;
  * @author FAUCHER Tony <faucher.tony85@gmail.com>
  */
 
-public class AnsweringService implements IService {
+public class AnsweringService extends Thread implements IService {
 
 	/**
 	 * List of different message from an answering Machine
