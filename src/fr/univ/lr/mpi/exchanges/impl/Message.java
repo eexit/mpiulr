@@ -15,6 +15,10 @@ public class Message implements IMessage {
 	private String recipientPhoneNumber;
 
 	// constructor
+	public Message(MessageType type, String callerPhoneNumber) {
+		this(type, callerPhoneNumber, null);
+	}
+	
 	public Message(MessageType type, String callerPhoneNumber,
 			String recipientPhoneNumber) {
 		this.type = type;
