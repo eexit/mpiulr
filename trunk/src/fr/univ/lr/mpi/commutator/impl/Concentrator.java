@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.univ.lr.mpi.exchanges.IMessage;
+import fr.univ.lr.mpi.exchanges.impl.Event;
+import fr.univ.lr.mpi.exchanges.impl.EventType;
+import fr.univ.lr.mpi.exchanges.impl.ExchangeAttributeNames;
 import fr.univ.lr.mpi.lines.ILine;
 
 /**
@@ -23,6 +26,11 @@ public class Concentrator {
 	public void registerLine(ILine line) {
 		lines.add(line);
 		line.setConcentrator(this);
+		/* Call Directory Service to register the line number */
+		Event e = new Event(EventType.LINE_CREATION);
+		e.addAttribute(ExchangeAttributeNames.CALLER_PHONE_NUMBER, line
+				.getPhoneNumber());
+		AutoCommutator.getInstance().sendEvent(e);
 	}
 
 	public int unregisterLine(String numberLine) {

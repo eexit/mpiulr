@@ -58,9 +58,13 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 		answering.start();
 		registerService(answering);
 
-		registerService(new BillingService());
+		BillingService billing = new BillingService();
+		billing.start();
+		registerService(billing);
 
-		registerService(new CallTransferService());
+		CallTransferService callTransfer = new CallTransferService();
+		callTransfer.start();
+		registerService(callTransfer);
 
 		/* Adding answering machine number */
 		IEvent event = new Event(EventType.LINE_CREATION);
@@ -145,7 +149,7 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 	 */
 
 	public void sendEvent(IEvent event) {
-		System.out.println("Autocommutator send event: " + event );
+		System.out.println("Autocommutator send event: " + event);
 		for (IService service : this.services) {
 			service.receiveEvent(event);
 		}
@@ -160,7 +164,7 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 
 	@Override
 	public synchronized void receiveEvent(IEvent event) {
-		System.out.println("Autocommutator receive event: " + event );
+		System.out.println("Autocommutator receive event: " + event);
 		getConnection(
 				event
 						.getAttributeValue(ExchangeAttributeNames.CALLER_PHONE_NUMBER))
@@ -176,7 +180,7 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 
 	@Override
 	public synchronized void receiveMessage(IMessage message) {
-		System.out.println("Autocommutator receive message: " + message );
+		System.out.println("Autocommutator receive message: " + message);
 		String callerPhoneNumber = message.getCallerPhoneNumber();
 		switch (message.getMessageType()) {
 		case PICKUP:
@@ -253,7 +257,7 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 	 */
 
 	public synchronized void sendMessage(String phoneNumber, IMessage message) {
-		System.out.println("Autocommutator send message: " + message );
+		System.out.println("Autocommutator send message: " + message);
 		concentrator.sendMessage(phoneNumber, message);
 	}
 }

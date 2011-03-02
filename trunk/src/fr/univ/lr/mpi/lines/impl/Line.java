@@ -41,7 +41,7 @@ public class Line implements ILine {
 	private LineState state;
 
 	private Concentrator concentrator;
-	
+
 	private PhoneWidget phone;
 
 	/**
@@ -58,12 +58,10 @@ public class Line implements ILine {
 		this.state = LineState.FREE;
 	}
 
-	public void setPhone(PhoneWidget p)
-	{
+	public void setPhone(PhoneWidget p) {
 		phone = p;
 	}
-	
-	
+
 	public void setConcentrator(Concentrator c) {
 		concentrator = c;
 	}
@@ -96,9 +94,8 @@ public class Line implements ILine {
 	 * @param message
 	 */
 	public void receiveMessage(IMessage message) {
-		System.out.println("Line receive message: " + message);
-		System.out.println(message);
-		phone.appendLog(message);
+		System.out.println("Line ("+this.phoneNumber+") receive message: " + message);
+		// phone.appendLog(message);
 	}
 
 	/**
@@ -144,7 +141,7 @@ public class Line implements ILine {
 			return;
 		}
 		concentrator.receiveMessage(new Message(MessageType.NUMBERING,
-				this.phoneNumber, null));
+				this.phoneNumber, phoneNumber));
 
 		// AutoCommutator.getInstance().receiveMessage(
 		// new Message(MessageType.NUMBERING, this.phoneNumber, null));
