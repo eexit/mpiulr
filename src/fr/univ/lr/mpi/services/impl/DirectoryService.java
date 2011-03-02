@@ -52,7 +52,7 @@ public class DirectoryService implements IService {
 	public void receiveEvent(IEvent event) {
 		String phoneNumber;
 		switch (event.getEventType()) {
-		
+
 		/**
 		 * Case of line creation
 		 */
@@ -83,12 +83,13 @@ public class DirectoryService implements IService {
 
 			// if the phone number is in the directory, we return true, else we
 			// return false
-			
+
 			// Create an event
 			Event e = new Event(EventType.PHONE_NUMBER_RESPONSE);
-			e.addAttributes(ExchangeAttributeNames.EXISTS, Boolean
-					.toString(this.exist(phoneNumber)));
-
+			e.addAttribute(ExchangeAttributeNames.EXISTS, Boolean.toString(this
+					.exist(phoneNumber)));
+			e.addAttribute(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER,
+					phoneNumber);
 			// Send to the autocommutator the event
 			AutoCommutator.getInstance().receiveEvent(e);
 

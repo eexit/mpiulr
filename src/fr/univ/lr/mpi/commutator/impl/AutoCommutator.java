@@ -15,6 +15,10 @@ import fr.univ.lr.mpi.handlers.EventHandler;
 import fr.univ.lr.mpi.handlers.MessageHandler;
 import fr.univ.lr.mpi.lines.ILine;
 import fr.univ.lr.mpi.services.IService;
+import fr.univ.lr.mpi.services.impl.AnsweringService;
+import fr.univ.lr.mpi.services.impl.BillingService;
+import fr.univ.lr.mpi.services.impl.CallTransferService;
+import fr.univ.lr.mpi.services.impl.DirectoryService;
 
 /**
  * The AutoCommunicator Object, the central point of communications between
@@ -43,6 +47,15 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 		this.lines = new ArrayList<ILine>();
 		this.services = new ArrayList<IService>();
 		this.MAX_CONNECTIONS = maxConnections;
+
+		initServices();
+	}
+
+	private void initServices() {
+		registerService(new DirectoryService());
+		registerService(new AnsweringService());
+		registerService(new BillingService());
+		registerService(new CallTransferService());
 	}
 
 	/**
@@ -68,7 +81,7 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 	private void launchConnection(String callerPhoneNumber) {
 		// IConnection connection = new Connection(callerPhoneNumber);
 		connections.add(new Connection());
-		//FIXME
+		// FIXME
 	}
 
 	/**
@@ -110,6 +123,15 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 	}
 
 	/**
+	 * 
+	 * @return
+	 */
+
+	public List<IService> getServices() {
+		return this.services;
+	}
+
+	/**
 	 * Unregisters a service from the service pool
 	 * 
 	 * @param service
@@ -129,7 +151,7 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 
 	public void registerLine(ILine line) {
 		IEvent event = new Event(EventType.LINE_CREATION);
-		event.addAttributes(ExchangeAttributeNames.CALLER_PHONE_NUMBER, line
+		event.addAttribute(ExchangeAttributeNames.CALLER_PHONE_NUMBER, line
 				.getPhoneNumber());
 		this.sendEvent(event);
 		this.lines.add(line);
@@ -144,7 +166,7 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 
 	public void unregisterLine(ILine line) {
 		IEvent event = new Event(EventType.LINE_DELETION);
-		event.addAttributes(ExchangeAttributeNames.CALLER_PHONE_NUMBER, line
+		event.addAttribute(ExchangeAttributeNames.CALLER_PHONE_NUMBER, line
 				.getPhoneNumber());
 		this.sendEvent(event);
 		this.lines.remove(line);
@@ -185,11 +207,12 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 				/* The recipient number doesn't exists */
 				return;
 			}
+			System.out.println("The phone number exists !");
 			String recipientPhoneNumber = event
 					.getAttributeValue(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER);
 			/* => Checks if call transfer rules exists */
 			IEvent e = new Event(EventType.CALL_TRANSFER_REQUEST);
-			e.addAttributes(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER,
+			e.addAttribute(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER,
 					recipientPhoneNumber);
 			sendEvent(e);
 			break;
@@ -208,7 +231,7 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 	}
 
 	/**
-	 * Receives a message from lines
+	 * Receives a message from lines (during the connection establishment)
 	 * 
 	 * @param message
 	 *            The message sent by lines
@@ -218,7 +241,7 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 	public synchronized void receiveMessage(IMessage message) {
 		// FIXME FOR TEST ONLY
 		System.out.println(message);
-	
+
 		String callerPhoneNumber = message.getCallerPhoneNumber();
 
 		switch (message.getMessageType()) {

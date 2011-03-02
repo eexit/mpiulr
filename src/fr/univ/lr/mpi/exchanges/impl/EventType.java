@@ -44,11 +44,11 @@ public enum EventType {
 	/**
 	 * When we want create a transfert between two lines
 	 */
-	CREATE_TRANSFERT,
+	CREATE_TRANSFER,
 	/**
 	 * When we want to remove a transfert
 	 */
-	REMOVE_TRANSFERT,
+	REMOVE_TRANSFER,
 	/**
 	 * When there is no answer from the recipient
 	 */
