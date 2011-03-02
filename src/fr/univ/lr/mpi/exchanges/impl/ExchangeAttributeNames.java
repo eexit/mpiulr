@@ -43,4 +43,5 @@ public class ExchangeAttributeNames {
 	/**
 	 * 
 	 */
+	public static final String PHONE_NUMBER = "PHONE_NUMBER";
 }
