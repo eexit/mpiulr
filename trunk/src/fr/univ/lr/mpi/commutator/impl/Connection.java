@@ -160,7 +160,7 @@ public class Connection extends Thread implements IConnection {
 			// When the call transfer returns a number
 			case CALL_TRANSFER_RESPONSE :
 				// Sends a RING message to the recipient
-				AutoCommutator.getInstance().sendMessage(recipientPhoneNumber, new Message(
+				AutoCommutator.getInstance().receiveMessage(new Message(
 					MessageType.RING, this.callerPhoneNumber, recipientPhoneNumber
 				));
 				break;
@@ -213,6 +213,8 @@ public class Connection extends Thread implements IConnection {
 						IEvent event = new Event(EventType.UNAVAILABLE_RECIPIENT);
 						event.addAttribute(ExchangeAttributeNames.CALLER_PHONE_NUMBER, callerPhoneNumber);
 						event.addAttribute(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER, recipientPhoneNumber);
+						event.addAttribute(ExchangeAttributeNames.DATE, new Date().toLocaleString());
+						event.addAttribute(ExchangeAttributeNames.MESSAGE, "Message Cool !");
 						AutoCommutator.getInstance().sendEvent(event);
 					}
 				}, ans_expire);

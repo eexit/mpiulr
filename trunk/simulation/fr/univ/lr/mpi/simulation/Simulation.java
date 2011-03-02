@@ -20,7 +20,7 @@ import fr.univ.lr.mpi.lines.impl.Line;
 public class Simulation {
 
 	public static void main(String[] args) throws LineException,
-			PhoneNumberValidatorException {
+			PhoneNumberValidatorException, InterruptedException {
 		AutoCommutator commutator = AutoCommutator.getInstance();
 
 		Line l1 = new Line("0102030105");
@@ -41,8 +41,10 @@ public class Simulation {
 
 		/* L2 => L4 */
 		l2.dialTo("0405060708");
+		Thread.sleep(10000);
+		commutator.stop();
 		/* L1 => L3 */
-		// l1.dialTo("0304050607");
+		//l1.dialTo("0304050607");
 
 		// Event e;
 		// /* Directory Service test */
