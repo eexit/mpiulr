@@ -2,33 +2,51 @@ package fr.univ.lr.mpi.services.impl;
 
 import java.util.Date;
 
+/**
+ * 
+ * @author FAUCHER Tony <faucher.tony85@gmail.com>
+ * 
+ */
+
 public class AnsweringMachineMessage {
 
-	
-	//attributes
+	/**
+	 * The date of te message
+	 */
 	private Date postDate;
-	private String posterPhoneNumber, ownerPhoneNumber;
+
+	/**
+	 * The caller phone number
+	 */
+	private String posterPhoneNumber;
+
+	/**
+	 * The recipient phone number
+	 */
+	private String ownerPhoneNumber;
+
+	/**
+	 * The Message
+	 */
 	private Object message;
 
-	
-	//Constructor
+	// Constructor
 	/**
 	 * 
 	 * @param postDate
 	 * @param posterPhoneNumber
 	 * @param message
 	 */
-	public AnsweringMachineMessage(Date postDate, String ownerPhoneNumber, String posterPhoneNumber,
-			Object message) {
+	public AnsweringMachineMessage(Date postDate, String ownerPhoneNumber,
+			String posterPhoneNumber, Object message) {
 		this.postDate = postDate;
 		this.ownerPhoneNumber = ownerPhoneNumber;
 		this.posterPhoneNumber = posterPhoneNumber;
 		this.message = message;
 	}
 
+	// méthodes
 
-	//méthodes
-	
 	/**
 	 * @return Post Date
 	 */
@@ -51,7 +69,7 @@ public class AnsweringMachineMessage {
 	public String getOwnerPhoneNumber() {
 		return this.ownerPhoneNumber;
 	}
-	
+
 	/**
 	 * 
 	 * @return The message
@@ -59,8 +77,5 @@ public class AnsweringMachineMessage {
 	public Object getMessage() {
 		return message;
 	}
-	
-	
-	
-	
+
 }

@@ -13,12 +13,14 @@ import fr.univ.lr.mpi.services.IService;
 /**
  * Call Transfert Service
  * 
- * @author FAUCHER Tony
+ * @author FAUCHER Tony <faucher.tony85@gmail.com>
  * 
  */
 public class CallTransferService implements IService {
 
-	// attribute
+	/**
+	 * Map to know the different transfert rule between two lines 
+	 */
 	private Map<String, String> transferRulesTables;
 
 	/**

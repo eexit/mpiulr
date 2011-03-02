@@ -13,12 +13,14 @@ import fr.univ.lr.mpi.services.IService;
 /**
  * Billing Service
  * 
- * @author FAUCHER Tony
+ * @author FAUCHER Tony <faucher.tony85@gmail.com>
  * 
  */
 public class BillingService implements IService {
 
-	// attributes
+	/**
+	 * List for the bill, it's contains BillingEntry (caller phone number, recipient phone number, duration and date)
+	 */
 	private List<BillingEntry> entries;
 
 	/**

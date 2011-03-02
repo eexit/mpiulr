@@ -13,15 +13,18 @@ import fr.univ.lr.mpi.services.IService;
 /**
  * Answering Service
  * 
- * @author FAUCHER Tony
+ * @author FAUCHER Tony <faucher.tony85@gmail.com>
  */
 
 public class AnsweringService implements IService {
 
-	// attributes
+	/**
+	 * List of different message from an answering Machine
+	 */
+	
 	private List<AnsweringMachineMessage> messages;
 
-	// constructor
+	
 	/**
 	 * Constructor of an Answering Service
 	 */
