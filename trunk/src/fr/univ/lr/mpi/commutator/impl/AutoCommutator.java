@@ -34,7 +34,6 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 	private int MAX_CONNECTIONS;
 
 	private List<IConnection> connections;
-//	private List<ILine> lines;
 	private List<IService> services;
 
 	private AutoCommutator() {
@@ -43,7 +42,6 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 
 	private AutoCommutator(int maxConnections) {
 		this.connections = new ArrayList<IConnection>();
-//		this.lines = new ArrayList<ILine>();
 		this.services = new ArrayList<IService>();
 		this.MAX_CONNECTIONS = maxConnections;
 
@@ -51,9 +49,15 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 	}
 
 	private void initServices() {
-		registerService(new DirectoryService());
+		DirectoryService directory = new DirectoryService();
+		directory.start();
+		registerService(directory);
+
+		
 		registerService(new AnsweringService());
+
 		registerService(new BillingService());
+
 		registerService(new CallTransferService());
 
 		/* Adding answering machine number */
@@ -84,26 +88,10 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 	 */
 
 	private void launchConnection(String callerPhoneNumber) {
-		// IConnection connection = new Connection(callerPhoneNumber);
-		connections.add(new Connection(callerPhoneNumber));
-		// FIXME
+		Connection connection = new Connection(callerPhoneNumber);
+		connection.start();
+		connections.add(connection);
 	}
-
-	/**
-	 * Returns a phone line that corresponds to the phone number
-	 * 
-	 * @param phoneNumber
-	 *            the line phone number
-	 */
-
-//	private ILine getLine(String phoneNumber) {
-//		for (ILine line : this.lines) {
-//			if (line.getPhoneNumber().equals(phoneNumber)) {
-//				return line;
-//			}
-//		}
-//		return null;
-//	}
 
 	/**
 	 * Returns the number of active connections (it must not exceed the
@@ -114,7 +102,7 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 
 	public int getActiveConnections() {
 		return this.concentrator.getActiveLines().size();
-//		return this.connections.size();
+		// return this.connections.size();
 	}
 
 	/**
@@ -147,36 +135,6 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 	public void unregisterService(IService service) {
 		this.services.remove(service);
 	}
-
-	/**
-	 * Registers a phone line
-	 * 
-	 * @param line
-	 *            The new phone line
-	 */
-
-//	public void registerLine(ILine line) {
-//		IEvent event = new Event(EventType.LINE_CREATION);
-//		event.addAttribute(ExchangeAttributeNames.CALLER_PHONE_NUMBER, line
-//				.getPhoneNumber());
-//		this.sendEvent(event);
-//		this.lines.add(line);
-//	}
-
-	/**
-	 * Unregisters a phone line
-	 * 
-	 * @param line
-	 *            The service to unregister
-	 */
-
-//	public void unregisterLine(ILine line) {
-//		IEvent event = new Event(EventType.LINE_DELETION);
-//		event.addAttribute(ExchangeAttributeNames.CALLER_PHONE_NUMBER, line
-//				.getPhoneNumber());
-//		this.sendEvent(event);
-//		this.lines.remove(line);
-//	}
 
 	/**
 	 * Send an event to all registered services
@@ -234,15 +192,9 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 					.getAttributeValue(ExchangeAttributeNames.CALLER_PHONE_NUMBER);
 			recipientPhoneNumber = event
 					.getAttributeValue(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER);
-
-			//!!!!!!!!!!!!!!!!!!!!!
 			this.concentrator.sendMessage(callerPhoneNumber, new Message(
 					MessageType.RING, callerPhoneNumber, recipientPhoneNumber));
-			
-			
-//			getLine(recipientPhoneNumber).receiveMessage(
-//					new Message(MessageType.RING, callerPhoneNumber,
-//							recipientPhoneNumber));
+
 			break;
 		}
 	}
@@ -257,7 +209,6 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 	@Override
 	public synchronized void receiveMessage(IMessage message) {
 		String callerPhoneNumber = message.getCallerPhoneNumber();
-		System.out.println(message);
 		switch (message.getMessageType()) {
 		case PICKUP:
 			// When pickup from caller => send a tone to it to notify the
@@ -271,24 +222,36 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 				this.concentrator.sendMessage(callerPhoneNumber, new Message(
 						MessageType.TOO_MANY_CONNECTIONS, callerPhoneNumber,
 						null));
-				
-				
-//				getLine(callerPhoneNumber).receiveMessage(
-//						new Message(MessageType.TOO_MANY_CONNECTIONS,
-//								callerPhoneNumber, null));
 				return;
 			}
-			
+
 			launchConnection(callerPhoneNumber);
 			this.concentrator.sendMessage(callerPhoneNumber, new Message(
 					MessageType.BACKTONE, callerPhoneNumber, null));
-
-			// getLine(callerPhoneNumber).receiveMessage(
-			// new Message(MessageType.BACKTONE, callerPhoneNumber, null));
 			break;
 		default:
+			/*
+			 * By default the message is dispatched to the concerned connection
+			 * service
+			 */
+			getConnection(callerPhoneNumber).receiveMessage(message);
 			break;
 		}
+	}
+
+	/**
+	 * 
+	 * @param phoneNumber
+	 * @return
+	 */
+
+	public IConnection getConnection(String phoneNumber) {
+		for (IConnection connection : connections) {
+			if (((Connection) connection).getCaller().equals(phoneNumber)) {
+				return connection;
+			}
+		}
+		return null;
 	}
 
 	/**
