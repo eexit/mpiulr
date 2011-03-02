@@ -126,7 +126,7 @@ public class CallTransferService implements IService {
 		 */
 		case REMOVE_TRANSFER:
 			String phoneNumber = event
-					.getAttributeValue(ExchangeAttributeNames.CALLER_PHONE_NUMBER);
+					.getAttributeValue(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER);
 			this.removeTransferCallRule(phoneNumber);
 			break;
 		}
