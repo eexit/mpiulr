@@ -89,7 +89,6 @@ public class CallTransferService implements IService {
 						.get(recipientPhoneNumber);
 
 			}
-
 			/**
 			 * Create event
 			 */
