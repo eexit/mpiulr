@@ -2,6 +2,7 @@ package fr.univ.lr.mpi.services.impl;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Stack;
 
 import fr.univ.lr.mpi.commutator.impl.AutoCommutator;
 import fr.univ.lr.mpi.exchanges.IEvent;
@@ -16,18 +17,92 @@ import fr.univ.lr.mpi.services.IService;
  * @author FAUCHER Tony <faucher.tony85@gmail.com>
  * 
  */
-public class CallTransferService implements IService {
+public class CallTransferService extends Thread implements IService {
 
 	/**
 	 * Map to know the different transfert rule between two lines
 	 */
 	private Map<String, String> transferRulesTables;
 
+	private Stack<IEvent> eventStack;
+
 	/**
 	 * Constructor
 	 */
 	public CallTransferService() {
 		this.transferRulesTables = new HashMap<String, String>();
+		this.eventStack = new Stack<IEvent>();
+	}
+
+	public void run() {
+		while (true) {
+			if (eventStack.isEmpty()) {
+				try {
+					wait();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			IEvent event = eventStack.pop();
+			switch (event.getEventType()) {
+			/**
+			 * Test if a transfert exist from a line
+			 */
+			case CALL_TRANSFER_REQUEST:
+				String recipientPhoneNumber = event
+						.getAttributeValue(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER);
+				String callerPhoneNumber = event
+						.getAttributeValue(ExchangeAttributeNames.CALLER_PHONE_NUMBER);
+
+				/**
+				 * Test if we must change the recipient
+				 */
+				if (this.transferRulesTables.containsKey(recipientPhoneNumber)) {
+					recipientPhoneNumber = this.transferRulesTables
+							.get(recipientPhoneNumber);
+
+				}
+				/**
+				 * Create event
+				 */
+				IEvent newEvent = new Event(EventType.CALL_TRANSFER_RESPONSE);
+				// add the caller attribute
+				newEvent.addAttribute(
+						ExchangeAttributeNames.CALLER_PHONE_NUMBER,
+						callerPhoneNumber);
+
+				// add the recipient attribute
+				newEvent.addAttribute(
+						ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER,
+						recipientPhoneNumber);
+
+				// send the event
+				AutoCommutator.getInstance().receiveEvent(newEvent);
+
+				break;
+
+			/**
+			 * Create a transfer from line 1 to line 2
+			 */
+			case CREATE_TRANSFER:
+
+				String oldPhoneNumber = event
+						.getAttributeValue(ExchangeAttributeNames.CALLER_PHONE_NUMBER);
+				String newPhoneNumber = event
+						.getAttributeValue(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER);
+				this.addTransferCallRule(oldPhoneNumber, newPhoneNumber);
+				break;
+
+			/**
+			 * Remove a transfert from a line
+			 */
+			case REMOVE_TRANSFER:
+				String phoneNumber = event
+						.getAttributeValue(ExchangeAttributeNames.PHONE_NUMBER);
+				this.removeTransferCallRule(phoneNumber);
+				break;
+			}
+		}
 	}
 
 	/**
@@ -59,7 +134,7 @@ public class CallTransferService implements IService {
 	}
 
 	/**
-	 * Remove a call transfert rule
+	 * Remove a call transfer rule
 	 * 
 	 * @param originalPhoneNumber
 	 */
@@ -71,63 +146,7 @@ public class CallTransferService implements IService {
 
 	@Override
 	public void receiveEvent(IEvent event) {
-		switch (event.getEventType()) {
-		/**
-		 * Test if a transfert exist from a line
-		 */
-		case CALL_TRANSFER_REQUEST:
-			String recipientPhoneNumber = event
-					.getAttributeValue(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER);
-			String callerPhoneNumber = event
-					.getAttributeValue(ExchangeAttributeNames.CALLER_PHONE_NUMBER);
-
-			/**
-			 * Test if we must change the recipient
-			 */
-			if (this.transferRulesTables.containsKey(recipientPhoneNumber)) {
-				recipientPhoneNumber = this.transferRulesTables
-						.get(recipientPhoneNumber);
-
-			}
-			/**
-			 * Create event
-			 */
-			IEvent newEvent = new Event(EventType.CALL_TRANSFER_RESPONSE);
-			// add the caller attribute
-			newEvent.addAttribute(ExchangeAttributeNames.CALLER_PHONE_NUMBER,
-					callerPhoneNumber);
-
-			
-			// add the recipient attribute
-			newEvent.addAttribute(
-					ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER,
-					recipientPhoneNumber);
-
-			// send the event
-			AutoCommutator.getInstance().receiveEvent(newEvent);
-
-			break;
-
-		/**
-		 * Create a transfert from line 1 to line 2
-		 */
-		case CREATE_TRANSFER:
-
-			String oldPhoneNumber = event
-					.getAttributeValue(ExchangeAttributeNames.CALLER_PHONE_NUMBER);
-			String newPhoneNumber = event
-					.getAttributeValue(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER);
-			this.addTransferCallRule(oldPhoneNumber, newPhoneNumber);
-			break;
-
-		/**
-		 * Remove a transfert from a line
-		 */
-		case REMOVE_TRANSFER:
-			String phoneNumber = event
-					.getAttributeValue(ExchangeAttributeNames.PHONE_NUMBER);
-			this.removeTransferCallRule(phoneNumber);
-			break;
-		}
+		this.eventStack.add(event);
+		this.notify();
 	}
 }
