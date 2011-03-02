@@ -32,10 +32,13 @@ public enum MessageType {
 	 */
 	SEARCH,
 	/**
-	 * When the AutoCommutator send a signal to the recipient (only if the line
-	 * is free)
+	 * When the Connection ask the recipient line to ring
 	 */
 	RING,
+	/**
+	 * When the recipient line is ringing
+	 */
+	RINGING,
 	/**
 	 * When the recipient phone rings the AutoCommutator send an ECHO signal to
 	 * the caller
@@ -54,5 +57,9 @@ public enum MessageType {
 	/**
 	 * When too many connections have been established on the AutoCommutator, a
 	 */
-	TOO_MANY_CONNECTIONS;
+	TOO_MANY_CONNECTIONS,
+	/**
+	 * When the number doesn't not exist
+	 */
+	UNKNOWN_NUMBER;
 }
