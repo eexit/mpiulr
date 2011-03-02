@@ -16,6 +16,7 @@ import fr.univ.lr.mpi.lines.impl.Line;
  * 
  */
 
+@SuppressWarnings("deprecation")
 public class Simulation {
 
 	public static void main(String[] args) throws LineException,
