@@ -13,6 +13,7 @@ import fr.univ.lr.mpi.exchanges.impl.Message;
 import fr.univ.lr.mpi.exchanges.impl.MessageType;
 import fr.univ.lr.mpi.handlers.EventHandler;
 import fr.univ.lr.mpi.handlers.MessageHandler;
+import fr.univ.lr.mpi.lines.LineState;
 import fr.univ.lr.mpi.services.IService;
 import fr.univ.lr.mpi.services.impl.AnsweringService;
 import fr.univ.lr.mpi.services.impl.BillingService;
@@ -53,7 +54,6 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 		directory.start();
 		registerService(directory);
 
-		
 		registerService(new AnsweringService());
 
 		registerService(new BillingService());
@@ -228,6 +228,17 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 			launchConnection(callerPhoneNumber);
 			this.concentrator.sendMessage(callerPhoneNumber, new Message(
 					MessageType.BACKTONE, callerPhoneNumber, null));
+			break;
+		/* When checking about the recipient line state before ring to his phone */
+		case RING:
+			String recipientNumber = message.getRecipientPhoneNumber();
+			if (concentrator.getActiveLine(recipientNumber).getState().equals(
+					LineState.BUSY)) {
+				return;
+			}
+			getConnection(callerPhoneNumber).receiveMessage(
+					new Message(MessageType.RINGING, callerPhoneNumber,
+							recipientNumber));
 			break;
 		default:
 			/*
