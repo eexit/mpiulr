@@ -14,6 +14,8 @@ import fr.univ.lr.mpi.lines.ILine;
 
 public class Concentrator {
 
+	
+	
 	private List<ILine> lines;
 
 	public Concentrator() {
@@ -36,7 +38,12 @@ public class Concentrator {
 	 */
 
 	public void sendMessage(String phoneNumber, IMessage message) {
-
+		int i=0;
+		while(phoneNumber!=lines.get(i).getPhoneNumber() || i>lines.size() )
+		{
+			i++;
+		}
+		lines.get(i).receiveMessage(message);
 	}
 
 	/**
@@ -45,6 +52,6 @@ public class Concentrator {
 	 */
 
 	public void receiveMessage(IMessage message) {
-
+		AutoCommutator.getInstance().receiveMessage(message);
 	}
 }
