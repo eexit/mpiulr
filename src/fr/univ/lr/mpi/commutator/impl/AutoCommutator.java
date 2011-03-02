@@ -49,6 +49,13 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 		initServices();
 	}
 
+	public void stop() {
+		for (int i = 0; i < services.size(); i++) {
+			Thread t = (Thread) services.get(i);
+			t.stop();
+		}
+	}
+
 	private void initServices() {
 		DirectoryService directory = new DirectoryService();
 		directory.start();
