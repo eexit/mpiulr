@@ -96,6 +96,7 @@ public class Line implements ILine {
 	 * @param message
 	 */
 	public void receiveMessage(IMessage message) {
+		System.out.println("Line receive message: " + message);
 		System.out.println(message);
 		phone.appendLog(message);
 	}
@@ -150,6 +151,7 @@ public class Line implements ILine {
 	}
 
 	public void sendMessage(String content) {
+		System.out.println("Line send content: " + content);
 		concentrator.receiveMessage(new Message(MessageType.VOICE_EXCHANGE,
 				this.getPhoneNumber(), null, content));
 	}
