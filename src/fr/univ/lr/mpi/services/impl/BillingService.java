@@ -43,10 +43,12 @@ public class BillingService extends Thread implements IService {
 	public void run() {
 		while (true) {
 			if (this.eventStack.isEmpty()) {
-				try {
-					this.wait();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
+				synchronized (this) {
+					try {
+						this.wait();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
 				}
 			}
 			IEvent event = this.eventStack.pop();
@@ -98,7 +100,7 @@ public class BillingService extends Thread implements IService {
 	}
 
 	@Override
-	public void receiveEvent(IEvent event) {
+	public synchronized void receiveEvent(IEvent event) {
 		this.eventStack.add(event);
 		this.notify();
 	}
