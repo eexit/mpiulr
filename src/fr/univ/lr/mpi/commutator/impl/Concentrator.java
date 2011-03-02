@@ -44,6 +44,15 @@ public class Concentrator {
 		return this.lines;
 	}
 
+	public ILine getActiveLine(String phoneNumber) {
+		for (ILine line : lines) {
+			if (line.getPhoneNumber().equals(phoneNumber)) {
+				return line;
+			}
+		}
+		return null;
+	}
+
 	/**
 	 * 
 	 * @param phoneNumber
