@@ -1,0 +1,9 @@
+fr.univ.lr.mpi.commutator
+fr.univ.lr.mpi.commutator.impl
+fr.univ.lr.mpi.exchanges
+fr.univ.lr.mpi.exchanges.impl
+fr.univ.lr.mpi.handlers
+fr.univ.lr.mpi.lines
+fr.univ.lr.mpi.lines.impl
+fr.univ.lr.mpi.services
+fr.univ.lr.mpi.services.impl
