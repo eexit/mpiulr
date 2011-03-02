@@ -3,6 +3,8 @@ package fr.univ.lr.mpi.simulation;
 import java.util.Date;
 
 import fr.univ.lr.mpi.commutator.impl.AutoCommutator;
+import fr.univ.lr.mpi.exceptions.LineException;
+import fr.univ.lr.mpi.exceptions.PhoneNumberValidatorException;
 import fr.univ.lr.mpi.exchanges.impl.Event;
 import fr.univ.lr.mpi.exchanges.impl.EventType;
 import fr.univ.lr.mpi.exchanges.impl.ExchangeAttributeNames;
@@ -16,7 +18,7 @@ import fr.univ.lr.mpi.lines.impl.Line;
 
 public class Simulation {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws PhoneNumberValidatorException, LineException {
 		AutoCommutator commutator = AutoCommutator.getInstance();
 
 		Line l1 = new Line("0102030105");
