@@ -40,5 +40,9 @@ public enum EventType {
 	/**
 	 * When the call transfer service delivers its response
 	 */
-	CALL_TRANSFER_RESPONSE;
+	CALL_TRANSFER_RESPONSE,
+	/**
+	 * When there is no answer from the recipient
+	 */
+	UNAVAILABLE_RECIPIENT;
 }

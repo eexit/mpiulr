@@ -7,9 +7,9 @@ public class AnsweringMachineMessage {
 	
 	//attributes
 	private Date postDate;
-	private String posterPhoneNumber;
+	private String posterPhoneNumber, ownerPhoneNumber;
 	private Object message;
-	
+
 	
 	//Constructor
 	/**
@@ -18,9 +18,10 @@ public class AnsweringMachineMessage {
 	 * @param posterPhoneNumber
 	 * @param message
 	 */
-	public AnsweringMachineMessage(Date postDate, String posterPhoneNumber,
+	public AnsweringMachineMessage(Date postDate, String ownerPhoneNumber, String posterPhoneNumber,
 			Object message) {
 		this.postDate = postDate;
+		this.ownerPhoneNumber = ownerPhoneNumber;
 		this.posterPhoneNumber = posterPhoneNumber;
 		this.message = message;
 	}
@@ -43,6 +44,14 @@ public class AnsweringMachineMessage {
 		return posterPhoneNumber;
 	}
 
+	/**
+	 * 
+	 * @return Phone number owner
+	 */
+	public String getOwnerPhoneNumber() {
+		return this.ownerPhoneNumber;
+	}
+	
 	/**
 	 * 
 	 * @return The message
