@@ -21,10 +21,11 @@ public class AnsweringService implements IService {
 	/**
 	 * List of different message from an answering Machine
 	 */
-	
+
 	private List<AnsweringMachineMessage> messages;
 
-	
+	public static final String ANSWERING_MACHINE_PHONENUMBER = "3103";
+
 	/**
 	 * Constructor of an Answering Service
 	 */
@@ -55,36 +56,35 @@ public class AnsweringService implements IService {
 
 	@Override
 	public void receiveEvent(IEvent event) {
-		switch (event.getEventType())
-		{
-		case UNAVAILABLE_RECIPIENT :
-			
+		switch (event.getEventType()) {
+		case UNAVAILABLE_RECIPIENT:
+
 			// Get the caller phone Number and the recipient phone number
 			String callerPhoneNumber = event
 					.getAttributeValue(ExchangeAttributeNames.CALLER_PHONE_NUMBER);
 			String recipientPhoneNumber = event
 					.getAttributeValue(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER);
 
-			// Get the message 
-			String message = event.getAttributeValue(ExchangeAttributeNames.MESSAGE);
-			
+			// Get the message
+			String message = event
+					.getAttributeValue(ExchangeAttributeNames.MESSAGE);
+
 			// Get the date
 			String dateString = event
 					.getAttributeValue(ExchangeAttributeNames.DATE);
 			DateFormat df = DateFormat.getDateInstance();
 			Date date;
-			
-			try{
+
+			try {
 				date = df.parse(dateString);
-				
-				this.messages.add(new AnsweringMachineMessage(date, recipientPhoneNumber, callerPhoneNumber, message));
-			}
-			catch (ParseException e) {
+
+				this.messages.add(new AnsweringMachineMessage(date,
+						recipientPhoneNumber, callerPhoneNumber, message));
+			} catch (ParseException e) {
 
 				e.printStackTrace();
 			}
 
-			
 			break;
 		}
 	}
