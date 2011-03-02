@@ -6,6 +6,8 @@ import com.trolltech.qt.core.QCoreApplication;
 import com.trolltech.qt.core.QSize;
 import com.trolltech.qt.gui.*;
 
+import fr.univ.lr.mpi.exchanges.IMessage;
+import fr.univ.lr.mpi.exchanges.impl.Message;
 import fr.univ.lr.mpi.lines.impl.Line;
 
 public class PhoneWidget extends QWidget
@@ -28,7 +30,7 @@ public class PhoneWidget extends QWidget
     {
         super(parent);
         this.resize(171, 301);
-        
+        this.line.setPhone(this);
         this.line = line;
         this.phoneNumber = this.line.getPhoneNumber();
         this.directory = new ArrayList<String>();
@@ -77,7 +79,17 @@ public class PhoneWidget extends QWidget
         gridLayout.addWidget(messageLabel,4,0,1,2);
         gridLayout.addWidget(messageEdit,5,0,1,2);
         gridLayout.addWidget(logBrowser,6,0,1,2);
+        
+        
     }
     
+    private void connection()
+    {
+    	
+    }
     
+    public void appendLog(IMessage message)
+    {
+    	
+    }
 }
