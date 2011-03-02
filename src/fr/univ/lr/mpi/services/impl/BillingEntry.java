@@ -3,15 +3,25 @@ package fr.univ.lr.mpi.services.impl;
 import java.util.Date;
 
 /**
- * 
- * @author FAUCHER Tony
+ * Billing Entry
+ * @author FAUCHER Tony <faucher.tony85@gmail.com>
  * 
  */
 public class BillingEntry {
 
-	// attributes
+	/**
+	 * the caller and recipient phone number
+	 */
 	private String callerPhoneNumber, recipientPhoneNumber;
+	
+	/**
+	 * The duration
+	 */
 	private double duration;
+	
+	/**
+	 * The date
+	 */
 	private Date date;
 
 	/**
