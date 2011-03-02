@@ -22,6 +22,7 @@ public class Concentrator {
 
 	public void registerLine(ILine line) {
 		lines.add(line);
+		line.setConcentrator(this);
 	}
 
 	public int unregisterLine(String numberLine) {

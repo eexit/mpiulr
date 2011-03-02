@@ -257,7 +257,7 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 	@Override
 	public synchronized void receiveMessage(IMessage message) {
 		String callerPhoneNumber = message.getCallerPhoneNumber();
-
+		System.out.println(message);
 		switch (message.getMessageType()) {
 		case PICKUP:
 			// When pickup from caller => send a tone to it to notify the
