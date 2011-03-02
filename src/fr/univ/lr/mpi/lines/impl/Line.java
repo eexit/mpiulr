@@ -98,8 +98,6 @@ public class Line implements ILine {
 	public void receiveMessage(IMessage message) {
 		System.out.println(message);
 		phone.appendLog(message);
-		
-		
 	}
 
 	/**

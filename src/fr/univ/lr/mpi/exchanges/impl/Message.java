@@ -13,17 +13,24 @@ public class Message implements IMessage {
 	private MessageType type;
 	private String callerPhoneNumber;
 	private String recipientPhoneNumber;
+	private String content;
 
 	// constructor
 	public Message(MessageType type, String callerPhoneNumber) {
-		this(type, callerPhoneNumber, null);
+		this(type, callerPhoneNumber, null, null);
 	}
 	
+	public Message(MessageType type, String callerPhoneNumber, String recipientPhoneNumber) {
+		this(type, callerPhoneNumber, recipientPhoneNumber, null);
+	}
+
+	
 	public Message(MessageType type, String callerPhoneNumber,
-			String recipientPhoneNumber) {
+			String recipientPhoneNumber, String content) {
 		this.type = type;
 		this.callerPhoneNumber = callerPhoneNumber;
 		this.recipientPhoneNumber = recipientPhoneNumber;
+		this.content = content;
 	}
 
 	// getter and setter
@@ -35,6 +42,11 @@ public class Message implements IMessage {
 		return this.type;
 	}
 
+	public String getContent()
+	{
+		return this.content;
+	}
+	
 	// called phone number
 	/**
 	 * @return caller phone number
@@ -55,7 +67,7 @@ public class Message implements IMessage {
 	public String toString() {
 		return "Message [callerPhoneNumber=" + callerPhoneNumber
 				+ ", recipientPhoneNumber=" + recipientPhoneNumber + ", type="
-				+ type + "]";
+				+ type + ", content=" + "]";
 	}
 
 }

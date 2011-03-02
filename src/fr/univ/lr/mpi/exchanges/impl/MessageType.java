@@ -62,4 +62,5 @@ public enum MessageType {
 	 * When the number doesn't not exist
 	 */
 	UNKNOWN_NUMBER;
+
 }
