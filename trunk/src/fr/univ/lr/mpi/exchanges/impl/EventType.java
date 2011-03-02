@@ -52,5 +52,13 @@ public enum EventType {
 	/**
 	 * When there is no answer from the recipient
 	 */
-	UNAVAILABLE_RECIPIENT;
+	UNAVAILABLE_RECIPIENT, 
+	/**
+	 * Dialing to a line
+	 */
+	DIALING,
+	/**
+	 * Send a message
+	 */
+	MESSAGE_TRANSFER;
 }
