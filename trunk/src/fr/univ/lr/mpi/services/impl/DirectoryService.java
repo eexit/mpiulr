@@ -84,14 +84,25 @@ public class DirectoryService implements IService {
 			// if the phone number is in the directory, we return true, else we
 			// return false
 
-			// Create an event
-			Event e = new Event(EventType.PHONE_NUMBER_RESPONSE);
-			e.addAttribute(ExchangeAttributeNames.EXISTS, Boolean.toString(this
-					.exist(phoneNumber)));
-			e.addAttribute(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER,
-					phoneNumber);
+			// Create a new event
+			Event newEvent = new Event(EventType.PHONE_NUMBER_RESPONSE);
+			// add caller phone number
+			newEvent
+					.addAttribute(
+							ExchangeAttributeNames.CALLER_PHONE_NUMBER,
+							event
+									.getAttributeValue(ExchangeAttributeNames.CALLER_PHONE_NUMBER));
+			// add recipient phone number
+			newEvent.addAttribute(
+					ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER, phoneNumber);
+
+			// add boolean
+		
+			newEvent.addAttribute(ExchangeAttributeNames.EXISTS, Boolean
+					.toString(this.exist(phoneNumber)));
+
 			// Send to the autocommutator the event
-			AutoCommutator.getInstance().receiveEvent(e);
+			AutoCommutator.getInstance().receiveEvent(newEvent);
 
 			break;
 		}
