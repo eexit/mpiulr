@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0" language="jambi">
+ <class>PhoneWidget</class>
+ <widget class="QWidget" name="PhoneWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>196</width>
+    <height>195</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <widget class="QWidget" name="">
+   <property name="geometry">
+    <rect>
+     <x>11</x>
+     <y>11</y>
+     <width>171</width>
+     <height>176</height>
+    </rect>
+   </property>
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="1" column="0">
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QPushButton" name="pickUpButton">
+        <property name="minimumSize">
+         <size>
+          <width>39</width>
+          <height>41</height>
+         </size>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normaloff>../../../../../../content/pick_up.png</normaloff>../../../../../../content/pick_up.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>41</width>
+          <height>39</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="hangUpButton">
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normaloff>../../../../../../content/hang_up.png</normaloff>../../../../../../content/hang_up.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>41</width>
+          <height>39</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="2" column="0">
+     <widget class="QComboBox" name="directoryComboBox"/>
+    </item>
+    <item row="3" column="0">
+     <widget class="QTextEdit" name="messageEdit"/>
+    </item>
+    <item row="0" column="0">
+     <widget class="QLabel" name="numLabel">
+      <property name="text">
+       <string>TextLabel</string>
+      </property>
+      <property name="alignment">
+       <set>com.trolltech.qt.core.Qt.AlignmentFlag.AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <zorder>gridLayoutWidget</zorder>
+  <zorder>numLabel</zorder>
+ </widget>
+ <tabstops>
+  <tabstop>pickUpButton</tabstop>
+  <tabstop>directoryComboBox</tabstop>
+  <tabstop>messageEdit</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>
