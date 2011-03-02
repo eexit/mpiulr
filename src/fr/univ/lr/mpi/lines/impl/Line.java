@@ -149,6 +149,11 @@ public class Line implements ILine {
 		// new Message(MessageType.NUMBERING, this.phoneNumber, null));
 	}
 
+	public void sendMessage(String content) {
+		concentrator.receiveMessage(new Message(MessageType.VOICE_EXCHANGE,
+				this.getPhoneNumber(), null, content));
+	}
+
 	/**
 	 * Gets the current line state
 	 * 
