@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.univ.lr.mpi.exchanges.IEvent;
+import fr.univ.lr.mpi.exchanges.impl.EventType;
+import fr.univ.lr.mpi.exchanges.impl.ExchangeAttributeNames;
 import fr.univ.lr.mpi.services.IService;
 
 /**
@@ -49,6 +51,19 @@ public class DirectoryService implements IService {
 
 	@Override
 	public void receiveEvent(IEvent event) {
-		// TODO Auto-generated method stub
+		String phoneNumber;
+		switch (event.getEventType()) {
+		case LINE_CREATION:
+			phoneNumber = event
+					.getAttributeValue(ExchangeAttributeNames.CALLER_PHONE_NUMBER);
+			this.directory.add(phoneNumber);
+			break;
+		case LINE_DELETION:
+			phoneNumber = event
+					.getAttributeValue(ExchangeAttributeNames.CALLER_PHONE_NUMBER);
+			this.directory.remove(phoneNumber);
+			break;
+		}
+
 	}
 }

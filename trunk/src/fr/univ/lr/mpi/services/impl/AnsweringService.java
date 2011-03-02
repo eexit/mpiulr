@@ -1,9 +1,13 @@
 package fr.univ.lr.mpi.services.impl;
 
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import fr.univ.lr.mpi.exchanges.IEvent;
+import fr.univ.lr.mpi.exchanges.impl.ExchangeAttributeNames;
 import fr.univ.lr.mpi.services.IService;
 
 /**
@@ -48,7 +52,37 @@ public class AnsweringService implements IService {
 
 	@Override
 	public void receiveEvent(IEvent event) {
-		// TODO Auto-generated method stub
+		switch (event.getEventType())
+		{
+		case UNAVAILABLE_RECIPIENT :
+			
+			// Get the caller phone Number and the recipient phone number
+			String callerPhoneNumber = event
+					.getAttributeValue(ExchangeAttributeNames.CALLER_PHONE_NUMBER);
+			String recipientPhoneNumber = event
+					.getAttributeValue(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER);
 
+			// Get the message 
+			String message = event.getAttributeValue(ExchangeAttributeNames.MESSAGE);
+			
+			// Get the date
+			String dateString = event
+					.getAttributeValue(ExchangeAttributeNames.DATE);
+			DateFormat df = DateFormat.getDateInstance();
+			Date date;
+			
+			try{
+				date = df.parse(dateString);
+				
+				this.messages.add(new AnsweringMachineMessage(date, recipientPhoneNumber, callerPhoneNumber, message));
+			}
+			catch (ParseException e) {
+
+				e.printStackTrace();
+			}
+
+			
+			break;
+		}
 	}
 }

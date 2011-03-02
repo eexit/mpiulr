@@ -1,10 +1,13 @@
 package fr.univ.lr.mpi.services.impl;
 
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import fr.univ.lr.mpi.exchanges.IEvent;
+import fr.univ.lr.mpi.exchanges.impl.ExchangeAttributeNames;
 import fr.univ.lr.mpi.services.IService;
 
 /**
@@ -18,7 +21,6 @@ public class BillingService implements IService {
 	// attributes
 	private List<BillingEntry> entries;
 
-
 	/**
 	 * Constructor
 	 * 
@@ -30,6 +32,7 @@ public class BillingService implements IService {
 
 	/**
 	 * Create and Add an entry in the list
+	 * 
 	 * @param callerPhoneNumber
 	 * @param recipientPhoneNumber
 	 * @param date
@@ -43,6 +46,39 @@ public class BillingService implements IService {
 
 	@Override
 	public void receiveEvent(IEvent event) {
-		// TODO Auto-generated method stub
+		switch (event.getEventType()) {
+		case CONNECTION_CLOSED:
+			// Get the caller phone Number and the recipient phone number
+			String callerPhoneNumber = event
+					.getAttributeValue(ExchangeAttributeNames.CALLER_PHONE_NUMBER);
+			String recipientPhoneNumber = event
+					.getAttributeValue(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER);
+
+			// Get the duration
+			Double duration = Double
+					.parseDouble(event
+							.getAttributeValue(ExchangeAttributeNames.CONNECTION_DURATION));
+
+			// Get the date
+			String dateString = event
+					.getAttributeValue(ExchangeAttributeNames.DATE);
+			DateFormat df = DateFormat.getDateInstance();
+			Date date;
+			try {
+				date = df.parse(dateString);
+
+				// Add a billing entry in the array
+				this.entries.add(new BillingEntry(callerPhoneNumber,
+						recipientPhoneNumber, date, duration));
+
+			} catch (ParseException e) {
+
+				e.printStackTrace();
+			}
+
+			break;
+
+		}
+
 	}
 }
