@@ -17,7 +17,6 @@ import fr.univ.lr.mpi.lines.impl.Line;
  * 
  */
 
-@SuppressWarnings("deprecation")
 public class Simulation {
 
 	public static void main(String[] args) throws LineException,
@@ -31,7 +30,7 @@ public class Simulation {
 
 		Concentrator concentrator = new Concentrator();
 		commutator.setConcentrator(concentrator);
-		
+
 		concentrator.registerLine(l1);
 		concentrator.registerLine(l2);
 		concentrator.registerLine(l3);
@@ -49,9 +48,6 @@ public class Simulation {
 		e.addAttribute(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER,
 				"0203040506");
 		AutoCommutator.getInstance().sendEvent(e);
-		
-		
-		
 
 		/* Billing Service test */
 		e = new Event(EventType.CONNECTION_CLOSED);
@@ -101,6 +97,12 @@ public class Simulation {
 		System.out.println("Actives Connections : "
 				+ commutator.getActiveConnections());
 	}
+
+	/**
+	 * 
+	 * @param length
+	 * @return
+	 */
 
 	public static String generatePhoneNumber(int length) {
 		String returns = "05";
