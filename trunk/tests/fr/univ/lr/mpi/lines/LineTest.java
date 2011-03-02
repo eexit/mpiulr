@@ -50,7 +50,7 @@ public class LineTest {
 		 * FIXME
 		 */
 		//instance.setConnection(new Connection(instance));
-		instance.setConnection(new Connection());
+//		instance.setConnection(new Connection(instance.getPhoneNumber()));
 		assertTrue(instance.getState().equals(LineState.BUSY));
 	}
 
