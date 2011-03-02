@@ -78,28 +78,42 @@ public class CallTransferService implements IService {
 		case CALL_TRANSFER_REQUEST:
 			String recipientPhoneNumber = event
 					.getAttributeValue(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER);
-			String newRecipientPhoneNumber = recipientPhoneNumber;
+			String callerPhoneNumber = event
+					.getAttributeValue(ExchangeAttributeNames.CALLER_PHONE_NUMBER);
+
+			/**
+			 * Test if we must change the recipient
+			 */
 			if (this.transferRulesTables.containsKey(recipientPhoneNumber)) {
-				newRecipientPhoneNumber = this.transferRulesTables
+				recipientPhoneNumber = this.transferRulesTables
 						.get(recipientPhoneNumber);
+
 			}
+
+			/**
+			 * Create event
+			 */
 			IEvent newEvent = new Event(EventType.CALL_TRANSFER_RESPONSE);
-			newEvent
-					.addAttribute(
-							ExchangeAttributeNames.CALLER_PHONE_NUMBER,
-							event
-									.getAttributeValue(ExchangeAttributeNames.CALLER_PHONE_NUMBER));
+			// add the caller attribute
+			newEvent.addAttribute(ExchangeAttributeNames.CALLER_PHONE_NUMBER,
+					callerPhoneNumber);
+
+			
+			// add the recipient attribute
 			newEvent.addAttribute(
 					ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER,
-					newRecipientPhoneNumber);
+					recipientPhoneNumber);
+
+			// send the event
 			AutoCommutator.getInstance().receiveEvent(newEvent);
 
 			break;
 
 		/**
-		 * Create a transfer from line 1 to line 2
+		 * Create a transfert from line 1 to line 2
 		 */
 		case CREATE_TRANSFER:
+
 			String oldPhoneNumber = event
 					.getAttributeValue(ExchangeAttributeNames.CALLER_PHONE_NUMBER);
 			String newPhoneNumber = event
@@ -108,7 +122,7 @@ public class CallTransferService implements IService {
 			break;
 
 		/**
-		 * Remove a transfer from a line
+		 * Remove a transfert from a line
 		 */
 		case REMOVE_TRANSFER:
 			String phoneNumber = event
