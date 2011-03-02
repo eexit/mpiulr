@@ -85,7 +85,7 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 
 	private void launchConnection(String callerPhoneNumber) {
 		// IConnection connection = new Connection(callerPhoneNumber);
-		connections.add(new Connection());
+		connections.add(new Connection(callerPhoneNumber));
 		// FIXME
 	}
 
