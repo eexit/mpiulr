@@ -13,7 +13,6 @@ import fr.univ.lr.mpi.exchanges.impl.Message;
 import fr.univ.lr.mpi.exchanges.impl.MessageType;
 import fr.univ.lr.mpi.handlers.EventHandler;
 import fr.univ.lr.mpi.handlers.MessageHandler;
-import fr.univ.lr.mpi.lines.ILine;
 import fr.univ.lr.mpi.services.IService;
 import fr.univ.lr.mpi.services.impl.AnsweringService;
 import fr.univ.lr.mpi.services.impl.BillingService;
@@ -35,7 +34,7 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 	private int MAX_CONNECTIONS;
 
 	private List<IConnection> connections;
-	private List<ILine> lines;
+//	private List<ILine> lines;
 	private List<IService> services;
 
 	private AutoCommutator() {
@@ -44,7 +43,7 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 
 	private AutoCommutator(int maxConnections) {
 		this.connections = new ArrayList<IConnection>();
-		this.lines = new ArrayList<ILine>();
+//		this.lines = new ArrayList<ILine>();
 		this.services = new ArrayList<IService>();
 		this.MAX_CONNECTIONS = maxConnections;
 
@@ -97,14 +96,14 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 	 *            the line phone number
 	 */
 
-	private ILine getLine(String phoneNumber) {
-		for (ILine line : this.lines) {
-			if (line.getPhoneNumber().equals(phoneNumber)) {
-				return line;
-			}
-		}
-		return null;
-	}
+//	private ILine getLine(String phoneNumber) {
+//		for (ILine line : this.lines) {
+//			if (line.getPhoneNumber().equals(phoneNumber)) {
+//				return line;
+//			}
+//		}
+//		return null;
+//	}
 
 	/**
 	 * Returns the number of active connections (it must not exceed the
@@ -114,7 +113,8 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 	 */
 
 	public int getActiveConnections() {
-		return this.connections.size();
+		return this.concentrator.getActiveLines().size();
+//		return this.connections.size();
 	}
 
 	/**
@@ -155,13 +155,13 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 	 *            The new phone line
 	 */
 
-	public void registerLine(ILine line) {
-		IEvent event = new Event(EventType.LINE_CREATION);
-		event.addAttribute(ExchangeAttributeNames.CALLER_PHONE_NUMBER, line
-				.getPhoneNumber());
-		this.sendEvent(event);
-		this.lines.add(line);
-	}
+//	public void registerLine(ILine line) {
+//		IEvent event = new Event(EventType.LINE_CREATION);
+//		event.addAttribute(ExchangeAttributeNames.CALLER_PHONE_NUMBER, line
+//				.getPhoneNumber());
+//		this.sendEvent(event);
+//		this.lines.add(line);
+//	}
 
 	/**
 	 * Unregisters a phone line
@@ -170,13 +170,13 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 	 *            The service to unregister
 	 */
 
-	public void unregisterLine(ILine line) {
-		IEvent event = new Event(EventType.LINE_DELETION);
-		event.addAttribute(ExchangeAttributeNames.CALLER_PHONE_NUMBER, line
-				.getPhoneNumber());
-		this.sendEvent(event);
-		this.lines.remove(line);
-	}
+//	public void unregisterLine(ILine line) {
+//		IEvent event = new Event(EventType.LINE_DELETION);
+//		event.addAttribute(ExchangeAttributeNames.CALLER_PHONE_NUMBER, line
+//				.getPhoneNumber());
+//		this.sendEvent(event);
+//		this.lines.remove(line);
+//	}
 
 	/**
 	 * Send an event to all registered services
@@ -235,9 +235,14 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 			recipientPhoneNumber = event
 					.getAttributeValue(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER);
 
-			getLine(recipientPhoneNumber).receiveMessage(
-					new Message(MessageType.RING, callerPhoneNumber,
-							recipientPhoneNumber));
+			//!!!!!!!!!!!!!!!!!!!!!
+			this.concentrator.sendMessage(callerPhoneNumber, new Message(
+					MessageType.RING, callerPhoneNumber, recipientPhoneNumber));
+			
+			
+//			getLine(recipientPhoneNumber).receiveMessage(
+//					new Message(MessageType.RING, callerPhoneNumber,
+//							recipientPhoneNumber));
 			break;
 		}
 	}
@@ -262,13 +267,24 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 			}
 			/* If too many connections have been established */
 			if (connections.size() > MAX_CONNECTIONS) {
-				getLine(callerPhoneNumber).receiveMessage(
-						new Message(MessageType.TOO_MANY_CONNECTIONS,
-								callerPhoneNumber, null));
+
+				this.concentrator.sendMessage(callerPhoneNumber, new Message(
+						MessageType.TOO_MANY_CONNECTIONS, callerPhoneNumber,
+						null));
+				
+				
+//				getLine(callerPhoneNumber).receiveMessage(
+//						new Message(MessageType.TOO_MANY_CONNECTIONS,
+//								callerPhoneNumber, null));
+				return;
 			}
+			
 			launchConnection(callerPhoneNumber);
-			getLine(callerPhoneNumber).receiveMessage(
-					new Message(MessageType.BACKTONE, callerPhoneNumber, null));
+			this.concentrator.sendMessage(callerPhoneNumber, new Message(
+					MessageType.BACKTONE, callerPhoneNumber, null));
+
+			// getLine(callerPhoneNumber).receiveMessage(
+			// new Message(MessageType.BACKTONE, callerPhoneNumber, null));
 			break;
 		default:
 			break;
