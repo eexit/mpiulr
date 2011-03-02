@@ -121,7 +121,7 @@ public class Line implements ILine {
 			return;
 		}
 		AutoCommutator.getInstance().receiveMessage(
-				new Message(MessageType.HANGUP, this.phoneNumber, null));
+				new Message(MessageType.NUMBERING, this.phoneNumber, null));
 	}
 
 	/**

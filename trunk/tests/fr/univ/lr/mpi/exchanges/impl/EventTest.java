@@ -54,7 +54,7 @@ public class EventTest {
 	}
 
 	/**
-	 * Test method for {@link fr.univ.lr.mpi.exchanges.impl.Event#addAttributes(java.lang.String, java.lang.String)}.
+	 * Test method for {@link fr.univ.lr.mpi.exchanges.impl.Event#addAttribute(java.lang.String, java.lang.String)}.
 	 */
 	@Test
 	public void testAddAttributes() {

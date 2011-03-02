@@ -40,5 +40,5 @@ public interface IEvent {
 	 * @param attributeNames
 	 * @param attributeValue
 	 */
-	public void addAttributes(String attributeNames, String attributeValue);
+	public void addAttribute(String attributeNames, String attributeValue);
 }

@@ -6,9 +6,8 @@
     <void property="attributes"> 
      <void property="text"> 
       <string>private int MAX_CONNECTIONS
-
+Concentrator concentrator
 List&lt;IConnection&gt; connections
-List&lt;ILine&gt; lines
 List&lt;IService&gt; services
 
 </string> 
@@ -19,11 +18,11 @@ List&lt;IService&gt; services
       <string>int getActiveConnections()
 void registerService(IService service)
 void unregisterService(IService service)
-void registerLine(ILine line)
-void unregisterLine(ILine line)
 void receiveMessage(IMessage message)
+void sendMessage(IMessage message)
 void sendEvent(IEvent event)
-void receiveEvent(IEvent event)</string> 
+void receiveEvent(IEvent event)
+void setConcentrator()</string> 
      </void> 
     </void> 
     <void property="name"> 
@@ -43,12 +42,9 @@ void receiveEvent(IEvent event)</string>
    <object id="ClassNode1" class="com.horstmann.violet.ClassNode"> 
     <void property="attributes"> 
      <void property="text"> 
-      <string>ILine caller
-ILine recipient
-Date startTime
+      <string>Date startTime
 Date endTime
 Timer timer
-AutoCommutator commutator
 </string> 
      </void> 
     </void> 
@@ -76,7 +72,6 @@ void receiveMessage(IMessage message)</string>
     <void property="attributes"> 
      <void property="text"> 
       <string>String phoneNumber
-AutoCommutator commutator
 IConnection connection
 LineState state
 </string> 
@@ -103,7 +98,6 @@ LineState state
 void setConnection(IConnection connection)
 LineState getState()
 void setState(LineState state)
-void receiveMessage(IMessage message)
 void pickUp()
 void hangUp()
 void dialTo(String phoneNumber)</string> 
@@ -184,8 +178,8 @@ boolean exists(String phoneNumber)</string>
    </object> 
    <object class="java.awt.geom.Point2D$Double"> 
     <void method="setLocation"> 
-     <double>823.0</double> 
-     <double>538.0</double> 
+     <double>815.0</double> 
+     <double>527.0</double> 
     </void> 
    </object> 
   </void> 
@@ -211,8 +205,8 @@ void removeTransferCallRule(String originalPhoneNumber)</string>
    </object> 
    <object class="java.awt.geom.Point2D$Double"> 
     <void method="setLocation"> 
-     <double>1301.0</double> 
-     <double>536.0</double> 
+     <double>1293.0</double> 
+     <double>525.0</double> 
     </void> 
    </object> 
   </void> 
@@ -237,8 +231,8 @@ void removeTransferCallRule(String originalPhoneNumber)</string>
    </object> 
    <object class="java.awt.geom.Point2D$Double"> 
     <void method="setLocation"> 
-     <double>736.0</double> 
-     <double>676.0</double> 
+     <double>728.0</double> 
+     <double>665.0</double> 
     </void> 
    </object> 
   </void> 
@@ -265,8 +259,8 @@ List&lt;AnsweringMachineMessage&gt; getMessages()
    </object> 
    <object class="java.awt.geom.Point2D$Double"> 
     <void method="setLocation"> 
-     <double>1354.0</double> 
-     <double>700.0</double> 
+     <double>1346.0</double> 
+     <double>689.0</double> 
     </void> 
    </object> 
   </void> 
@@ -281,8 +275,8 @@ List&lt;AnsweringMachineMessage&gt; getMessages()
    </object> 
    <object class="java.awt.geom.Point2D$Double"> 
     <void method="setLocation"> 
-     <double>1126.0</double> 
-     <double>540.0</double> 
+     <double>1118.0</double> 
+     <double>529.0</double> 
     </void> 
    </object> 
   </void> 
@@ -312,8 +306,8 @@ Date getDate()</string>
    </object> 
    <object class="java.awt.geom.Point2D$Double"> 
     <void method="setLocation"> 
-     <double>758.0</double> 
-     <double>782.0</double> 
+     <double>750.0</double> 
+     <double>771.0</double> 
     </void> 
    </object> 
   </void> 
@@ -338,8 +332,8 @@ qui pourront potentiellement recevoir des
    </object> 
    <object class="java.awt.geom.Point2D$Double"> 
     <void method="setLocation"> 
-     <double>1461.0</double> 
-     <double>435.0</double> 
+     <double>1389.0</double> 
+     <double>418.0</double> 
     </void> 
    </object> 
   </void> 
@@ -416,8 +410,8 @@ précisément avec une instance
    </object> 
    <object class="java.awt.geom.Point2D$Double"> 
     <void method="setLocation"> 
-     <double>19.0</double> 
-     <double>608.0</double> 
+     <double>28.0</double> 
+     <double>752.0</double> 
     </void> 
    </object> 
   </void> 
@@ -483,6 +477,7 @@ précisément avec une instance
     <void property="attributes"> 
      <void property="text"> 
       <string>Date postDate
+String ownerPhoneNumber
 String posterPhoneNumber
 Object message
 </string> 
@@ -492,6 +487,7 @@ Object message
      <void property="text"> 
       <string>Date getPostDate()
 String getPosterPhoneNumber()
+String getOwnerPhoneNumber()
 Object getMessage()</string> 
      </void> 
     </void> 
@@ -503,8 +499,8 @@ Object getMessage()</string>
    </object> 
    <object class="java.awt.geom.Point2D$Double"> 
     <void method="setLocation"> 
-     <double>1332.0</double> 
-     <double>818.0</double> 
+     <double>1324.0</double> 
+     <double>807.0</double> 
     </void> 
    </object> 
   </void> 
@@ -683,8 +679,8 @@ String getRecipientPhoneNumber()
    </object> 
    <object class="java.awt.geom.Point2D$Double"> 
     <void method="setLocation"> 
-     <double>700.0</double> 
-     <double>960.0</double> 
+     <double>720.0</double> 
+     <double>1010.0</double> 
     </void> 
    </object> 
   </void> 
@@ -692,8 +688,8 @@ String getRecipientPhoneNumber()
    <object idref="ClassNode14"/> 
    <object class="java.awt.geom.Point2D$Double"> 
     <void method="setLocation"> 
-     <double>714.0</double> 
-     <double>993.0</double> 
+     <double>731.0</double> 
+     <double>1036.0</double> 
     </void> 
    </object> 
   </void> 
@@ -701,8 +697,8 @@ String getRecipientPhoneNumber()
    <object idref="ClassNode15"/> 
    <object class="java.awt.geom.Point2D$Double"> 
     <void method="setLocation"> 
-     <double>851.0</double> 
-     <double>994.0</double> 
+     <double>868.0</double> 
+     <double>1037.0</double> 
     </void> 
    </object> 
   </void> 
@@ -723,8 +719,8 @@ les lignes (en fonction des messages reçus).</string>
    </object> 
    <object class="java.awt.geom.Point2D$Double"> 
     <void method="setLocation"> 
-     <double>1042.0</double> 
-     <double>970.0</double> 
+     <double>1079.0</double> 
+     <double>1016.0</double> 
     </void> 
    </object> 
   </void> 
@@ -743,24 +739,6 @@ les lignes (en fonction des messages reçus).</string>
     <void method="setLocation"> 
      <double>1130.0</double> 
      <double>340.0</double> 
-    </void> 
-   </object> 
-  </void> 
-  <void method="addNode"> 
-   <object class="com.horstmann.violet.NoteNode"/> 
-   <object class="java.awt.geom.Point2D$Double"> 
-    <void method="setLocation"> 
-     <double>1235.0</double> 
-     <double>634.0</double> 
-    </void> 
-   </object> 
-  </void> 
-  <void method="addNode"> 
-   <object class="com.horstmann.violet.NoteNode"/> 
-   <object class="java.awt.geom.Point2D$Double"> 
-    <void method="setLocation"> 
-     <double>1259.0</double> 
-     <double>654.0</double> 
     </void> 
    </object> 
   </void> 
@@ -793,8 +771,8 @@ les lignes (en fonction des messages reçus).</string>
    </object> 
    <object class="java.awt.geom.Point2D$Double"> 
     <void method="setLocation"> 
-     <double>730.0</double> 
-     <double>510.0</double> 
+     <double>720.0</double> 
+     <double>500.0</double> 
     </void> 
    </object> 
   </void> 
@@ -812,8 +790,23 @@ Ils communiquent via évènement.</string>
    </object> 
    <object class="java.awt.geom.Point2D$Double"> 
     <void method="setLocation"> 
-     <double>1439.0</double> 
-     <double>988.0</double> 
+     <double>1433.0</double> 
+     <double>1031.0</double> 
+    </void> 
+   </object> 
+  </void> 
+  <void method="addNode"> 
+   <object id="ClassNode16" class="com.horstmann.violet.ClassNode"> 
+    <void property="name"> 
+     <void property="text"> 
+      <string>&lt;&lt;enum&gt;&gt; LineState</string> 
+     </void> 
+    </void> 
+   </object> 
+   <object class="java.awt.geom.Point2D$Double"> 
+    <void method="setLocation"> 
+     <double>59.0</double> 
+     <double>620.0</double> 
     </void> 
    </object> 
   </void> 
@@ -821,8 +814,8 @@ Ils communiquent via évènement.</string>
    <object id="PointNode1" class="com.horstmann.violet.PointNode"> 
     <void id="Rectangle2D$Double2" property="bounds"> 
      <void method="setRect"> 
-      <double>1639.0</double> 
-      <double>910.0</double> 
+      <double>1687.0</double> 
+      <double>879.0</double> 
       <double>0.0</double> 
       <double>0.0</double> 
      </void> 
@@ -833,8 +826,38 @@ Ils communiquent via évènement.</string>
    </object> 
    <object class="java.awt.geom.Point2D$Double"> 
     <void method="setLocation"> 
-     <double>1639.0</double> 
-     <double>910.0</double> 
+     <double>1687.0</double> 
+     <double>879.0</double> 
+    </void> 
+   </object> 
+  </void> 
+  <void method="addNode"> 
+   <object class="com.horstmann.violet.ClassNode"> 
+    <void property="attributes"> 
+     <void property="text"> 
+      <string>List&lt;ILine&gt; lines</string> 
+     </void> 
+    </void> 
+    <void property="methods"> 
+     <void property="text"> 
+      <string>void registerLine(ILine line)
+void unregisterLine(ILine line)
+List&lt;ILine&gt; getActiveLines()
+
+void receiveMessage(IMessage message)
+void sendMessage(String phoneNumber, IMessage message)</string> 
+     </void> 
+    </void> 
+    <void property="name"> 
+     <void property="text"> 
+      <string>Concentrator</string> 
+     </void> 
+    </void> 
+   </object> 
+   <object class="java.awt.geom.Point2D$Double"> 
+    <void method="setLocation"> 
+     <double>239.0</double> 
+     <double>925.0</double> 
     </void> 
    </object> 
   </void> 
@@ -864,18 +887,6 @@ Ils communiquent via évènement.</string>
    </object> 
    <object idref="ClassNode2"/> 
    <object idref="ClassNode1"/> 
-  </void> 
-  <void method="connect"> 
-   <object class="com.horstmann.violet.ClassRelationshipEdge"> 
-    <void property="bentStyle"> 
-     <object class="com.horstmann.violet.BentStyle" field="VHV"/> 
-    </void> 
-    <void property="endArrowHead"> 
-     <object class="com.horstmann.violet.ArrowHead" field="TRIANGLE"/> 
-    </void> 
-   </object> 
-   <object idref="InterfaceNode1"/> 
-   <object idref="InterfaceNode0"/> 
   </void> 
   <void method="connect"> 
    <object class="com.horstmann.violet.ClassRelationshipEdge"> 
@@ -1024,18 +1035,6 @@ Ils communiquent via évènement.</string>
     <void property="endArrowHead"> 
      <object class="com.horstmann.violet.ArrowHead" field="TRIANGLE"/> 
     </void> 
-   </object> 
-   <object idref="ClassNode8"/> 
-   <object idref="InterfaceNode1"/> 
-  </void> 
-  <void method="connect"> 
-   <object class="com.horstmann.violet.ClassRelationshipEdge"> 
-    <void property="bentStyle"> 
-     <object class="com.horstmann.violet.BentStyle" field="VHV"/> 
-    </void> 
-    <void property="endArrowHead"> 
-     <object class="com.horstmann.violet.ArrowHead" field="TRIANGLE"/> 
-    </void> 
     <void property="lineStyle"> 
      <object class="com.horstmann.violet.LineStyle" field="DOTTED"/> 
     </void> 
@@ -1127,11 +1126,6 @@ Ils communiquent via évènement.</string>
    <object idref="PackageNode1"/> 
   </void> 
   <void method="connect"> 
-   <object class="com.horstmann.violet.NoteEdge"/> 
-   <object idref="NoteNode5"/> 
-   <object idref="PointNode1"/> 
-  </void> 
-  <void method="connect"> 
    <object class="com.horstmann.violet.ClassRelationshipEdge"> 
     <void property="bentStyle"> 
      <object class="com.horstmann.violet.BentStyle" field="HVH"/> 
@@ -1159,6 +1153,64 @@ Ils communiquent via évènement.</string>
    <object class="com.horstmann.violet.NoteEdge"/> 
    <object idref="PackageNode0"/> 
    <object idref="NoteNode4"/> 
+  </void> 
+  <void method="connect"> 
+   <object class="com.horstmann.violet.ClassRelationshipEdge"> 
+    <void property="bentStyle"> 
+     <object class="com.horstmann.violet.BentStyle" field="HVH"/> 
+    </void> 
+    <void property="startArrowHead"> 
+     <object class="com.horstmann.violet.ArrowHead" field="BLACK_DIAMOND"/> 
+    </void> 
+   </object> 
+   <object idref="ClassNode16"/> 
+   <object idref="ClassNode2"/> 
+  </void> 
+  <void method="connect"> 
+   <object class="com.horstmann.violet.ClassRelationshipEdge"> 
+    <void property="bentStyle"> 
+     <object class="com.horstmann.violet.BentStyle" field="VHV"/> 
+    </void> 
+    <void property="endArrowHead"> 
+     <object class="com.horstmann.violet.ArrowHead" field="TRIANGLE"/> 
+    </void> 
+   </object> 
+   <object idref="InterfaceNode0"/> 
+   <object idref="InterfaceNode1"/> 
+  </void> 
+  <void method="connect"> 
+   <object class="com.horstmann.violet.ClassRelationshipEdge"> 
+    <void property="bentStyle"> 
+     <object class="com.horstmann.violet.BentStyle" field="VHV"/> 
+    </void> 
+    <void property="endArrowHead"> 
+     <object class="com.horstmann.violet.ArrowHead" field="TRIANGLE"/> 
+    </void> 
+   </object> 
+   <object idref="ClassNode8"/> 
+   <object idref="InterfaceNode1"/> 
+  </void> 
+  <void method="connect"> 
+   <object class="com.horstmann.violet.NoteEdge"/> 
+   <object idref="NoteNode5"/> 
+   <object idref="PointNode1"/> 
+  </void> 
+  <void method="connect"> 
+   <object class="com.horstmann.violet.NoteEdge"/> 
+   <object idref="PackageNode1"/> 
+   <object idref="PackageNode1"/> 
+  </void> 
+  <void method="connect"> 
+   <object class="com.horstmann.violet.ClassRelationshipEdge"> 
+    <void property="bentStyle"> 
+     <object class="com.horstmann.violet.BentStyle" field="HVH"/> 
+    </void> 
+    <void property="endArrowHead"> 
+     <object class="com.horstmann.violet.ArrowHead" field="V"/> 
+    </void> 
+   </object> 
+   <object idref="PackageNode0"/> 
+   <object idref="PackageNode1"/> 
   </void> 
  </object> 
 </java> 

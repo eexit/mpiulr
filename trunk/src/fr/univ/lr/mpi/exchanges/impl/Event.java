@@ -58,8 +58,8 @@ public class Event implements IEvent {
 	 * @param attributeName
 	 * @param attributeValue
 	 */
-	public void addAttributes(String attributeName, String attributeValue) {
-		this.attributes.put(attributeName, attributeName);
+	public void addAttribute(String attributeName, String attributeValue) {
+		this.attributes.put(attributeName, attributeValue);
 	}
 
 	@Override
