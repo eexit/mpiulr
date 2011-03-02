@@ -30,5 +30,7 @@ public interface IMessage {
 	 * @return
 	 */
 	public String getRecipientPhoneNumber();
+
+	public String getContent();
 	
 }

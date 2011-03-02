@@ -69,5 +69,4 @@ public class Message implements IMessage {
 				+ ", recipientPhoneNumber=" + recipientPhoneNumber + ", type="
 				+ type + ", content=" + "]";
 	}
-
 }
