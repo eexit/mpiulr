@@ -14,12 +14,24 @@ import fr.univ.lr.mpi.lines.ILine;
 
 public class Concentrator {
 
-	
-	
 	private List<ILine> lines;
 
 	public Concentrator() {
 		this.lines = new ArrayList<ILine>();
+	}
+
+	public void registerLine(ILine line) {
+		lines.add(line);
+	}
+
+	public int unregisterLine(String numberLine) {
+		for (int i = 0; i < lines.size(); i++) {
+			if (lines.get(i).getPhoneNumber() == numberLine) {
+				lines.remove(i);
+				return 0;
+			}
+		}
+		return 1;
 	}
 
 	/**
@@ -38,9 +50,8 @@ public class Concentrator {
 	 */
 
 	public void sendMessage(String phoneNumber, IMessage message) {
-		int i=0;
-		while(phoneNumber!=lines.get(i).getPhoneNumber() || i>lines.size() )
-		{
+		int i = 0;
+		while (phoneNumber != lines.get(i).getPhoneNumber() || i > lines.size()) {
 			i++;
 		}
 		lines.get(i).receiveMessage(message);
