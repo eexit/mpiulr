@@ -7,6 +7,7 @@ import fr.univ.lr.mpi.exchanges.impl.MessageType;
 import fr.univ.lr.mpi.exchanges.impl.PhoneNumberValidator;
 import fr.univ.lr.mpi.lines.ILine;
 import fr.univ.lr.mpi.lines.LineState;
+import fr.univ.lr.mpi.simulation.PhoneWidget;
 
 /**
  * 
@@ -40,6 +41,8 @@ public class Line implements ILine {
 	private LineState state;
 
 	private Concentrator concentrator;
+	
+	private PhoneWidget phone;
 
 	/**
 	 * Line contructor
@@ -55,6 +58,12 @@ public class Line implements ILine {
 		this.state = LineState.FREE;
 	}
 
+	public void setPhone(PhoneWidget p)
+	{
+		phone = p;
+	}
+	
+	
 	public void setConcentrator(Concentrator c) {
 		concentrator = c;
 	}
@@ -88,6 +97,9 @@ public class Line implements ILine {
 	 */
 	public void receiveMessage(IMessage message) {
 		System.out.println(message);
+		phone.appendLog(message);
+		
+		
 	}
 
 	/**
