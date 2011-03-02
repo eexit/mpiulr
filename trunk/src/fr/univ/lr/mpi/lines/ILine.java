@@ -1,6 +1,5 @@
 package fr.univ.lr.mpi.lines;
 
-import fr.univ.lr.mpi.commutator.IConnection;
 import fr.univ.lr.mpi.exceptions.LineException;
 import fr.univ.lr.mpi.exceptions.PhoneNumberValidatorException;
 import fr.univ.lr.mpi.handlers.MessageHandler;
@@ -29,7 +28,7 @@ public interface ILine extends MessageHandler {
 	 * @author Joris Berthelot <joris.berthelot@gmail.com>
 	 * @param connection
 	 */
-	public void setConnection(IConnection connection);
+//	public void setConnection(IConnection connection);
 	
 	/**
 	 * Gets the current line state
