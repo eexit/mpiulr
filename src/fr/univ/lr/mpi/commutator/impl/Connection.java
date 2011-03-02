@@ -134,6 +134,8 @@ public class Connection extends Thread implements IConnection {
 	 * @param event
 	 */
 	public void receiveEvent(IEvent event) {
+		System.out.println("Connection event: " + event);
+		
 		// The recipient phone number
 		final String recipientPhoneNumber = event.getAttributeValue(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER);
 		
@@ -172,6 +174,8 @@ public class Connection extends Thread implements IConnection {
 	 * @author Joris Berthelot <joris.berthelot@gmail.com>
 	 */
 	public void receiveMessage(IMessage message) {
+		System.out.println("Connection message: " + message);
+		
 		// The recipient phone number
 		final String recipientPhoneNumber = message.getRecipientPhoneNumber();
 		
