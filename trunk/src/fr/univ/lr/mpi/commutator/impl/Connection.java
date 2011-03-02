@@ -12,6 +12,7 @@ import fr.univ.lr.mpi.exchanges.impl.Event;
 import fr.univ.lr.mpi.exchanges.impl.EventType;
 import fr.univ.lr.mpi.exchanges.impl.ExchangeAttributeNames;
 import fr.univ.lr.mpi.exchanges.impl.Message;
+import fr.univ.lr.mpi.exchanges.impl.MessageType;
 
 /**
  * 
@@ -42,14 +43,14 @@ public class Connection extends Thread implements IConnection {
 	 * 
 	 * @author Joris Berthelot <joris.berthelot@gmail.com>
 	 */
-	private String caller;
+	private String callerPhoneNumber;
 
 	/**
 	 * Recipient line container
 	 * 
 	 * @author Joris Berthelot <joris.berthelot@gmail.com>
 	 */
-	private String recipient;
+	private String recipientPhoneNumber;
 
 	/**
 	 * Connection start time
@@ -79,18 +80,18 @@ public class Connection extends Thread implements IConnection {
 	 * @author Joris Berthelot <joris.berthelot@gmail.com>
 	 * @param callerLine
 	 */
-	public Connection(String caller) {
-		this.caller = caller;
+	public Connection(String callerPhoneNumber) {
+		this.callerPhoneNumber = callerPhoneNumber;
 	}
 	
 	/**
 	 * Sets the recipient line
 	 * 
 	 * @author Joris Berthelot <joris.berthelot@gmail.com>
-	 * @param recipient
+	 * @param recipientPhoneNumber
 	 */
-	public void setRecipient(String recipient) {
-		this.recipient = recipient;
+	public void setRecipient(String recipientPhoneNumber) {
+		this.recipientPhoneNumber = recipientPhoneNumber;
 	}
 	
 	/**
@@ -99,8 +100,8 @@ public class Connection extends Thread implements IConnection {
 	 * @author Joris Berthelot <joris.berthelot@gmail.com>
 	 * @return
 	 */
-	public String getCaller() {
-		return this.caller;
+	public String getCallerPhoneNumber() {
+		return this.callerPhoneNumber;
 	}
 	
 	/**
@@ -109,8 +110,8 @@ public class Connection extends Thread implements IConnection {
 	 * @author Joris Berthelot <joris.berthelot@gmail.com>
 	 * @return
 	 */
-	public String getRecipient() {
-		return this.recipient; 
+	public String getRecipientPhoneNumber() {
+		return this.recipientPhoneNumber; 
 	}
 
 	/**
@@ -125,6 +126,45 @@ public class Connection extends Thread implements IConnection {
 		 */
 		// AutoCommutator.getInstance().forwardMessage(message);
 	}
+	
+	/**
+	 * 
+	 * 
+	 * @author Joris Berthelot <joris.berthelot@gmail.com>
+	 * @param event
+	 */
+	public void receiveEvent(IEvent event) {
+		// The recipient phone number
+		final String recipientPhoneNumber = event.getAttributeValue(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER);
+		
+		switch (event.getEventType()) {
+			// When the phone number exists (from the directory service)
+			case PHONE_NUMBER_RESPONSE :
+				// The phone number doesn't exist
+				if (event.getAttributeValue(ExchangeAttributeNames.EXISTS).equals(Boolean.toString(false))) {
+					// Sends an UNKNOWN_NUMBER to the caller
+					AutoCommutator.getInstance().sendMessage(this.callerPhoneNumber, new Message(
+						MessageType.UNKNOWN_NUMBER,
+						recipientPhoneNumber
+					));
+				}
+				
+				// Sends a call transfer exist request
+				IEvent call_trans_event = new Event(EventType.CALL_TRANSFER_REQUEST);
+				call_trans_event.addAttribute(ExchangeAttributeNames.CALLER_PHONE_NUMBER, this.callerPhoneNumber);
+				call_trans_event.addAttribute(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER, recipientPhoneNumber);
+				AutoCommutator.getInstance().sendEvent(call_trans_event);
+				break;
+				
+			// When the call transfer returns a number
+			case CALL_TRANSFER_RESPONSE :
+				// Sends a RING message to the recipient
+				AutoCommutator.getInstance().sendMessage(recipientPhoneNumber, new Message(
+					MessageType.RING, this.callerPhoneNumber, recipientPhoneNumber
+				));
+				break;
+		}
+	}
 
 	/**
 	 * Message receiver of commutator container
@@ -132,8 +172,32 @@ public class Connection extends Thread implements IConnection {
 	 * @author Joris Berthelot <joris.berthelot@gmail.com>
 	 */
 	public void receiveMessage(IMessage message) {
+		// The recipient phone number
+		final String recipientPhoneNumber = message.getRecipientPhoneNumber();
+		
 		switch (message.getMessageType()) {
-			case RING :
+		
+			// When the caller is numbering
+			case NUMBERING :
+				// Sends to the caller a SEARCH message
+				AutoCommutator.getInstance().sendMessage(this.callerPhoneNumber, new Message(
+					MessageType.SEARCH, this.callerPhoneNumber
+				));
+				
+				// Sends to the directory service a phone number exist request
+				IEvent num_req_event = new Event(EventType.PHONE_NUMBER_REQUEST);
+				num_req_event.addAttribute(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER, recipientPhoneNumber);
+				AutoCommutator.getInstance().sendEvent(num_req_event);				
+				break;
+			
+			// When the recipient phone is ringing
+			case RINGING :
+				// Sends an ECHO message to the caller
+				AutoCommutator.getInstance().sendMessage(this.callerPhoneNumber, new Message(
+					MessageType.ECHO, this.callerPhoneNumber, recipientPhoneNumber
+				));
+				
+				// Sets up the answering machine timer
 				Date ans_expire = new Date();
 				ans_expire.setSeconds(ans_expire.getSeconds() + ANSWERING_MACHINE_TIMEOUT);
 				this.timer = new Timer();
@@ -141,30 +205,34 @@ public class Connection extends Thread implements IConnection {
 					
 					@Override
 					public void run() {
+						// Sends a unavailable recipient event
 						IEvent event = new Event(EventType.UNAVAILABLE_RECIPIENT);
-						event.addAttribute(ExchangeAttributeNames.CALLER_PHONE_NUMBER, caller);
-						event.addAttribute(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER, recipient);
+						event.addAttribute(ExchangeAttributeNames.CALLER_PHONE_NUMBER, callerPhoneNumber);
+						event.addAttribute(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER, recipientPhoneNumber);
 						AutoCommutator.getInstance().sendEvent(event);
 					}
 				}, ans_expire);
-				
 				break;
-				
+			
+			// When the recipient pick up the phone
 			case RECIPIENT_PICKUP :
+				// If there is any timer, we kill it!
 				if (null != this.timer) {
 					this.timer.cancel();
 					this.timer = null;
 				}
 				
-				this.recipient = message.getRecipientPhoneNumber();
+				this.recipientPhoneNumber = recipientPhoneNumber;
 				this.startTime = Calendar.getInstance();
 				IEvent event = new Event(EventType.CONNECTION_ESTABLISHED);
-				event.addAttribute(ExchangeAttributeNames.CALLER_PHONE_NUMBER, caller);
-				event.addAttribute(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER, recipient);
+				event.addAttribute(ExchangeAttributeNames.CALLER_PHONE_NUMBER, this.callerPhoneNumber);
+				event.addAttribute(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER, recipientPhoneNumber);
 				AutoCommutator.getInstance().sendEvent(event);
 				break;
-				
+			
+			// When the caller or the recipient hang up the phone
 			case HANGUP :
+				// Sets up a connection keepalive timeout
 				this.timer = new Timer();
 				Date hang_expire = new Date();
 				hang_expire.setSeconds(hang_expire.getSeconds() + HANGUP_TIMEOUT);
@@ -173,17 +241,15 @@ public class Connection extends Thread implements IConnection {
 					
 					@Override
 					public void run() {
+						// Sends the connection duration to the billing servive
 						Long duration = endTime.getTimeInMillis() - startTime.getTimeInMillis() / 1000;
 						IEvent event = new Event(EventType.CONNECTION_CLOSED);
-						event.addAttribute(ExchangeAttributeNames.CALLER_PHONE_NUMBER, caller);
-						event.addAttribute(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER, recipient);
+						event.addAttribute(ExchangeAttributeNames.CALLER_PHONE_NUMBER, callerPhoneNumber);
+						event.addAttribute(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER, recipientPhoneNumber);
 						event.addAttribute(ExchangeAttributeNames.CONNECTION_DURATION, duration.toString());
 						AutoCommutator.getInstance().sendEvent(event);
 					}
 				}, hang_expire);
-				break;
-				
-			default :
 				break;
 		}
 	}
