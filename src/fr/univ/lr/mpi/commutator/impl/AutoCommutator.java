@@ -31,7 +31,7 @@ import fr.univ.lr.mpi.services.impl.DirectoryService;
 public class AutoCommutator implements MessageHandler, EventHandler {
 
 	private static AutoCommutator INSTANCE;
-
+	private Concentrator concentrator;
 	private int MAX_CONNECTIONS;
 
 	private List<IConnection> connections;
@@ -56,6 +56,12 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 		registerService(new AnsweringService());
 		registerService(new BillingService());
 		registerService(new CallTransferService());
+
+		/* Adding answering machine number */
+		IEvent event = new Event(EventType.LINE_CREATION);
+		event.addAttribute(ExchangeAttributeNames.CALLER_PHONE_NUMBER, "3103");
+		this.sendEvent(event);
+
 	}
 
 	/**
@@ -212,6 +218,11 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 					.getAttributeValue(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER);
 			/* => Checks if call transfer rules exists */
 			IEvent e = new Event(EventType.CALL_TRANSFER_REQUEST);
+			e
+					.addAttribute(
+							ExchangeAttributeNames.CALLER_PHONE_NUMBER,
+							event
+									.getAttributeValue(ExchangeAttributeNames.CALLER_PHONE_NUMBER));
 			e.addAttribute(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER,
 					recipientPhoneNumber);
 			sendEvent(e);
@@ -223,6 +234,7 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 					.getAttributeValue(ExchangeAttributeNames.CALLER_PHONE_NUMBER);
 			recipientPhoneNumber = event
 					.getAttributeValue(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER);
+
 			getLine(recipientPhoneNumber).receiveMessage(
 					new Message(MessageType.RING, callerPhoneNumber,
 							recipientPhoneNumber));
@@ -239,9 +251,6 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 
 	@Override
 	public synchronized void receiveMessage(IMessage message) {
-		// FIXME FOR TEST ONLY
-		System.out.println(message);
-
 		String callerPhoneNumber = message.getCallerPhoneNumber();
 
 		switch (message.getMessageType()) {
@@ -264,5 +273,26 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 		default:
 			break;
 		}
+	}
+
+	/**
+	 * Sets a concentrator to the PABX
+	 * 
+	 * @param concentrator
+	 */
+
+	public void setConcentrator(Concentrator concentrator) {
+		this.concentrator = concentrator;
+	}
+
+	/**
+	 * Sends a message to a line
+	 * 
+	 * @param phoneNumber
+	 * @param message
+	 */
+
+	public synchronized void sendMessage(String phoneNumber, IMessage message) {
+		concentrator.sendMessage(phoneNumber, message);
 	}
 }
