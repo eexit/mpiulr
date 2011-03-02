@@ -2,6 +2,8 @@ package fr.univ.lr.mpi.lines.impl;
 
 import fr.univ.lr.mpi.commutator.IConnection;
 import fr.univ.lr.mpi.commutator.impl.AutoCommutator;
+import fr.univ.lr.mpi.exceptions.LineException;
+import fr.univ.lr.mpi.exceptions.PhoneNumberValidatorException;
 import fr.univ.lr.mpi.exchanges.IMessage;
 import fr.univ.lr.mpi.exchanges.impl.Message;
 import fr.univ.lr.mpi.exchanges.impl.MessageType;
@@ -45,10 +47,11 @@ public class Line implements ILine {
 	 * 
 	 * @author Joris Berthelot <joris.berthelot@gmail.com>
 	 * @param number
+	 * @throws PhoneNumberValidatorException 
 	 */
-	public Line(String number) {
+	public Line(String number) throws PhoneNumberValidatorException {
 		if (false == PhoneNumberValidator.isValid(number)) {
-			return;
+			throw new PhoneNumberValidatorException(PhoneNumberValidatorException.WRONG_FORMAT);
 		}
 		this.phoneNumber = number;
 		this.state = LineState.FREE;
@@ -89,14 +92,15 @@ public class Line implements ILine {
 	 * Line pick up action:
 	 * 
 	 * @author Joris Berthelot <joris.berthelot@gmail.com>
+	 * @throws LineException 
 	 */
-	public void pickUp() {
-		if (this.state != null && !this.state.equals(LineState.FREE)) {
-			return;
+	public void pickUp() throws LineException {
+		if (!this.state.equals(LineState.FREE)) {
+			throw new LineException(LineException.ERROR_BUSY);
 		}
 		this.state = LineState.BUSY;
 		AutoCommutator.getInstance().receiveMessage(
-				new Message(MessageType.PICKUP, this.phoneNumber, null));
+				new Message(MessageType.PICKUP, this.phoneNumber));
 	}
 
 	/**
@@ -107,7 +111,7 @@ public class Line implements ILine {
 	public void hangUp() {
 		this.state = LineState.FREE;
 		AutoCommutator.getInstance().receiveMessage(
-				new Message(MessageType.HANGUP, this.phoneNumber, null));
+				new Message(MessageType.HANGUP, this.phoneNumber));
 	}
 
 	/**
@@ -115,13 +119,18 @@ public class Line implements ILine {
 	 * 
 	 * @author Joris Berthelot <joris.berthelot@gmail.com>
 	 * @param phoneNumber
+	 * @throws LineException 
 	 */
-	public void dialTo(String phoneNumber) {
+	public void dialTo(String phoneNumber) throws PhoneNumberValidatorException, LineException {
+		if (false == PhoneNumberValidator.isValid(phoneNumber)) {
+			throw new PhoneNumberValidatorException(PhoneNumberValidatorException.WRONG_FORMAT);
+		}
+		
 		if (!this.state.equals(LineState.BUSY)) {
-			return;
+			throw new LineException(LineException.ERROR_FREE);
 		}
 		AutoCommutator.getInstance().receiveMessage(
-				new Message(MessageType.NUMBERING, this.phoneNumber, null));
+				new Message(MessageType.HANGUP, this.phoneNumber));
 	}
 
 	/**

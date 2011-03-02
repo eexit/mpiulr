@@ -1,6 +1,8 @@
 package fr.univ.lr.mpi.lines;
 
 import fr.univ.lr.mpi.commutator.IConnection;
+import fr.univ.lr.mpi.exceptions.LineException;
+import fr.univ.lr.mpi.exceptions.PhoneNumberValidatorException;
 import fr.univ.lr.mpi.handlers.MessageHandler;
 
 /**
@@ -41,8 +43,9 @@ public interface ILine extends MessageHandler {
 	 * Line pick up action:
 	 * 
 	 * @author Joris Berthelot <joris.berthelot@gmail.com>
+	 * @throws LineException 
 	 */
-	public void pickUp();
+	public void pickUp() throws LineException;
 	
 	/**
 	 * Line hang up action
@@ -56,6 +59,8 @@ public interface ILine extends MessageHandler {
 	 * 
 	 * @author Joris Berthelot <joris.berthelot@gmail.com>
 	 * @param phoneNumber
+	 * @throws PhoneNumberValidatorException 
+	 * @throws LineException 
 	 */
-	public void dialTo(String phoneNumber);
+	public void dialTo(String phoneNumber) throws PhoneNumberValidatorException, LineException;
 }
