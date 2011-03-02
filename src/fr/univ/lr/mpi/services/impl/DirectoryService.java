@@ -45,13 +45,7 @@ public class DirectoryService implements IService {
 	 * @return if the phone number is in the directory or not
 	 */
 	public boolean exist(String phoneNumber) {
-		boolean exist = false;
-		for (int i = 0; i < this.directory.size() && !exist; i++) {
-			if (phoneNumber.equals(this.directory.get(i))) {
-				exist = true;
-			}
-		}
-		return exist;
+		return this.directory.contains(phoneNumber);
 	}
 
 	@Override
@@ -89,15 +83,11 @@ public class DirectoryService implements IService {
 
 			// if the phone number is in the directory, we return true, else we
 			// return false
-			boolean exist = false;
-			if (this.directory.contains(phoneNumber)) {
-				exist = true;
-			}
-
+			
 			// Create an event
 			Event e = new Event(EventType.PHONE_NUMBER_RESPONSE);
 			e.addAttributes(ExchangeAttributeNames.EXISTS, Boolean
-					.toString(exist));
+					.toString(this.exist(phoneNumber)));
 
 			// Send to the autocommutator the event
 			AutoCommutator.getInstance().receiveEvent(e);
