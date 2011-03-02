@@ -4,6 +4,7 @@ import java.util.Date;
 
 /**
  * Billing Entry
+ * 
  * @author FAUCHER Tony <faucher.tony85@gmail.com>
  * 
  */
@@ -13,12 +14,12 @@ public class BillingEntry {
 	 * the caller and recipient phone number
 	 */
 	private String callerPhoneNumber, recipientPhoneNumber;
-	
+
 	/**
 	 * The duration
 	 */
 	private double duration;
-	
+
 	/**
 	 * The date
 	 */
@@ -68,4 +69,10 @@ public class BillingEntry {
 		return this.date;
 	}
 
+	@Override
+	public String toString() {
+		return "BillingEntry [callerPhoneNumber=" + callerPhoneNumber
+				+ ", date=" + date + ", duration=" + duration
+				+ ", recipientPhoneNumber=" + recipientPhoneNumber + "]";
+	}
 }

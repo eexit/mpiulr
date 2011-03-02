@@ -19,7 +19,8 @@ import fr.univ.lr.mpi.services.IService;
 public class BillingService implements IService {
 
 	/**
-	 * List for the bill, it's contains BillingEntry (caller phone number, recipient phone number, duration and date)
+	 * List for the bill, it's contains BillingEntry (caller phone number,
+	 * recipient phone number, duration and date)
 	 */
 	private List<BillingEntry> entries;
 
@@ -64,11 +65,10 @@ public class BillingService implements IService {
 			// Get the date
 			String dateString = event
 					.getAttributeValue(ExchangeAttributeNames.DATE);
-			DateFormat df = DateFormat.getDateInstance();
+			DateFormat df = DateFormat.getDateTimeInstance();
 			Date date;
 			try {
 				date = df.parse(dateString);
-
 				// Add a billing entry in the array
 				this.entries.add(new BillingEntry(callerPhoneNumber,
 						recipientPhoneNumber, date, duration));
