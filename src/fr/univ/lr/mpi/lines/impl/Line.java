@@ -30,7 +30,7 @@ public class Line implements ILine {
 	 * 
 	 * @author Joris Berthelot <joris.berthelot@gmail.com>
 	 */
-//	private IConnection connection;
+	// private IConnection connection;
 
 	/**
 	 * Line current state
@@ -38,10 +38,9 @@ public class Line implements ILine {
 	 * @author Joris Berthelot <joris.berthelot@gmail.com>
 	 */
 	private LineState state;
-	
+
 	private Concentrator concentrator;
-	
-	
+
 	/**
 	 * Line contructor
 	 * 
@@ -56,12 +55,10 @@ public class Line implements ILine {
 		this.state = LineState.FREE;
 	}
 
-	public void setConcentrator(Concentrator c)
-	{
+	public void setConcentrator(Concentrator c) {
 		concentrator = c;
 	}
-	
-	
+
 	/**
 	 * Gets the line phone number
 	 * 
@@ -78,10 +75,10 @@ public class Line implements ILine {
 	 * @author Joris Berthelot <joris.berthelot@gmail.com>
 	 * @param connection
 	 */
-//	public void setConnection(IConnection connection) {
-//		this.connection = connection;
-//		this.state = LineState.BUSY;
-//	}
+	// public void setConnection(IConnection connection) {
+	// this.connection = connection;
+	// this.state = LineState.BUSY;
+	// }
 
 	/**
 	 * Message receiver of commutator
@@ -117,12 +114,12 @@ public class Line implements ILine {
 	 */
 	public void hangUp() {
 		this.state = LineState.FREE;
-		
+
 		concentrator.receiveMessage(new Message(MessageType.HANGUP,
-				this.phoneNumber, null));	
-		
-//		AutoCommutator.getInstance().receiveMessage(
-//				new Message(MessageType.HANGUP, this.phoneNumber, null));
+				this.phoneNumber, null));
+
+		// AutoCommutator.getInstance().receiveMessage(
+		// new Message(MessageType.HANGUP, this.phoneNumber, null));
 	}
 
 	/**
@@ -137,9 +134,9 @@ public class Line implements ILine {
 		}
 		concentrator.receiveMessage(new Message(MessageType.NUMBERING,
 				this.phoneNumber, null));
-		
-//		AutoCommutator.getInstance().receiveMessage(
-//				new Message(MessageType.NUMBERING, this.phoneNumber, null));
+
+		// AutoCommutator.getInstance().receiveMessage(
+		// new Message(MessageType.NUMBERING, this.phoneNumber, null));
 	}
 
 	/**
