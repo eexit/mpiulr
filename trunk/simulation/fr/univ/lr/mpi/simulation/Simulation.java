@@ -39,63 +39,68 @@ public class Simulation {
 		l1.pickUp();
 		l2.pickUp();
 
-		Event e;
-		/* Directory Service test */
-		e = new Event(EventType.PHONE_NUMBER_REQUEST);
-		e
-				.addAttribute(ExchangeAttributeNames.CALLER_PHONE_NUMBER,
-						"0102030105");
-		e.addAttribute(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER,
-				"0203040506");
-		AutoCommutator.getInstance().sendEvent(e);
+		/* L2 => L4 */
+		l2.dialTo("0405060708");
+		/* L1 => L3 */
+		// l1.dialTo("0304050607");
 
-		/* Billing Service test */
-		e = new Event(EventType.CONNECTION_CLOSED);
-		e
-				.addAttribute(ExchangeAttributeNames.CALLER_PHONE_NUMBER,
-						"0102030105");
-		e.addAttribute(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER,
-				"0203040506");
-		e
-				.addAttribute(ExchangeAttributeNames.DATE, new Date()
-						.toLocaleString());
-		e.addAttribute(ExchangeAttributeNames.CONNECTION_DURATION, "12.2");
-		AutoCommutator.getInstance().sendEvent(e);
-
-		/* transfert service test */
-
-		// // create a transfert
-		Event e2 = new Event(EventType.CREATE_TRANSFER);
-		e2.addAttribute(ExchangeAttributeNames.CALLER_PHONE_NUMBER,
-				"0203040506");
-		e2.addAttribute(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER,
-				"0304050607");
-		AutoCommutator.getInstance().sendEvent(e2);
-
-		// test transfer
-		e = new Event(EventType.CALL_TRANSFER_REQUEST);
-		e
-				.addAttribute(ExchangeAttributeNames.CALLER_PHONE_NUMBER,
-						"0102030105");
-		e.addAttribute(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER,
-				"0203040506");
-		AutoCommutator.getInstance().sendEvent(e);
-		// remove
-		e = new Event(EventType.REMOVE_TRANSFER);
-		e.addAttribute(ExchangeAttributeNames.PHONE_NUMBER, "0203040506");
-		AutoCommutator.getInstance().sendEvent(e);
-
-		// test transfer
-		e = new Event(EventType.CALL_TRANSFER_REQUEST);
-		e
-				.addAttribute(ExchangeAttributeNames.CALLER_PHONE_NUMBER,
-						"0102030105");
-		e.addAttribute(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER,
-				"0203040506");
-		AutoCommutator.getInstance().sendEvent(e);
-
-		System.out.println("Actives Connections : "
-				+ commutator.getActiveConnections());
+		// Event e;
+		// /* Directory Service test */
+		// e = new Event(EventType.PHONE_NUMBER_REQUEST);
+		// e
+		// .addAttribute(ExchangeAttributeNames.CALLER_PHONE_NUMBER,
+		// "0102030105");
+		// e.addAttribute(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER,
+		// "0203040506");
+		// AutoCommutator.getInstance().sendEvent(e);
+		//
+		// /* Billing Service test */
+		// e = new Event(EventType.CONNECTION_CLOSED);
+		// e
+		// .addAttribute(ExchangeAttributeNames.CALLER_PHONE_NUMBER,
+		// "0102030105");
+		// e.addAttribute(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER,
+		// "0203040506");
+		// e
+		// .addAttribute(ExchangeAttributeNames.DATE, new Date()
+		// .toLocaleString());
+		// e.addAttribute(ExchangeAttributeNames.CONNECTION_DURATION, "12.2");
+		// AutoCommutator.getInstance().sendEvent(e);
+		//
+		// /* transfert service test */
+		//
+		// // // create a transfert
+		// Event e2 = new Event(EventType.CREATE_TRANSFER);
+		// e2.addAttribute(ExchangeAttributeNames.CALLER_PHONE_NUMBER,
+		// "0203040506");
+		// e2.addAttribute(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER,
+		// "0304050607");
+		// AutoCommutator.getInstance().sendEvent(e2);
+		//
+		// // test transfer
+		// e = new Event(EventType.CALL_TRANSFER_REQUEST);
+		// e
+		// .addAttribute(ExchangeAttributeNames.CALLER_PHONE_NUMBER,
+		// "0102030105");
+		// e.addAttribute(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER,
+		// "0203040506");
+		// AutoCommutator.getInstance().sendEvent(e);
+		// // remove
+		// e = new Event(EventType.REMOVE_TRANSFER);
+		// e.addAttribute(ExchangeAttributeNames.PHONE_NUMBER, "0203040506");
+		// AutoCommutator.getInstance().sendEvent(e);
+		//
+		// // test transfer
+		// e = new Event(EventType.CALL_TRANSFER_REQUEST);
+		// e
+		// .addAttribute(ExchangeAttributeNames.CALLER_PHONE_NUMBER,
+		// "0102030105");
+		// e.addAttribute(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER,
+		// "0203040506");
+		// AutoCommutator.getInstance().sendEvent(e);
+		//
+		// System.out.println("Actives Connections : "
+		// + commutator.getActiveConnections());
 	}
 
 	/**
