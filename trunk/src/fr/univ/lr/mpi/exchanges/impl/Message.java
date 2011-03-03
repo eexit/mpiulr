@@ -65,8 +65,8 @@ public class Message implements IMessage {
 
 	@Override
 	public String toString() {
-		return "Message [callerPhoneNumber=" + callerPhoneNumber
-				+ ", recipientPhoneNumber=" + recipientPhoneNumber + ", type="
-				+ type + ", content=" + "]";
+		return "Message [callerPhoneNumber=" + callerPhoneNumber + ", content="
+				+ content + ", recipientPhoneNumber=" + recipientPhoneNumber
+				+ ", type=" + type + "]";
 	}
 }
