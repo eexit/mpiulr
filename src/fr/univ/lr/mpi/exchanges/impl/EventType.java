@@ -26,6 +26,10 @@ public enum EventType {
 	 */
 	CONNECTION_CLOSED,
 	/**
+	 * When a connection is destroyed
+	 */
+	CONNECTION_DESTROYED,
+	/**
 	 * When a caller requests a recipient number
 	 */
 	PHONE_NUMBER_REQUEST,
