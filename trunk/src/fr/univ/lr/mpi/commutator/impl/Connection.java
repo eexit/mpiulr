@@ -215,7 +215,8 @@ public class Connection extends Thread implements IConnection {
 
 			// Sets up the answering machine timer
 			Date ans_expire = new Date();
-			ans_expire.setSeconds(ans_expire.getSeconds() + ANSWERING_MACHINE_TIMEOUT);
+			ans_expire.setSeconds(ans_expire.getSeconds()
+					+ ANSWERING_MACHINE_TIMEOUT);
 			this.timer = new Timer();
 			this.timer.schedule(new TimerTask() {
 
@@ -233,11 +234,10 @@ public class Connection extends Thread implements IConnection {
 							.toLocaleString());
 					event.addAttribute(ExchangeAttributeNames.MESSAGE,
 							"Message Cool !");
-					System.out.println("machin");
 					AutoCommutator.getInstance().sendEvent(event);
 				}
 			}, ans_expire);
-			
+
 			// Sends an RINGING message to the recipient
 			AutoCommutator.getInstance().sendMessage(
 					recipientPhoneNumber,
@@ -262,9 +262,12 @@ public class Connection extends Thread implements IConnection {
 			AutoCommutator.getInstance().sendEvent(event);
 
 			// Sends message VOICE_EXCHANGE to the caller and the recipient
-			IMessage exchange_message = new Message(MessageType.VOICE_EXCHANGE, this.callerPhoneNumber, this.recipientPhoneNumber);
-			AutoCommutator.getInstance().sendMessage(this.callerPhoneNumber, exchange_message);
-			AutoCommutator.getInstance().sendMessage(this.recipientPhoneNumber, exchange_message);
+			IMessage exchange_message = new Message(MessageType.VOICE_EXCHANGE,
+					this.callerPhoneNumber, this.recipientPhoneNumber);
+			AutoCommutator.getInstance().sendMessage(this.callerPhoneNumber,
+					exchange_message);
+			AutoCommutator.getInstance().sendMessage(this.recipientPhoneNumber,
+					exchange_message);
 			break;
 
 		// When the caller or the recipient hang up the phone
@@ -273,7 +276,8 @@ public class Connection extends Thread implements IConnection {
 				// Sets up a connection keepalive timeout
 				this.timer = new Timer();
 				Date hang_expire = new Date();
-				hang_expire.setSeconds(hang_expire.getSeconds() + HANGUP_TIMEOUT);
+				hang_expire.setSeconds(hang_expire.getSeconds()
+						+ HANGUP_TIMEOUT);
 				this.endTime = Calendar.getInstance();
 				this.timer.schedule(new TimerTask() {
 
