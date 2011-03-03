@@ -12,6 +12,7 @@ public class PhoneWidget extends QWidget
     public QPushButton pickUpButton;
     public QPushButton hangUpButton;
     public QPushButton sendButton;
+    public QPushButton clearButton;
     public QComboBox directoryComboBox;
     public QTextEdit messageEdit;
     public QLabel numLabel;
@@ -50,6 +51,7 @@ public class PhoneWidget extends QWidget
         hangUpButton = new QPushButton(this);
         hangUpButton.setIcon(new QIcon(new QPixmap("content/hang_up.png")));
         hangUpButton.setIconSize(new QSize(41, 39));
+        hangUpButton.setCheckable(false);
         
         dialLabel = new QLabel(this);
         dialLabel.setText("Dial :");
@@ -69,6 +71,9 @@ public class PhoneWidget extends QWidget
         
         logBrowser = new QTextBrowser(this);
         
+        clearButton = new QPushButton(this);
+        clearButton.setText("Clear log");
+        
         gridLayout = new QGridLayout(this);
         
         gridLayout.addWidget(numLabel,0,0,1,2);
@@ -80,6 +85,7 @@ public class PhoneWidget extends QWidget
         gridLayout.addWidget(sendButton,4,1,1,1);
         gridLayout.addWidget(messageEdit,5,0,1,2);
         gridLayout.addWidget(logBrowser,6,0,1,2);
+        gridLayout.addWidget(clearButton,7,0,1,2);
         
         this.connection();
         
@@ -91,6 +97,7 @@ public class PhoneWidget extends QWidget
     	this.hangUpButton.pressed.connect(this, "hangUpThePhone()");
     	this.directoryComboBox.activated.connect(this, "dialing(String)");
     	this.sendButton.pressed.connect(this, "sendMessage()");
+    	this.clearButton.pressed.connect(this, "clearTheLog()");
     }
     
     public void appendLog(IMessage message)
@@ -107,11 +114,15 @@ public class PhoneWidget extends QWidget
     
     public void pickUpThePhone()
     {
+    	this.hangUpButton.setCheckable(true);
+    	this.pickUpButton.setCheckable(true);
     	this.line.pickUp();
     }
     
     public void hangUpThePhone()
     {
+    	this.pickUpButton.setCheckable(true);
+    	this.hangUpButton.setCheckable(true);
     	this.line.hangUp();
     }
     
@@ -125,5 +136,10 @@ public class PhoneWidget extends QWidget
     {
     	this.line.sendMessage(this.sendButton.text());
     	this.logBrowser.append(this.sendButton.text());
+    }
+    
+    public void clearTheLog()
+    {
+    	this.logBrowser.clear();
     }
 }
