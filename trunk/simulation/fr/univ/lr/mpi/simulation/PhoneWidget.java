@@ -15,6 +15,7 @@ public class PhoneWidget extends QWidget
     public QPushButton hangUpButton;
     public QPushButton sendButton;
     public QPushButton clearButton;
+    public QPushButton transfertButton;
     public QComboBox directoryComboBox;
     public QTextEdit messageEdit;
     public QLabel dialLabel;
@@ -81,6 +82,8 @@ public class PhoneWidget extends QWidget
         clearButton = new QPushButton(this);
         clearButton.setText("Clear log");
         
+        transfertButton = new QPushButton("Make a transfert rule", this);
+        
         timer = new QTimer(this);
         timer.setInterval(500);
         
@@ -95,6 +98,7 @@ public class PhoneWidget extends QWidget
         gridLayout.addWidget(messageEdit,4,0,1,2);
         gridLayout.addWidget(logBrowser,5,0,1,2);
         gridLayout.addWidget(clearButton,6,0,1,2);
+        gridLayout.addWidget(transfertButton,7,0,1,2);
         
         groupBox.setLayout(gridLayout);
         
@@ -112,6 +116,7 @@ public class PhoneWidget extends QWidget
     	this.timer.timeout.connect(this, "blink()");
     	this.startBlink.connect(this.timer, "start()");
     	this.stopBlink.connect(this.timer, "stop()");
+    	this.transfertButton.pressed.connect(this, "askForTransfert()");
     }
     
     public void appendLog(IMessage message)
@@ -207,5 +212,13 @@ public class PhoneWidget extends QWidget
     		break;
     	}
     	this.timer.start();
+    }
+    
+    public void askForTransfert()
+    {
+    	String transfer = QInputDialog.getItem(this, "Transfert", "Select the  recipient number :", this.directory);
+    	if(!transfer.equals("")) {
+    		// Envoyer un message transfert
+    	}
     }
 }
