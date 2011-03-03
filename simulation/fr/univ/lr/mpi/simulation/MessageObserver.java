@@ -1,10 +1,11 @@
 package fr.univ.lr.mpi.simulation;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Queue;
 
 import fr.univ.lr.mpi.exchanges.IEvent;
-import fr.univ.lr.mpi.exchanges.impl.ExchangeAttributeNames;
 import fr.univ.lr.mpi.services.IService;
 
 /**
@@ -17,82 +18,46 @@ public class MessageObserver extends Thread implements IService {
 
 	public SimulationUI ui;
 	private Queue<IEvent> evenement;
+	
 
 	public MessageObserver() {
 
 		ui = new SimulationUI();
 		this.evenement = new LinkedList<IEvent>();
-
+	
 	}
 
 	/**
 	 * If the observer receive a message, he stock it in the queue
 	 */
-	public void receiveEvent(IEvent event) {
+	public synchronized void receiveEvent(IEvent event) {
 		this.evenement.add(event);
 		this.notify();
 	}
 
 	public void run() {
-		String callerPhoneNumber;
-		String recipientPhoneNumber;
-		while (this.evenement.peek() != null) {
-			IEvent event = this.evenement.poll();
 
-			switch (event.getEventType()) {
+		while (true) {
+			if (this.evenement.isEmpty()) {
+				synchronized (this) {
+					try {
+						this.wait();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+			}
 
-			/**
-			 * End of communication
-			 */
-			case CONNECTION_CLOSED:
-
-				callerPhoneNumber = event
-						.getAttributeValue(ExchangeAttributeNames.CALLER_PHONE_NUMBER);
-				recipientPhoneNumber = event
-						.getAttributeValue(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER);
-
-				// action à effectuer, à completer selon l'ui
-
-				break;
-
-			/**
-			 * Connection strart
-			 */
-			case CONNECTION_ESTABLISHED:
-				//
-				callerPhoneNumber = event
-						.getAttributeValue(ExchangeAttributeNames.CALLER_PHONE_NUMBER);
-				recipientPhoneNumber = event
-						.getAttributeValue(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER);
-
-				// à compléter
-				break;
-			
-				/**
-				 * Create a line
-				 */
-			case LINE_CREATION:
-				break;
-				
-			case LINE_DELETION:
-				break;
-			
-			case DIALING :
-				break;
-				
-			case MESSAGE_TRANSFER:
-				break;
+			try {
+				FileWriter logFile = new FileWriter("log.txt",true);
+				String log = this.evenement.poll().toString();
+				System.out.println("\n ----- ecriture :              " + log);
+				logFile.write(log+"\r\n");
+				logFile.close();
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
 		}
 
-		/**
-		 * When the queue is empty, we pause the thread
-		 */
-		try {
-			this.wait();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 }
