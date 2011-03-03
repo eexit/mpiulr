@@ -142,6 +142,8 @@ public class PhoneWidget extends QWidget
     public void pickUpThePhone()
     {
     	this.stopBlink.emit();
+    	pickUpButton.setIcon(new QIcon(new QPixmap("content/pick_up.png")));
+		this.defaultColor = true;
     	this.hangUpButton.setEnabled(true);
     	this.pickUpButton.setEnabled(false);
     	this.line.pickUp();
@@ -150,6 +152,8 @@ public class PhoneWidget extends QWidget
     public void hangUpThePhone()
     {
     	this.stopBlink.emit();
+    	hangUpButton.setIcon(new QIcon(new QPixmap("content/hang_up.png")));
+		this.defaultColor = false;
     	this.pickUpButton.setEnabled(true);
     	this.hangUpButton.setEnabled(false);
     	this.line.hangUp();
@@ -163,9 +167,8 @@ public class PhoneWidget extends QWidget
     
     public void sendMessage()
     {
-    	
     	String message = this.messageEdit.toPlainText();
-    	if(message.equals(""))
+    	if(!message.equals(""))
     	{
     		this.messageEdit.clear();
     		this.line.sendMessage(message);
@@ -183,10 +186,24 @@ public class PhoneWidget extends QWidget
     	{
     	case FREE :
     		this.logBrowser.append("RING!!");
+        	if(this.defaultColor) {
+        		pickUpButton.setIcon(new QIcon(new QPixmap("content/pick_up_blink.png")));
+        		this.defaultColor = false;
+        	} else {
+        		pickUpButton.setIcon(new QIcon(new QPixmap("content/pick_up.png")));
+        		this.defaultColor = true;
+        	}
     		break;
     		
     	case BUSY :
     		this.logBrowser.append("Recipient is busy, please hang up!");
+    		if(this.defaultColor) {
+    			hangUpButton.setIcon(new QIcon(new QPixmap("content/hang_up_blink.png")));
+        		this.defaultColor = false;
+        	} else {
+        		hangUpButton.setIcon(new QIcon(new QPixmap("content/hang_up.png")));
+        		this.defaultColor = true;
+        	}
     		break;
     	}
     	this.timer.start();
