@@ -152,6 +152,10 @@ public class Line implements ILine {
 	 * @author Joris Berthelot <joris.berthelot@gmail.com>
 	 */
 	public void hangUp() {
+		if (this.state.equals(LineState.FREE)) {
+			return;
+		}
+		
 		this.state = LineState.FREE;
 		
 		// Sends the message to the concentrator
