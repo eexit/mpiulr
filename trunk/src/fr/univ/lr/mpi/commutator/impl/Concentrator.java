@@ -68,11 +68,17 @@ public class Concentrator {
 	 */
 
 	public void sendMessage(String phoneNumber, IMessage message) {
-		int i = 0;
-		while (phoneNumber != lines.get(i).getPhoneNumber() || i > lines.size()) {
-			i++;
+//		int i = 0;
+//		while (phoneNumber != lines.get(i).getPhoneNumber() || i > lines.size()) {
+//			i++;
+//		}
+		for(ILine l:lines)
+		{
+			l.receiveMessage(message);
+			return;
 		}
-		lines.get(i).receiveMessage(message);
+		
+
 	}
 
 	/**
