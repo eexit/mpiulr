@@ -202,6 +202,9 @@ public class Connection extends Thread implements IConnection {
 
 		// When the recipient phone is ringing
 		case RINGING:
+			/* Sets the recipient phone number */
+			this.recipientPhoneNumber = message.getRecipientPhoneNumber();
+
 			// Sends an ECHO message to the caller
 			AutoCommutator.getInstance().sendMessage(
 					this.callerPhoneNumber,
@@ -256,8 +259,9 @@ public class Connection extends Thread implements IConnection {
 			AutoCommutator.getInstance().sendEvent(event);
 
 			// Sends message VOICE_EXCHANGE to the caller and the recipient
-			IMessage exchange_message = new Message(MessageType.CONNECTION_ESTABLISHED,
-					this.callerPhoneNumber, this.recipientPhoneNumber);
+			IMessage exchange_message = new Message(
+					MessageType.CONNECTION_ESTABLISHED, this.callerPhoneNumber,
+					this.recipientPhoneNumber);
 			AutoCommutator.getInstance().sendMessage(this.callerPhoneNumber,
 					exchange_message);
 			AutoCommutator.getInstance().sendMessage(this.recipientPhoneNumber,
