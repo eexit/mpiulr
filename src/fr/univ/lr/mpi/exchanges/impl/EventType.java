@@ -58,6 +58,14 @@ public enum EventType {
 	 */
 	UNAVAILABLE_RECIPIENT, 
 	/**
+	 * send/receive message to answering machine
+	 */
+	ANSWERING_MACHINE_DIALING,	
+	/**
+	 * when need answering machine home message
+	 */
+	GET_ANSWERING_MACHINE_MESSAGE,
+	/**
 	 * Dialing to a line
 	 */
 	DIALING,
