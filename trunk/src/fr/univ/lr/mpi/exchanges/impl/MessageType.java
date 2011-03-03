@@ -45,13 +45,17 @@ public enum MessageType {
 	 */
 	ECHO,
 	/**
+	 * When the connection is established
+	 */
+	CONNECTION_ESTABLISHED,
+	/**
 	 * When the connection is established, the caller and the recipient can
 	 * exchange voice data
 	 */
 	VOICE_EXCHANGE,
 	/**
-	 * When the caller OR the recipient hang up their phones
-	 * new connection is refused
+	 * When the caller OR the recipient hang up their phones new connection is
+	 * refused
 	 */
 	HANGUP,
 	/**
