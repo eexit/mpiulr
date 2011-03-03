@@ -27,24 +27,32 @@ public class Line implements ILine {
 	private String phoneNumber;
 
 	/**
-	 * Connection container
-	 * 
-	 * @author Joris Berthelot <joris.berthelot@gmail.com>
-	 */
-	// private IConnection connection;
-
-	/**
 	 * Line current state
 	 * 
 	 * @author Joris Berthelot <joris.berthelot@gmail.com>
 	 */
 	private LineState state;
-
+	
+	/**
+	 * Concentrator container
+	 * 
+	 * @author Joris Berthelot <joris.berthelot@gmail.com>
+	 */
 	private Concentrator concentrator;
-
+	
+	/**
+	 * Phone widget containter
+	 * 
+	 * @author Joris Berthelot <joris.berthelot@gmail.com>
+	 */
 	private PhoneWidget phone;
 	
-	private Boolean isRinging;// false = not ringing, true = ringing
+	/**
+	 * Boolean value of the ringing state of the line
+	 * 
+	 * @author Joris Berthelot <joris.berthelot@gmail.com>
+	 */
+	private Boolean isRinging;
 
 	/**
 	 * Line contructor
@@ -60,13 +68,25 @@ public class Line implements ILine {
 		this.state = LineState.FREE;
 		this.isRinging = false;
 	}
-
-	public void setPhone(PhoneWidget p) {
-		phone = p;
+	
+	/**
+	 * Phone widget setter
+	 * 
+	 * @author Joris Berthelot <joris.berthelot@gmail.com>
+	 * @param phone
+	 */
+	public void setPhone(PhoneWidget phone) {
+		this.phone = phone;
 	}
-
-	public void setConcentrator(Concentrator c) {
-		concentrator = c;
+	
+	/**
+	 * Concentrator setter
+	 * 
+	 * @author Joris Berthelot <joris.berthelot@gmail.com>
+	 * @param concentrator
+	 */
+	public void setConcentrator(Concentrator concentrator) {
+		this.concentrator = concentrator;
 	}
 
 	/**
@@ -78,17 +98,6 @@ public class Line implements ILine {
 	public String getPhoneNumber() {
 		return this.phoneNumber;
 	}
-
-	/**
-	 * Sets a new connection to the line
-	 * 
-	 * @author Joris Berthelot <joris.berthelot@gmail.com>
-	 * @param connection
-	 */
-	// public void setConnection(IConnection connection) {
-	// this.connection = connection;
-	// this.state = LineState.BUSY;
-	// }
 
 	/**
 	 * Message receiver of commutator
@@ -122,18 +131,19 @@ public class Line implements ILine {
 		}
 		this.state = LineState.BUSY;
 		
-		if(!this.isRinging)
-		{
-			concentrator.receiveMessage(new Message(MessageType.PICKUP,
-					this.phoneNumber, null));
-		}
-		else
-		{
+		if (!this.isRinging) {
+			// Sends the message to the concentrator
+			this.concentrator.receiveMessage(new Message(
+				MessageType.PICKUP, this.phoneNumber
+			));
+		} else {
+			// Stops the ring
 			this.isRinging = false;
-			concentrator.receiveMessage(new Message(MessageType.RECIPIENT_PICKUP,null, this.phoneNumber));
+			// Sends the message to the concentrator
+			this.concentrator.receiveMessage(new Message(
+				MessageType.RECIPIENT_PICKUP, null, this.phoneNumber
+			));
 		}
-		// AutoCommutator.getInstance().receiveMessage(
-		// new Message(MessageType.PICKUP, this.phoneNumber, null));
 	}
 
 	/**
@@ -143,12 +153,11 @@ public class Line implements ILine {
 	 */
 	public void hangUp() {
 		this.state = LineState.FREE;
-
-		concentrator.receiveMessage(new Message(MessageType.HANGUP,
-				this.phoneNumber, null));
-
-		// AutoCommutator.getInstance().receiveMessage(
-		// new Message(MessageType.HANGUP, this.phoneNumber, null));
+		
+		// Sends the message to the concentrator
+		this.concentrator.receiveMessage(new Message(
+			MessageType.HANGUP, this.phoneNumber
+		));
 	}
 
 	/**
@@ -161,17 +170,20 @@ public class Line implements ILine {
 		if (!this.state.equals(LineState.BUSY)) {
 			return;
 		}
-		concentrator.receiveMessage(new Message(MessageType.NUMBERING,
-				this.phoneNumber, phoneNumber));
-
-		// AutoCommutator.getInstance().receiveMessage(
-		// new Message(MessageType.NUMBERING, this.phoneNumber, null));
+		
+		// Sends the message to the concentrator
+		this.concentrator.receiveMessage(new Message(
+			MessageType.NUMBERING, this.phoneNumber, phoneNumber
+		));
 	}
 
 	public void sendMessage(String content) {
 		System.out.println("Line send content: " + content);
-		concentrator.receiveMessage(new Message(MessageType.VOICE_EXCHANGE,
-				this.getPhoneNumber(), null, content));
+		
+		// Sends the message to the concentrator
+		this.concentrator.receiveMessage(new Message(
+			MessageType.VOICE_EXCHANGE, this.getPhoneNumber(), null, content
+		));
 	}
 
 	/**
