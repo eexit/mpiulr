@@ -239,12 +239,22 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 			}
 			break;
 		case VOICE_EXCHANGE:
-			String recipient = ((Connection) getConnection(message
-					.getCallerPhoneNumber())).getRecipientPhoneNumber();
-			// if (!getConnection(recipient).isConnected()) {
+			String sender = message.getCallerPhoneNumber();
+			Connection con = ((Connection) getConnection(sender));
+			if (con == null) {
+				return;
+			}
+			String recipient = null;
+			if (con.getCallerPhoneNumber().equals(sender)) {
+				recipient = con.getRecipientPhoneNumber();
+			} else if (con.getRecipientPhoneNumber().equals(sender)) {
+				recipient = con.getCallerPhoneNumber();
+			}
+			// if (!((Connection) getConnection(recipient)).isConnected()) {
 			// return;
 			// }
-			System.out.println("VOICE_EXCHANGE (Messages) to " + recipient);
+			System.out.println("MESSAGE TRANSFER (from " + sender + ") to ("
+					+ recipient + ")");
 			concentrator.sendMessage(recipient, message);
 			break;
 		default:
