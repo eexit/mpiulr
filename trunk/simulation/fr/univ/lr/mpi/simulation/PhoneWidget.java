@@ -51,7 +51,7 @@ public class PhoneWidget extends QWidget
         hangUpButton = new QPushButton(this);
         hangUpButton.setIcon(new QIcon(new QPixmap("content/hang_up.png")));
         hangUpButton.setIconSize(new QSize(41, 39));
-        hangUpButton.setCheckable(false);
+        hangUpButton.setEnabled(false);
         
         dialLabel = new QLabel(this);
         dialLabel.setText("Dial :");
@@ -68,7 +68,6 @@ public class PhoneWidget extends QWidget
         sendButton.setText("Send");
         
         messageEdit = new QTextEdit(this);
-       
         
         logBrowser = new QTextBrowser(this);
         
@@ -115,15 +114,15 @@ public class PhoneWidget extends QWidget
     
     public void pickUpThePhone()
     {
-    	this.hangUpButton.setCheckable(true);
-    	this.pickUpButton.setCheckable(true);
+    	this.hangUpButton.setEnabled(true);
+    	this.pickUpButton.setEnabled(false);
     	this.line.pickUp();
     }
     
     public void hangUpThePhone()
     {
-    	this.pickUpButton.setCheckable(true);
-    	this.hangUpButton.setCheckable(true);
+    	this.pickUpButton.setEnabled(true);
+    	this.hangUpButton.setEnabled(false);
     	this.line.hangUp();
     }
     
@@ -135,15 +134,8 @@ public class PhoneWidget extends QWidget
     
     public void sendMessage()
     {
-    	if(!this.line.getDialPhone().equals("")){
-    		String message = this.messageEdit.toPlainText();
-        	this.line.sendMessage(message);
-        	this.logBrowser.append(message);
-    	}
-    	else {
-    		this.logBrowser.append("Vous devez être en communication");
-    	}
-    	this.messageEdit.setPlainText("");
+    	this.line.sendMessage(this.messageEdit.toPlainText());
+    	this.logBrowser.append(this.messageEdit.toPlainText());
     }
     
     public void clearTheLog()
