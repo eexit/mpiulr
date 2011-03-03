@@ -239,7 +239,7 @@ public class Connection extends Thread implements IConnection {
 				this.timer.cancel();
 				this.timer.purge();
 			}
-			
+
 			this.recipientPhoneNumber = recipientPhoneNumber;
 			this.startTime = Calendar.getInstance();
 			IEvent event = new Event(EventType.CONNECTION_ESTABLISHED);
@@ -250,7 +250,7 @@ public class Connection extends Thread implements IConnection {
 			AutoCommutator.getInstance().sendEvent(event);
 
 			// Sends message VOICE_EXCHANGE to the caller and the recipient
-			IMessage exchange_message = new Message(MessageType.VOICE_EXCHANGE,
+			IMessage exchange_message = new Message(MessageType.CONNECTION_ESTABLISHED,
 					this.callerPhoneNumber, this.recipientPhoneNumber);
 			AutoCommutator.getInstance().sendMessage(this.callerPhoneNumber,
 					exchange_message);
@@ -261,14 +261,15 @@ public class Connection extends Thread implements IConnection {
 		// When the caller or the recipient hang up the phone
 		case HANGUP:
 			final IEvent kill_event = new Event(EventType.CONNECTION_DESTROYED);
-			kill_event.addAttribute(ExchangeAttributeNames.CALLER_PHONE_NUMBER, this.callerPhoneNumber);
-			
+			kill_event.addAttribute(ExchangeAttributeNames.CALLER_PHONE_NUMBER,
+					this.callerPhoneNumber);
+
 			if (null != this.recipientPhoneNumber) {
 				// Sets up a connection keepalive timeout
 				this.timer = new Timer();
 				Date hang_expire = new Date();
 				hang_expire.setSeconds(hang_expire.getSeconds()
-					+ HANGUP_TIMEOUT);
+						+ HANGUP_TIMEOUT);
 				this.endTime = Calendar.getInstance();
 				this.timer.schedule(new TimerTask() {
 
