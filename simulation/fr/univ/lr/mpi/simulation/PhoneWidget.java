@@ -68,6 +68,7 @@ public class PhoneWidget extends QWidget
         sendButton.setText("Send");
         
         messageEdit = new QTextEdit(this);
+       
         
         logBrowser = new QTextBrowser(this);
         
@@ -134,8 +135,15 @@ public class PhoneWidget extends QWidget
     
     public void sendMessage()
     {
-    	this.line.sendMessage(this.sendButton.text());
-    	this.logBrowser.append(this.sendButton.text());
+    	if(!this.line.getDialPhone().equals("")){
+    		String message = this.messageEdit.toPlainText();
+        	this.line.sendMessage(message);
+        	this.logBrowser.append(message);
+    	}
+    	else {
+    		this.logBrowser.append("Vous devez être en communication");
+    	}
+    	this.messageEdit.setPlainText("");
     }
     
     public void clearTheLog()

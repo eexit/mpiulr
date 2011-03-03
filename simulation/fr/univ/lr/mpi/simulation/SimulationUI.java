@@ -90,6 +90,7 @@ public class SimulationUI {
 
 			QWidget phone = new PhoneWidget(windows, lines.get(i), dir);
 			phone.setGeometry(x, y, phone.width(), phone.height());
+			lines.get(i).setPhone((PhoneWidget) phone);
 			phone.show();
 			phones.add(phone);
 		}

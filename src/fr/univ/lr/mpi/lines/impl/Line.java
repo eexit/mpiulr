@@ -25,6 +25,8 @@ public class Line implements ILine {
 	 * @author Joris Berthelot <joris.berthelot@gmail.com>
 	 */
 	private String phoneNumber;
+	
+	private String dialToPhoneNumber;
 
 	/**
 	 * Line current state
@@ -67,6 +69,7 @@ public class Line implements ILine {
 		this.phoneNumber = number;
 		this.state = LineState.FREE;
 		this.isRinging = false;
+		this.dialToPhoneNumber = "";
 	}
 	
 	/**
@@ -111,10 +114,12 @@ public class Line implements ILine {
 		switch (message.getMessageType()) {
 		case RINGING:
 			this.isRinging = true;
+			this.dialToPhoneNumber = message.getCallerPhoneNumber();
 			break;
 		case VOICE_EXCHANGE:
 			System.out.println("--------------VOICE EXCHANGE (from "
-					+ this.phoneNumber + ")--------------");
+					+ message.getCallerPhoneNumber() + ")--------------");
+			
 			break;
 		}
 		phone.appendLog(message);
@@ -136,6 +141,7 @@ public class Line implements ILine {
 			this.concentrator.receiveMessage(new Message(
 				MessageType.PICKUP, this.phoneNumber
 			));
+			
 		} else {
 			// Stops the ring
 			this.isRinging = false;
@@ -147,6 +153,15 @@ public class Line implements ILine {
 	}
 
 	/**
+	 * 
+	 * @return the dial phone number
+	 */
+	public String getDialPhone()
+	{
+		return this.dialToPhoneNumber;
+	}
+	
+	/**
 	 * Line hang up action
 	 * 
 	 * @author Joris Berthelot <joris.berthelot@gmail.com>
@@ -157,7 +172,7 @@ public class Line implements ILine {
 		}
 		
 		this.state = LineState.FREE;
-		
+		this.dialToPhoneNumber = "";
 		// Sends the message to the concentrator
 		this.concentrator.receiveMessage(new Message(
 			MessageType.HANGUP, this.phoneNumber
@@ -175,6 +190,7 @@ public class Line implements ILine {
 			return;
 		}
 		
+		this.dialToPhoneNumber = phoneNumber;
 		// Sends the message to the concentrator
 		this.concentrator.receiveMessage(new Message(
 			MessageType.NUMBERING, this.phoneNumber, phoneNumber
@@ -187,12 +203,17 @@ public class Line implements ILine {
 	 */
 
 	public void sendMessage(String content) {
-		System.out.println("Line send content: " + content);
+		if(!this.dialToPhoneNumber.equals("")){
+			System.out.println("Line send content: " + content);
+			
+			IMessage message = new Message(
+				MessageType.VOICE_EXCHANGE, this.getPhoneNumber(), this.dialToPhoneNumber, content
+			);
+			
+			// Sends the message to the concentrator
+			this.concentrator.receiveMessage(message);
+		}
 		
-		// Sends the message to the concentrator
-		this.concentrator.receiveMessage(new Message(
-			MessageType.VOICE_EXCHANGE, this.getPhoneNumber(), null, content
-		));
 	}
 
 	/**
