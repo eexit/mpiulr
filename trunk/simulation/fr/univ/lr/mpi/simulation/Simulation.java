@@ -1,6 +1,12 @@
 package fr.univ.lr.mpi.simulation;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
+import com.trolltech.qt.gui.QApplication;
+import com.trolltech.qt.gui.QTextBrowser;
+import com.trolltech.qt.gui.QWidget;
 
 import fr.univ.lr.mpi.commutator.impl.AutoCommutator;
 import fr.univ.lr.mpi.commutator.impl.Concentrator;
@@ -28,6 +34,17 @@ public class Simulation {
 		Line l3 = new Line("0304050607");
 		Line l4 = new Line("0405060708");
 
+		List<String> dir = new ArrayList<String>();
+		dir.add(l1.getPhoneNumber());
+		dir.add(l2.getPhoneNumber());
+		dir.add(l3.getPhoneNumber());
+		dir.add(l4.getPhoneNumber());
+		List<Line> lines = new ArrayList<Line>();
+		lines.add(l1);
+		lines.add(l2);
+		lines.add(l3);
+		lines.add(l4);
+
 		Concentrator concentrator = new Concentrator();
 		commutator.setConcentrator(concentrator);
 
@@ -36,73 +53,123 @@ public class Simulation {
 		concentrator.registerLine(l3);
 		concentrator.registerLine(l4);
 
-		l1.pickUp();
-		l2.pickUp();
-
-		/* L2 => L4 */
-		l2.dialTo("0405060708");
-		Thread.sleep(10000);
-		commutator.stop();
+		// l1.pickUp();
+		// l2.pickUp();
+		//
+		// /* L2 => L4 */
+		// l2.dialTo("0405060708");
+		// Thread.sleep(10000);
+		// commutator.stop();
 		/* L1 => L3 */
-		//l1.dialTo("0304050607");
+		// l1.dialTo("0304050607");
 
-		 Event e;
-		 /* Directory Service test */
-		 e = new Event(EventType.PHONE_NUMBER_REQUEST);
-		 e
-		 .addAttribute(ExchangeAttributeNames.CALLER_PHONE_NUMBER,
-		 "0102030105");
-		 e.addAttribute(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER,
-		 "0203040506");
-		 AutoCommutator.getInstance().sendEvent(e);
+		// Event e;
+		// /* Directory Service test */
+		// e = new Event(EventType.PHONE_NUMBER_REQUEST);
+		// e
+		// .addAttribute(ExchangeAttributeNames.CALLER_PHONE_NUMBER,
+		// "0102030105");
+		// e.addAttribute(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER,
+		// "0203040506");
+		// AutoCommutator.getInstance().sendEvent(e);
+		//		
+		// /* Billing Service test */
+		// e = new Event(EventType.CONNECTION_CLOSED);
+		// e
+		// .addAttribute(ExchangeAttributeNames.CALLER_PHONE_NUMBER,
+		// "0102030105");
+		// e.addAttribute(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER,
+		// "0203040506");
+		// e
+		// .addAttribute(ExchangeAttributeNames.DATE, new Date()
+		// .toLocaleString());
+		// e.addAttribute(ExchangeAttributeNames.CONNECTION_DURATION, "12.2");
+		// AutoCommutator.getInstance().sendEvent(e);
+		//		
+		// /* transfert service test */
+		//		
+		// // // create a transfert
+		// Event e2 = new Event(EventType.CREATE_TRANSFER);
+		// e2.addAttribute(ExchangeAttributeNames.CALLER_PHONE_NUMBER,
+		// "0203040506");
+		// e2.addAttribute(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER,
+		// "0304050607");
+		// AutoCommutator.getInstance().sendEvent(e2);
+		//		
+		// // test transfer
+		// e = new Event(EventType.CALL_TRANSFER_REQUEST);
+		// e
+		// .addAttribute(ExchangeAttributeNames.CALLER_PHONE_NUMBER,
+		// "0102030105");
+		// e.addAttribute(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER,
+		// "0203040506");
+		// AutoCommutator.getInstance().sendEvent(e);
+		// // remove
+		// e = new Event(EventType.REMOVE_TRANSFER);
+		// e.addAttribute(ExchangeAttributeNames.PHONE_NUMBER, "0203040506");
+		// AutoCommutator.getInstance().sendEvent(e);
+		//		
+		// // test transfer
+		// e = new Event(EventType.CALL_TRANSFER_REQUEST);
+		// e
+		// .addAttribute(ExchangeAttributeNames.CALLER_PHONE_NUMBER,
+		// "0102030105");
+		// e.addAttribute(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER,
+		// "0203040506");
+		// AutoCommutator.getInstance().sendEvent(e);
+		//		
+		// System.out.println("Actives Connections : "
+		// + commutator.getActiveConnections());
+
+		QApplication.initialize(args);
+
+		/**
+		 * Windows instanciation
+		 */
+		QWidget windows = new QWidget();
+		windows.setWindowTitle("Telecom Project");
+
+		/**
+		 * Differents phone instanciation
+		 */
+
+		List<QWidget> phones = new ArrayList();
+		int x = 10;
+		int y = 10;
+
+		for (int i = 0; i < lines.size(); i++) {
+
+			if (i % 2 == 0) {
+
+				x = 10;
+				if (i != 0)
+					y += 310;
+				System.out.println("colone 1 : x = " + x + " y = " + y);
+			} else {
+
+				x = 180;
+
+				System.out.println("colone 2 : x = " + x + " y = " + y);
+
+			}
+			QWidget phone = new PhoneWidget(windows, lines.get(i), dir);
+			phone.setGeometry(x, y, phone.width(), phone.height());
+			phone.show();
+			phones.add(phone);
+		}
+
+	
+		/**
+		 * Log Instanciation
+		 */
+
 		
-		 /* Billing Service test */
-		 e = new Event(EventType.CONNECTION_CLOSED);
-		 e
-		 .addAttribute(ExchangeAttributeNames.CALLER_PHONE_NUMBER,
-		 "0102030105");
-		 e.addAttribute(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER,
-		 "0203040506");
-		 e
-		 .addAttribute(ExchangeAttributeNames.DATE, new Date()
-		 .toLocaleString());
-		 e.addAttribute(ExchangeAttributeNames.CONNECTION_DURATION, "12.2");
-		 AutoCommutator.getInstance().sendEvent(e);
-		
-		 /* transfert service test */
-		
-		 // // create a transfert
-		 Event e2 = new Event(EventType.CREATE_TRANSFER);
-		 e2.addAttribute(ExchangeAttributeNames.CALLER_PHONE_NUMBER,
-		 "0203040506");
-		 e2.addAttribute(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER,
-		 "0304050607");
-		 AutoCommutator.getInstance().sendEvent(e2);
-		
-		 // test transfer
-		 e = new Event(EventType.CALL_TRANSFER_REQUEST);
-		 e
-		 .addAttribute(ExchangeAttributeNames.CALLER_PHONE_NUMBER,
-		 "0102030105");
-		 e.addAttribute(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER,
-		 "0203040506");
-		 AutoCommutator.getInstance().sendEvent(e);
-		 // remove
-		 e = new Event(EventType.REMOVE_TRANSFER);
-		 e.addAttribute(ExchangeAttributeNames.PHONE_NUMBER, "0203040506");
-		 AutoCommutator.getInstance().sendEvent(e);
-		
-		 // test transfer
-		 e = new Event(EventType.CALL_TRANSFER_REQUEST);
-		 e
-		 .addAttribute(ExchangeAttributeNames.CALLER_PHONE_NUMBER,
-		 "0102030105");
-		 e.addAttribute(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER,
-		 "0203040506");
-		 AutoCommutator.getInstance().sendEvent(e);
-		
-		 System.out.println("Actives Connections : "
-		 + commutator.getActiveConnections());
+	
+
+		windows.show();
+
+		QApplication.exec();
+
 	}
 
 	/**
