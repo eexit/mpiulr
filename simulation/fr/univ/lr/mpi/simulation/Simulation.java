@@ -1,22 +1,19 @@
 package fr.univ.lr.mpi.simulation;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import com.trolltech.qt.gui.QApplication;
-import com.trolltech.qt.gui.QTextBrowser;
 import com.trolltech.qt.gui.QWidget;
 
 import fr.univ.lr.mpi.commutator.impl.AutoCommutator;
 import fr.univ.lr.mpi.commutator.impl.Concentrator;
 import fr.univ.lr.mpi.exceptions.LineException;
 import fr.univ.lr.mpi.exceptions.PhoneNumberValidatorException;
+import fr.univ.lr.mpi.exchanges.IEvent;
 import fr.univ.lr.mpi.exchanges.impl.Event;
 import fr.univ.lr.mpi.exchanges.impl.EventType;
 import fr.univ.lr.mpi.exchanges.impl.ExchangeAttributeNames;
-import fr.univ.lr.mpi.exchanges.impl.Message;
-import fr.univ.lr.mpi.exchanges.impl.MessageType;
 import fr.univ.lr.mpi.lines.impl.Line;
 
 /**
@@ -29,19 +26,17 @@ public class Simulation {
 
 	public static void main(String[] args) throws LineException,
 			PhoneNumberValidatorException, InterruptedException {
-
 		System.setProperty("com.trolltech.qt.thread-check", "no");
-
-		/**
-		 * UI instanciation
-		 */
-
 		QApplication.initialize(args);
 
-		/**
-		 * Autocommutator end line instanciation
-		 */
 		AutoCommutator commutator = AutoCommutator.getInstance();
+
+		IEvent e = new Event(EventType.CREATE_TRANSFER);
+		e.addAttribute(ExchangeAttributeNames.CALLER_PHONE_NUMBER,
+				ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER);
+		e.addAttribute(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER,
+				ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER);
+		commutator.sendEvent(e);
 
 		Line l1 = new Line("0102030105");
 		Line l2 = new Line("0203040506");
@@ -66,6 +61,64 @@ public class Simulation {
 		concentrator.registerLine(l2);
 		concentrator.registerLine(l3);
 		concentrator.registerLine(l4);
+
+		// Event e;
+		// /* Directory Service test */
+		// e = new Event(EventType.PHONE_NUMBER_REQUEST);
+		// e
+		// .addAttribute(ExchangeAttributeNames.CALLER_PHONE_NUMBER,
+		// "0102030105");
+		// e.addAttribute(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER,
+		// "0203040506");
+		// AutoCommutator.getInstance().sendEvent(e);
+		//		
+		// /* Billing Service test */
+		// e = new Event(EventType.CONNECTION_CLOSED);
+		// e
+		// .addAttribute(ExchangeAttributeNames.CALLER_PHONE_NUMBER,
+		// "0102030105");
+		// e.addAttribute(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER,
+		// "0203040506");
+		// e
+		// .addAttribute(ExchangeAttributeNames.DATE, new Date()
+		// .toLocaleString());
+		// e.addAttribute(ExchangeAttributeNames.CONNECTION_DURATION, "12.2");
+		// AutoCommutator.getInstance().sendEvent(e);
+		//		
+		// /* transfert service test */
+		//		
+		// // // create a transfert
+		// Event e2 = new Event(EventType.CREATE_TRANSFER);
+		// e2.addAttribute(ExchangeAttributeNames.CALLER_PHONE_NUMBER,
+		// "0203040506");
+		// e2.addAttribute(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER,
+		// "0304050607");
+		// AutoCommutator.getInstance().sendEvent(e2);
+		//		
+		// // test transfer
+		// e = new Event(EventType.CALL_TRANSFER_REQUEST);
+		// e
+		// .addAttribute(ExchangeAttributeNames.CALLER_PHONE_NUMBER,
+		// "0102030105");
+		// e.addAttribute(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER,
+		// "0203040506");
+		// AutoCommutator.getInstance().sendEvent(e);
+		// // remove
+		// e = new Event(EventType.REMOVE_TRANSFER);
+		// e.addAttribute(ExchangeAttributeNames.PHONE_NUMBER, "0203040506");
+		// AutoCommutator.getInstance().sendEvent(e);
+		//		
+		// // test transfer
+		// e = new Event(EventType.CALL_TRANSFER_REQUEST);
+		// e
+		// .addAttribute(ExchangeAttributeNames.CALLER_PHONE_NUMBER,
+		// "0102030105");
+		// e.addAttribute(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER,
+		// "0203040506");
+		// AutoCommutator.getInstance().sendEvent(e);
+		//		
+		// System.out.println("Actives Connections : "
+		// + commutator.getActiveConnections());
 
 		/**
 		 * Windows instanciation
@@ -110,7 +163,7 @@ public class Simulation {
 		// logBrowser.setGeometry(410, windows.height() - 300, 800, 250);
 		// logBrowser.show();
 		windows.show();
-		//
+
 		// l1.pickUp();
 		// l2.pickUp();
 		//
@@ -120,7 +173,7 @@ public class Simulation {
 		// commutator.stop();
 		// /* L1 => L3 */
 		// l1.dialTo("0304050607");
-		//
+
 		// Event e;
 		// /* Directory Service test */
 		// e = new Event(EventType.PHONE_NUMBER_REQUEST);
