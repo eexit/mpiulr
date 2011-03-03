@@ -24,17 +24,17 @@ public class MessageObserver extends Thread implements IService {
 	private Queue<IEvent> evenement;
 
 	private QWidget logBrowser;
-	private QTextBrowser logBrowserText;
+//	private QTextBrowser logBrowserText;
 
 	public MessageObserver() {
 
 		ui = new SimulationUI();
 		this.evenement = new LinkedList<IEvent>();
 
-		this.logBrowser = new QWidget();
-		this.logBrowserText = new QTextBrowser(logBrowser);
-		this.logBrowserText.setGeometry(0, 0, 800, 255);
-		this.logBrowser.setGeometry(450, 500, 800, 250);
+//		this.logBrowser = new QWidget();
+//		this.logBrowserText = new QTextBrowser(logBrowser);
+//		this.logBrowserText.setGeometry(0, 0, 800, 255);
+//		this.logBrowser.setGeometry(450, 500, 800, 250);
 
 		try {
 			FileWriter logFile = new FileWriter(
@@ -57,7 +57,7 @@ public class MessageObserver extends Thread implements IService {
 		/**
 		 * Treatment of the event
 		 */
-		this.processing();
+this.notify();
 
 	}
 
@@ -65,68 +65,68 @@ public class MessageObserver extends Thread implements IService {
 		return this.logBrowser;
 	}
 
-	private void processing() {
-		 try {
-		 String log = this.evenement.poll().toString();
-					
-		 this.logBrowserText.append(log);
-		 this.logBrowser.repaint();
-					
-		 FileWriter logFile = new FileWriter(
-		 "simulation/fr/univ/lr/mpi/log/log.txt", true);
-								
-		 logFile.write(log + "\r\n");
-		 logFile.close();
-					
-					
-		 } catch (IOException e) {
-		 e.printStackTrace();
-		 }
-
-	}
+//	private void processing() {
+//		 try {
+//		 String log = this.evenement.poll().toString();
+//					
+//		 this.logBrowserText.append(log);
+//		 this.logBrowser.repaint();
+//					
+//		 FileWriter logFile = new FileWriter(
+//		 "simulation/fr/univ/lr/mpi/log/log.txt", true);
+//								
+//		 logFile.write(log + "\r\n");
+//		 logFile.close();
+//					
+//					
+//		 } catch (IOException e) {
+//		 e.printStackTrace();
+//		 }
+//
+//	}
 
 	/**
 	 * Write in the log file the different event
 	 */
 	public void run() {
 
-//		while (true) {
-//			//System.out.println("NOTIFY");
-//			/**
-//			 * If there is no event in the queue, we pause the Thread
-//			 */
-//			if (this.evenement.isEmpty()) {
-//				
-//				synchronized (this) {
-//					try {
-//						this.wait();
-//					} catch (InterruptedException e) {
-//						e.printStackTrace();
-//					}
-//				}
-//			}
-//			
-//			/**
-//			 * We write in the file
-//			 */
-//
-//			try {
-//				String log = this.evenement.poll().toString();
-//
-//				this.logBrowserText.append(log);
-//				this.logBrowser.repaint();
-//
-//				FileWriter logFile = new FileWriter(
-//						"simulation/fr/univ/lr/mpi/log/log.txt", true);
-//
-//				logFile.write(log + "\r\n");
-//				logFile.close();
-//
-//			} catch (IOException e) {
-//				e.printStackTrace();
-//			}
-//
-//		}
+		while (true) {
+			//System.out.println("NOTIFY");
+			/**
+			 * If there is no event in the queue, we pause the Thread
+			 */
+			if (this.evenement.isEmpty()) {
+				
+				synchronized (this) {
+					try {
+						this.wait();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+			
+			/**
+			 * We write in the file
+			 */
+
+			try {
+				String log = this.evenement.poll().toString();
+
+				//this.logBrowserText.append(log);
+			//	this.logBrowser.repaint();
+
+				FileWriter logFile = new FileWriter(
+						"simulation/fr/univ/lr/mpi/log/log.txt", true);
+
+				logFile.write(log + "\r\n");
+				logFile.close();
+
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+		}
 
 	}
 }
