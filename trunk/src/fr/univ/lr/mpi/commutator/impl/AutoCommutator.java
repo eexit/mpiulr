@@ -177,7 +177,10 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 	public synchronized void receiveEvent(IEvent event) {
 		switch (event.getEventType()) {
 		case CONNECTION_DESTROYED:
-			getConnection(event.getAttributeValue(ExchangeAttributeNames.CALLER_PHONE_NUMBER));
+			Connection c = ((Connection) getConnection(event
+					.getAttributeValue(ExchangeAttributeNames.CALLER_PHONE_NUMBER)));
+			c.stop();
+			connections.remove(c);
 			break;
 		default:
 			getConnection(
@@ -238,7 +241,6 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 		case VOICE_EXCHANGE:
 			String recipient = message.getRecipientPhoneNumber();
 			concentrator.sendMessage(recipient, message);
-			
 			break;
 		default:
 			/*
