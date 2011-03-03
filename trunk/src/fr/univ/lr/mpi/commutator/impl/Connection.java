@@ -215,8 +215,7 @@ public class Connection extends Thread implements IConnection {
 
 			// Sets up the answering machine timer
 			Date ans_expire = new Date();
-			ans_expire.setSeconds(ans_expire.getSeconds()
-					+ ANSWERING_MACHINE_TIMEOUT);
+			ans_expire.setSeconds(ans_expire.getSeconds() + ANSWERING_MACHINE_TIMEOUT);
 			this.timer = new Timer();
 			this.timer.schedule(new TimerTask() {
 
@@ -238,6 +237,7 @@ public class Connection extends Thread implements IConnection {
 					AutoCommutator.getInstance().sendEvent(event);
 				}
 			}, ans_expire);
+			
 			// Sends an RINGING message to the recipient
 			AutoCommutator.getInstance().sendMessage(
 					recipientPhoneNumber,
@@ -261,16 +261,10 @@ public class Connection extends Thread implements IConnection {
 					recipientPhoneNumber);
 			AutoCommutator.getInstance().sendEvent(event);
 
-			/* Messages sent to both caller and recipient */
-
-			IMessage m = new Message(MessageType.VOICE_EXCHANGE, message
-					.getCallerPhoneNumber(), message.getRecipientPhoneNumber());
-
-			AutoCommutator.getInstance().sendMessage(
-					message.getCallerPhoneNumber(), m);
-			AutoCommutator.getInstance().sendMessage(
-					message.getRecipientPhoneNumber(), m);
-
+			// Sends message VOICE_EXCHANGE to the caller and the recipient
+			IMessage exchange_message = new Message(MessageType.VOICE_EXCHANGE, this.callerPhoneNumber, this.recipientPhoneNumber);
+			AutoCommutator.getInstance().sendMessage(this.callerPhoneNumber, exchange_message);
+			AutoCommutator.getInstance().sendMessage(this.recipientPhoneNumber, exchange_message);
 			break;
 
 		// When the caller or the recipient hang up the phone
