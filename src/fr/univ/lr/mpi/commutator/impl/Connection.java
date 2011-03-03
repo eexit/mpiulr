@@ -269,31 +269,33 @@ public class Connection extends Thread implements IConnection {
 
 		// When the caller or the recipient hang up the phone
 		case HANGUP:
-			// Sets up a connection keepalive timeout
-			this.timer = new Timer();
-			Date hang_expire = new Date();
-			hang_expire.setSeconds(hang_expire.getSeconds() + HANGUP_TIMEOUT);
-			this.endTime = Calendar.getInstance();
-			this.timer.schedule(new TimerTask() {
+			if (null != this.recipientPhoneNumber) {
+				// Sets up a connection keepalive timeout
+				this.timer = new Timer();
+				Date hang_expire = new Date();
+				hang_expire.setSeconds(hang_expire.getSeconds() + HANGUP_TIMEOUT);
+				this.endTime = Calendar.getInstance();
+				this.timer.schedule(new TimerTask() {
 
-				@Override
-				public void run() {
-					// Sends the connection duration to the billing servive
-					Long duration = endTime.getTimeInMillis()
-							- startTime.getTimeInMillis() / 1000;
-					IEvent event = new Event(EventType.CONNECTION_CLOSED);
-					event.addAttribute(
-							ExchangeAttributeNames.CALLER_PHONE_NUMBER,
-							callerPhoneNumber);
-					event.addAttribute(
-							ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER,
-							recipientPhoneNumber);
-					event.addAttribute(
-							ExchangeAttributeNames.CONNECTION_DURATION,
-							duration.toString());
-					AutoCommutator.getInstance().sendEvent(event);
-				}
-			}, hang_expire);
+					@Override
+					public void run() {
+						// Sends the connection duration to the billing servive
+						Long duration = endTime.getTimeInMillis()
+								- startTime.getTimeInMillis() / 1000;
+						IEvent event = new Event(EventType.CONNECTION_CLOSED);
+						event.addAttribute(
+								ExchangeAttributeNames.CALLER_PHONE_NUMBER,
+								callerPhoneNumber);
+						event.addAttribute(
+								ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER,
+								recipientPhoneNumber);
+						event.addAttribute(
+								ExchangeAttributeNames.CONNECTION_DURATION,
+								duration.toString());
+						AutoCommutator.getInstance().sendEvent(event);
+					}
+				}, hang_expire);
+			}
 			break;
 		}
 	}
