@@ -201,11 +201,6 @@ public class Connection extends Thread implements IConnection {
 					MessageType.ECHO, this.callerPhoneNumber, recipientPhoneNumber
 				));
 				
-				// Sends an ECHO message to the caller
-				AutoCommutator.getInstance().sendMessage(recipientPhoneNumber, new Message(
-					MessageType.RINGING, this.callerPhoneNumber, recipientPhoneNumber
-				));
-				
 				// Sets up the answering machine timer
 				Date ans_expire = new Date();
 				ans_expire.setSeconds(ans_expire.getSeconds() + ANSWERING_MACHINE_TIMEOUT);
@@ -220,20 +215,29 @@ public class Connection extends Thread implements IConnection {
 						event.addAttribute(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER, recipientPhoneNumber);
 						event.addAttribute(ExchangeAttributeNames.DATE, new Date().toLocaleString());
 						event.addAttribute(ExchangeAttributeNames.MESSAGE, "Message Cool !");
+						System.out.println("machin");
 						AutoCommutator.getInstance().sendEvent(event);
 					}
 				}, ans_expire);
+				// Sends an RINGING message to the recipient
+				AutoCommutator.getInstance().sendMessage(recipientPhoneNumber, new Message(
+					MessageType.RINGING, this.callerPhoneNumber, recipientPhoneNumber
+				));
 				break;
 			
 			// When the recipient pick up the phone
-			case PICKUP :
+			case RECIPIENT_PICKUP :
 				System.out.println("FINAL Message : "+message);
+				System.out.println("RECIPIENT :"+recipientPhoneNumber);
+				if(!message.getRecipientPhoneNumber().equals(recipientPhoneNumber)) {
+					return;
+				}
 				// If there is any timer, we kill it!
 				if (null != this.timer) {
 					this.timer.cancel();
-					this.timer = null;
+					System.out.println("TIMER CANCELLED");
+					this.timer.purge();
 				}
-				
 				this.recipientPhoneNumber = recipientPhoneNumber;
 				this.startTime = Calendar.getInstance();
 				IEvent event = new Event(EventType.CONNECTION_ESTABLISHED);

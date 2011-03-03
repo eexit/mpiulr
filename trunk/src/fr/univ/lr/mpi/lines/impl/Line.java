@@ -94,7 +94,15 @@ public class Line implements ILine {
 	 * @param message
 	 */
 	public void receiveMessage(IMessage message) {
-		System.out.println("Line ("+this.phoneNumber+") receive message: " + message);
+		switch (message.getMessageType()) {
+		case RINGING:
+			concentrator.receiveMessage(new Message(
+					MessageType.RECIPIENT_PICKUP, message
+							.getCallerPhoneNumber(), this.phoneNumber));
+			break;
+		}
+		System.out.println("Line (" + this.phoneNumber + ") receive message: "
+				+ message);
 		// phone.appendLog(message);
 	}
 
