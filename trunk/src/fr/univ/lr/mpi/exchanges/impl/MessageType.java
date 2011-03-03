@@ -65,6 +65,13 @@ public enum MessageType {
 	/**
 	 * When the number doesn't not exist
 	 */
-	UNKNOWN_NUMBER;
-
+	UNKNOWN_NUMBER,
+	/**
+	 * When the connection is closed by the caller
+	 */
+	CONNECTION_CLOSED,
+	/**
+	 * When the recipient is busy
+	 */
+	BUSY;
 }
