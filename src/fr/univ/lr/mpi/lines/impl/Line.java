@@ -43,6 +43,8 @@ public class Line implements ILine {
 	private Concentrator concentrator;
 
 	private PhoneWidget phone;
+	
+	private Boolean isRinging;// false = not ringing, true = ringing
 
 	/**
 	 * Line contructor
@@ -56,6 +58,7 @@ public class Line implements ILine {
 		}
 		this.phoneNumber = number;
 		this.state = LineState.FREE;
+		this.isRinging = false;
 	}
 
 	public void setPhone(PhoneWidget p) {
@@ -98,16 +101,14 @@ public class Line implements ILine {
 				+ message);
 		switch (message.getMessageType()) {
 		case RINGING:
-			concentrator.receiveMessage(new Message(
-					MessageType.RECIPIENT_PICKUP, message
-							.getCallerPhoneNumber(), this.phoneNumber));
+			this.isRinging = true;
 			break;
 		case VOICE_EXCHANGE:
 			System.out.println("--------------VOICE EXCHANGE (from "
 					+ this.phoneNumber + ")--------------");
 			break;
 		}
-		// phone.appendLog(message);
+		phone.appendLog(message);
 	}
 
 	/**
@@ -120,9 +121,17 @@ public class Line implements ILine {
 			return;
 		}
 		this.state = LineState.BUSY;
-
-		concentrator.receiveMessage(new Message(MessageType.PICKUP,
-				this.phoneNumber, null));
+		
+		if(!this.isRinging)
+		{
+			concentrator.receiveMessage(new Message(MessageType.PICKUP,
+					this.phoneNumber, null));
+		}
+		else
+		{
+			this.isRinging = false;
+			concentrator.receiveMessage(new Message(MessageType.RECIPIENT_PICKUP,null, this.phoneNumber));
+		}
 		// AutoCommutator.getInstance().receiveMessage(
 		// new Message(MessageType.PICKUP, this.phoneNumber, null));
 	}
