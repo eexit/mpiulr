@@ -175,10 +175,17 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 
 	@Override
 	public synchronized void receiveEvent(IEvent event) {
-		getConnection(
-				event
-						.getAttributeValue(ExchangeAttributeNames.CALLER_PHONE_NUMBER))
-				.receiveEvent(event);
+		switch (event.getEventType()) {
+		case CONNECTION_DESTROYED:
+			getConnection(event.getAttributeValue(ExchangeAttributeNames.CALLER_PHONE_NUMBER));
+			break;
+		default:
+			getConnection(
+					event
+							.getAttributeValue(ExchangeAttributeNames.CALLER_PHONE_NUMBER))
+					.receiveEvent(event);
+		}
+
 	}
 
 	/**
@@ -218,16 +225,33 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 					LineState.BUSY)) {
 				return;
 			}
-			getConnection(callerPhoneNumber).receiveMessage(
-					new Message(MessageType.RINGING, callerPhoneNumber,
-							recipientNumber));
+			if (callerPhoneNumber != null) {
+				getConnection(callerPhoneNumber).receiveMessage(
+						new Message(MessageType.RINGING, callerPhoneNumber,
+								recipientNumber));
+			} else if (recipientNumber != null) {
+				getConnection(recipientNumber).receiveMessage(
+						new Message(MessageType.RINGING, callerPhoneNumber,
+								recipientNumber));
+			}
+			break;
+		case VOICE_EXCHANGE:
+			String recipient = message.getRecipientPhoneNumber();
+			concentrator.sendMessage(recipient, message);
+			
 			break;
 		default:
 			/*
 			 * By default the message is dispatched to the concerned connection
 			 * service
 			 */
-			getConnection(callerPhoneNumber).receiveMessage(message);
+			if (message.getCallerPhoneNumber() != null) {
+				getConnection(message.getCallerPhoneNumber()).receiveMessage(
+						message);
+			} else if (message.getRecipientPhoneNumber() != null) {
+				getConnection(message.getRecipientPhoneNumber())
+						.receiveMessage(message);
+			}
 			break;
 		}
 	}
@@ -240,8 +264,11 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 
 	public IConnection getConnection(String phoneNumber) {
 		for (IConnection connection : connections) {
-			if (((Connection) connection).getCallerPhoneNumber().equals(
-					phoneNumber)) {
+			String caller = ((Connection) connection).getCallerPhoneNumber();
+			String recipient = ((Connection) connection)
+					.getRecipientPhoneNumber();
+			if ((caller != null && caller.equals(phoneNumber))
+					| (recipient != null && recipient.equals(phoneNumber))) {
 				return connection;
 			}
 		}

@@ -207,6 +207,9 @@ public class Connection extends Thread implements IConnection {
 
 		// When the recipient phone is ringing
 		case RINGING:
+			/* Sets the recipient number instance attribute */
+			this.recipientPhoneNumber = message.getRecipientPhoneNumber();
+
 			// Sends an ECHO message to the caller
 			AutoCommutator.getInstance().sendMessage(
 					this.callerPhoneNumber,
