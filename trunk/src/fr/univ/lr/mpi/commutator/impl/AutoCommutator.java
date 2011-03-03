@@ -1,7 +1,6 @@
 package fr.univ.lr.mpi.commutator.impl;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import fr.univ.lr.mpi.commutator.IConnection;
@@ -202,8 +201,6 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 	@Override
 	public synchronized void receiveMessage(IMessage message) {
 		String callerPhoneNumber = message.getCallerPhoneNumber();
-		String recipientPhoneNumber = message.getRecipientPhoneNumber();
-		
 		switch (message.getMessageType()) {
 		case PICKUP:
 			// When pickup from caller => send a tone to it to notify the
@@ -222,27 +219,43 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 
 			launchConnection(callerPhoneNumber);
 			this.concentrator.sendMessage(callerPhoneNumber, new Message(
-					MessageType.BACKTONE, callerPhoneNumber));
+					MessageType.BACKTONE, callerPhoneNumber, null));
 			break;
 		/* When checking about the recipient line state before ring to his phone */
 		case RING:
-			
-			if (concentrator.getActiveLine(recipientPhoneNumber).getState().equals(LineState.BUSY)) {
-				IEvent event = new Event(EventType.UNAVAILABLE_RECIPIENT);
-				event.addAttribute(ExchangeAttributeNames.CALLER_PHONE_NUMBER, callerPhoneNumber);
-				event.addAttribute(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER, recipientPhoneNumber);
-				event.addAttribute(ExchangeAttributeNames.DATE, new Date().toLocaleString());
+			String recipientNumber = message.getRecipientPhoneNumber();
+			if (concentrator.getActiveLine(recipientNumber).getState().equals(
+					LineState.BUSY)) {
 				return;
 			}
 			if (callerPhoneNumber != null) {
 				getConnection(callerPhoneNumber).receiveMessage(
 						new Message(MessageType.RINGING, callerPhoneNumber,
-								recipientPhoneNumber));
-			} else if (recipientPhoneNumber != null) {
-				getConnection(recipientPhoneNumber).receiveMessage(
+								recipientNumber));
+			} else if (recipientNumber != null) {
+				getConnection(recipientNumber).receiveMessage(
 						new Message(MessageType.RINGING, callerPhoneNumber,
-								recipientPhoneNumber));
+								recipientNumber));
 			}
+			break;
+		case VOICE_EXCHANGE:
+			String sender = message.getCallerPhoneNumber();
+			Connection con = ((Connection) getConnection(sender));
+			if (con == null) {
+				return;
+			}
+			String recipient = null;
+			if (con.getCallerPhoneNumber().equals(sender)) {
+				recipient = con.getRecipientPhoneNumber();
+			} else if (con.getRecipientPhoneNumber().equals(sender)) {
+				recipient = con.getCallerPhoneNumber();
+			}
+			// if (!((Connection) getConnection(recipient)).isConnected()) {
+			// return;
+			// }
+			System.out.println("MESSAGE TRANSFER (from " + sender + ") to ("
+					+ recipient + ")");
+			concentrator.sendMessage(recipient, message);
 			break;
 		default:
 			/*
