@@ -201,6 +201,11 @@ public class Connection extends Thread implements IConnection {
 					MessageType.ECHO, this.callerPhoneNumber, recipientPhoneNumber
 				));
 				
+				// Sends an ECHO message to the caller
+				AutoCommutator.getInstance().sendMessage(recipientPhoneNumber, new Message(
+					MessageType.RINGING, this.callerPhoneNumber, recipientPhoneNumber
+				));
+				
 				// Sets up the answering machine timer
 				Date ans_expire = new Date();
 				ans_expire.setSeconds(ans_expire.getSeconds() + ANSWERING_MACHINE_TIMEOUT);
@@ -221,7 +226,8 @@ public class Connection extends Thread implements IConnection {
 				break;
 			
 			// When the recipient pick up the phone
-			case RECIPIENT_PICKUP :
+			case PICKUP :
+				System.out.println("FINAL Message : "+message);
 				// If there is any timer, we kill it!
 				if (null != this.timer) {
 					this.timer.cancel();
