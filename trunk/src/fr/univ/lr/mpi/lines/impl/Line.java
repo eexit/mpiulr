@@ -180,6 +180,11 @@ public class Line implements ILine {
 			MessageType.NUMBERING, this.phoneNumber, phoneNumber
 		));
 	}
+	
+	/**
+	 * 
+	 * @param content
+	 */
 
 	public void sendMessage(String content) {
 		System.out.println("Line send content: " + content);
