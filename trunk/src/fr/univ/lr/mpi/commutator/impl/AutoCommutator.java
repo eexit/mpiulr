@@ -19,6 +19,7 @@ import fr.univ.lr.mpi.services.impl.AnsweringService;
 import fr.univ.lr.mpi.services.impl.BillingService;
 import fr.univ.lr.mpi.services.impl.CallTransferService;
 import fr.univ.lr.mpi.services.impl.DirectoryService;
+import fr.univ.lr.mpi.simulation.MessageObserver;
 
 /**
  * The AutoCommunicator Object, the central point of communications between
@@ -73,6 +74,10 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 		callTransfer.start();
 		registerService(callTransfer);
 
+		MessageObserver messageObserver = new MessageObserver();
+		messageObserver.start();
+		registerService(messageObserver);
+		
 		/* Adding answering machine number */
 		IEvent event = new Event(EventType.LINE_CREATION);
 		event.addAttribute(ExchangeAttributeNames.CALLER_PHONE_NUMBER, "3103");
