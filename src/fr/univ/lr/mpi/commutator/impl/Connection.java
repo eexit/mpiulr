@@ -89,6 +89,7 @@ public class Connection extends Thread implements IConnection {
 	 */
 	public Connection(String callerPhoneNumber) {
 		this.callerPhoneNumber = callerPhoneNumber;
+		this.connected = false;
 	}
 	
 	/**
