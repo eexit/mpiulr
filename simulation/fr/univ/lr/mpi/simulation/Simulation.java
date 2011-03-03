@@ -121,6 +121,7 @@ public class Simulation {
 		// System.out.println("Actives Connections : "
 		// + commutator.getActiveConnections());
 
+		System.setProperty("com.trolltech.qt.thread-check", "no");
 		QApplication.initialize(args);
 
 		/**
