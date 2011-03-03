@@ -263,11 +263,19 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 			 * service
 			 */
 			if (message.getCallerPhoneNumber() != null) {
-				getConnection(message.getCallerPhoneNumber()).receiveMessage(
-						message);
+				Connection connection = (Connection) getConnection(message
+						.getCallerPhoneNumber());
+				if (connection == null) {
+					return;
+				}
+				connection.receiveMessage(message);
 			} else if (message.getRecipientPhoneNumber() != null) {
-				getConnection(message.getRecipientPhoneNumber())
-						.receiveMessage(message);
+				Connection connection = (Connection) getConnection(message
+						.getRecipientPhoneNumber());
+				if (connection == null) {
+					return;
+				}
+				connection.receiveMessage(message);
 			}
 			break;
 		}
