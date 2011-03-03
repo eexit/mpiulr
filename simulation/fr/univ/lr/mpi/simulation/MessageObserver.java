@@ -49,9 +49,8 @@ public class MessageObserver extends Thread implements IService {
 			}
 
 			try {
-				FileWriter logFile = new FileWriter("log.txt",true);
+				FileWriter logFile = new FileWriter("simulation/fr/univ/lr/mpi/log/log.txt",true);
 				String log = this.evenement.poll().toString();
-				System.out.println("\n ----- ecriture :              " + log);
 				logFile.write(log+"\r\n");
 				logFile.close();
 			} catch (IOException e) {
