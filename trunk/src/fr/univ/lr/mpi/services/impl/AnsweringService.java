@@ -55,9 +55,9 @@ public class AnsweringService extends Thread implements IService {
 		IEvent event = this.eventStack.pop();
 		switch (event.getEventType()) {
 
-		case UNAVAILABLE_RECIPIENT:
+		case GET_ANSWERING_MACHINE_WELCOME:
 			// en envoi le message d'acceuil
-			IEvent e1 = new Event(EventType.ANSWERING_MACHINE_DIALING);
+			IEvent e1 = new Event(EventType.ANSWERING_MACHINE_MESSAGE);
 			e1.addAttribute("message", receptionMessage);
 			e1
 					.addAttribute(
@@ -71,17 +71,22 @@ public class AnsweringService extends Thread implements IService {
 			// cas lecture des message
 			IEvent e2;
 			for (AnsweringMachineMessage l : messages) {
-				e2 = new Event(EventType.ANSWERING_MACHINE_DIALING);
-				e2
-						.addAttribute(
-								event
-										.getAttributeValue(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER),
-								receptionMessage);
-				e2.addAttribute("message", l.getMessage().toString());
+				if ((event
+						.getAttributeValue(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER))
+						.equals(l.getOwnerPhoneNumber())) {
+
+					e2 = new Event(EventType.ANSWERING_MACHINE_MESSAGE);
+					e2
+							.addAttribute(
+									event
+											.getAttributeValue(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER),
+									receptionMessage);
+					e2.addAttribute("message", l.getMessage().toString());
+				}
 			}
 			break;
 
-		case ANSWERING_MACHINE_DIALING:
+		case ANSWERING_MACHINE_MESSAGE:
 			// on ajoute le message
 			// Get the caller phone Number and the recipient phone number
 			String callerPhoneNumber = event
