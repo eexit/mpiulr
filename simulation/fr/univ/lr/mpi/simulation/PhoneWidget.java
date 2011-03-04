@@ -130,11 +130,11 @@ public class PhoneWidget extends QWidget {
 			this.logBrowser.append(message.getMessageType().toString());
 			break;
 
-		case STOP_RINGING:
+		/*case STOP_RINGING:
     			this.stopBlink.emit();
 				pickUpButton.setIcon(new QIcon(new QPixmap("content/pick_up.png")));
 				this.defaultColor = true;
-    			break;
+    			break;*/
 		
 		case CONNECTION_CLOSED:
 			this.hangUpButton.pressed.emit();
