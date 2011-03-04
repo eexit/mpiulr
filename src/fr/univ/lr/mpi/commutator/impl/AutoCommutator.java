@@ -346,7 +346,11 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 		
 		for(int i = 0 ; i<this.connections.size() && !connected; i++){
 			IConnection c = this.connections.get(i);
-			if((c.getCalledPhoneNumber().equals(phoneNumber)  || c.getCallerPhoneNumber().equals(phoneNumber)) && c.isConnected())
+			
+			String called = c.getCalledPhoneNumber();
+			String caller = c.getCallerPhoneNumber();
+			boolean connect = c.isConnected();
+			if((called.equals(phoneNumber)  || caller.equals(phoneNumber)) && connect)
 			{
 				System.out.println("---CONNECTION----\n"+c+"------------");
 				connected = true;
