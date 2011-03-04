@@ -12,8 +12,6 @@ import fr.univ.lr.mpi.exchanges.IEvent;
 import fr.univ.lr.mpi.exchanges.impl.Event;
 import fr.univ.lr.mpi.exchanges.impl.EventType;
 import fr.univ.lr.mpi.exchanges.impl.ExchangeAttributeNames;
-import fr.univ.lr.mpi.exchanges.impl.Message;
-import fr.univ.lr.mpi.exchanges.impl.MessageType;
 import fr.univ.lr.mpi.services.IService;
 
 /**

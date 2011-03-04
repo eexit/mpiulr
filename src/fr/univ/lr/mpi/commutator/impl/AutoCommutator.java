@@ -1,7 +1,6 @@
 package fr.univ.lr.mpi.commutator.impl;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import fr.univ.lr.mpi.commutator.IConnection;
@@ -20,7 +19,7 @@ import fr.univ.lr.mpi.services.impl.AnsweringService;
 import fr.univ.lr.mpi.services.impl.BillingService;
 import fr.univ.lr.mpi.services.impl.CallTransferService;
 import fr.univ.lr.mpi.services.impl.DirectoryService;
-import fr.univ.lr.mpi.simulation.MessageObserver;
+
 
 /**
  * The AutoCommunicator Object, the central point of communications between
