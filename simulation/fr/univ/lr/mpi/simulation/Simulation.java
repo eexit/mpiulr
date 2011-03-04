@@ -1,10 +1,9 @@
 package fr.univ.lr.mpi.simulation;
 
-import java.util.ArrayList;
-import java.util.List;
 
 import com.trolltech.qt.gui.QApplication;
 import com.trolltech.qt.gui.QWidget;
+import java.util.*;
 
 import fr.univ.lr.mpi.commutator.impl.AutoCommutator;
 import fr.univ.lr.mpi.commutator.impl.Concentrator;
@@ -26,7 +25,8 @@ public class Simulation {
 
 	public static void main(String[] args) throws LineException,
 			PhoneNumberValidatorException, InterruptedException {
-		System.setProperty("com.trolltech.qt.thread-check", "no");
+//		l1.pickUp();
+//		l2.pickUp();
 		QApplication.initialize(args);
 
 		AutoCommutator commutator = AutoCommutator.getInstance();
@@ -98,10 +98,39 @@ public class Simulation {
 
 		windows.show();
 
-		System.out.println("Actives Connections : "
-				+ commutator.getActiveConnections());
+	}
+	
+	
+	
+	
+	
+	public static int scenario1()
+	{
+	AutoCommutator commutator = AutoCommutator.getInstance();
 
-		QApplication.exec();
+		Line l1 = new Line("0102030105");
+		Line l2 = new Line("0203040506");
+		Line l3 = new Line("0304050607");
+		Line l4 = new Line("0405060708");
+
+		Concentrator concentrator = new Concentrator();
+		commutator.setConcentrator(concentrator);
+
+		concentrator.registerLine(l1);
+		concentrator.registerLine(l2);
+		concentrator.registerLine(l3);
+		concentrator.registerLine(l4);
+
+		l1.pickUp();
+		
+		/* L2 => L4 */
+		l1.dialTo("0405060708");
+
+		//l4.pickUp();
+
+		
+		
+		return 0;
 	}
 
 	/**

@@ -8,7 +8,6 @@ package fr.univ.lr.mpi.exchanges.impl;
  */
 
 public enum MessageType {
-
 	/**
 	 * When the caller picks up his phone
 	 */
@@ -32,13 +31,21 @@ public enum MessageType {
 	 */
 	SEARCH,
 	/**
-	 * When the Connection ask the recipient line to ring
+	 * When the connection asks for ringing a line
 	 */
-	RING,
+	IS_BUSY,
+	/**
+	 * When the recipient line is busy
+	 */
+	BUSY,
 	/**
 	 * When the recipient line is ringing
 	 */
 	RINGING,
+	/**
+	 * When the recipient line needs to stop ringing (answering machine time out)
+	 */
+	STOP_RINGING,
 	/**
 	 * When the recipient phone rings the AutoCommutator send an ECHO signal to
 	 * the caller
@@ -48,6 +55,10 @@ public enum MessageType {
 	 * When the connection is established
 	 */
 	CONNECTION_ESTABLISHED,
+	/**
+	 * When the connection is closed
+	 */
+	CONNECTION_CLOSED,
 	/**
 	 * When the connection is established, the caller and the recipient can
 	 * exchange voice data
@@ -65,13 +76,5 @@ public enum MessageType {
 	/**
 	 * When the number doesn't not exist
 	 */
-	UNKNOWN_NUMBER,
-	/**
-	 * When the connection is closed by the caller
-	 */
-	CONNECTION_CLOSED,
-	/**
-	 * When the recipient is busy
-	 */
-	BUSY;
+	UNKNOWN_NUMBER;
 }
