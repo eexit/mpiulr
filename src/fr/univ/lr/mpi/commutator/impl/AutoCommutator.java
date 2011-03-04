@@ -20,7 +20,6 @@ import fr.univ.lr.mpi.services.impl.BillingService;
 import fr.univ.lr.mpi.services.impl.CallTransferService;
 import fr.univ.lr.mpi.services.impl.DirectoryService;
 
-
 /**
  * The AutoCommunicator Object, the central point of communications between
  * lines
@@ -179,15 +178,24 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 		switch (event.getEventType()) {
 		// When the connection timed out and needs to be killed
 		case CONNECTION_DESTROY:
-			Connection connection = ((Connection) getConnection(event.getAttributeValue(ExchangeAttributeNames.CALLER_PHONE_NUMBER)));
+			Connection connection = ((Connection) getConnection(event
+					.getAttributeValue(ExchangeAttributeNames.CALLER_PHONE_NUMBER)));
+			if (connection==null) {
+				return;
+			}
 			connection.endConnection();
 			connection.stop();
-			System.out.println("------Connection killed for number: " + event.getAttributeValue(ExchangeAttributeNames.CALLER_PHONE_NUMBER) + " (" + connection + ")");
+			System.out
+					.println("------Connection killed for number: "
+							+ event
+									.getAttributeValue(ExchangeAttributeNames.CALLER_PHONE_NUMBER)
+							+ " (" + connection + ")");
 			connections.remove(connection);
 			break;
 		default:
-			Connection conn = (Connection) getConnection(event.getAttributeValue(ExchangeAttributeNames.CALLER_PHONE_NUMBER));
-			if(conn==null){
+			Connection conn = (Connection) getConnection(event
+					.getAttributeValue(ExchangeAttributeNames.CALLER_PHONE_NUMBER));
+			if (conn == null) {
 				return;
 			}
 			conn.receiveEvent(event);
