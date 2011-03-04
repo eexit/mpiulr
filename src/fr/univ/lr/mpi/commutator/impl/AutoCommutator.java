@@ -217,8 +217,7 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 		// Recipient phone number
 		final String recipientPhoneNumber = message.getRecipientPhoneNumber();
 
-		// System.out.println("Com CN : "+ callerPhoneNumber + " / RN :" +
-		// recipientPhoneNumber);
+		System.out.println("Com CN : "+ callerPhoneNumber + " / RN :" + recipientPhoneNumber);
 
 		switch (message.getMessageType()) {
 		// When a line is picked up
