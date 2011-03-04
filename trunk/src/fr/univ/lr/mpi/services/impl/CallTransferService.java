@@ -86,7 +86,7 @@ public class CallTransferService extends Thread implements IService {
 			/**
 			 * Create a transfer from line 1 to line 2
 			 */
-			case CREATE_TRANSFER:
+			case TRANSFER_CREATE:
 
 				String oldPhoneNumber = event
 						.getAttributeValue(ExchangeAttributeNames.CALLER_PHONE_NUMBER);
@@ -98,7 +98,7 @@ public class CallTransferService extends Thread implements IService {
 			/**
 			 * Remove a transfert from a line
 			 */
-			case REMOVE_TRANSFER:
+			case TRANSFER_REMOVE:
 				String phoneNumber = event
 						.getAttributeValue(ExchangeAttributeNames.PHONE_NUMBER);
 				this.removeTransferCallRule(phoneNumber);

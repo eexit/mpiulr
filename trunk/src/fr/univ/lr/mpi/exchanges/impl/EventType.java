@@ -18,6 +18,14 @@ public enum EventType {
 	 */
 	LINE_DELETION,
 	/**
+	 * When a connection need to be create
+	 */
+	CONNECTION_CREATED,
+	/**
+	 * When a connection is destroyed
+	 */
+	CONNECTION_DESTROY,
+	/**
 	 * When a connection is established between caller & recipient
 	 */
 	CONNECTION_ESTABLISHED,
@@ -25,10 +33,6 @@ public enum EventType {
 	 * When a connection is closed between caller & recipient
 	 */
 	CONNECTION_CLOSED,
-	/**
-	 * When a connection is destroyed
-	 */
-	CONNECTION_DESTROYED,
 	/**
 	 * When a caller requests a recipient number
 	 */
@@ -46,29 +50,33 @@ public enum EventType {
 	 */
 	CALL_TRANSFER_RESPONSE,
 	/**
-	 * When we want create a transfert between two lines
+	 * When we want create a transfer between two lines
 	 */
-	CREATE_TRANSFER,
+	TRANSFER_CREATE,
 	/**
-	 * When we want to remove a transfert
+	 * When we want to remove a transfer
 	 */
-	REMOVE_TRANSFER,
+	TRANSFER_REMOVE,
 	/**
 	 * When there is no answer from the recipient
 	 */
 	UNAVAILABLE_RECIPIENT, 
 	/**
-	 * when need answering machine welcome message
+	 * When we want to get the answering machine welcome message
 	 */
-	GET_ANSWERING_MACHINE_WELCOME,
+	ANSWERING_MACHINE_WELCOME_MESSAGE,
 	/**
-	 * send/receive message to answering machine
+	 * When we want to retrieve answering machine messages
 	 */
-	GET_ANSWERING_MACHINE_MESSAGE,
+	ANSWERING_MACHINE_PULL_MESSAGE,
 	/**
-	 * Dialing to a line
+	 * When we want to push a message to the answering machine
 	 */
-	ANSWERING_MACHINE_MESSAGE,	
+	ANSWERING_MACHINE_PUSH_MESSAGE,
+	/**
+	 * When the answering machine sends message to the answering machine owner
+	 */
+	ANSWERING_MESSAGE,
 	/**
 	 * when need answering machine home message
 	 */

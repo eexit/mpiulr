@@ -30,6 +30,11 @@ public class Line implements ILine {
 	 * @author Joris Berthelot <joris.berthelot@gmail.com>
 	 */
 	private String phoneNumber;
+	
+	/**
+	 * The caller phone number while the line is ringing
+	 */
+	private String ringingNumber;
 
 	/**
 	 * Line current state
@@ -111,12 +116,19 @@ public class Line implements ILine {
 	 * @param message
 	 */
 	public void receiveMessage(IMessage message) {
-//		System.out.println("Line (" + this.phoneNumber + ") receive message: "
-//				+ message);
+		System.out.println("---Line received message : " + message);
 		switch (message.getMessageType()) {
-		case RINGING:
-			this.isRinging = true;
+			case RINGING:
+				this.ringingNumber = message.getCallerPhoneNumber();
+				this.isRinging = true;
+				break;
+			case STOP_RINGING:
+				this.ringingNumber = null;
+				this.isRinging = false;
 			break;
+			default:
+				this.ringingNumber = message.getCallerPhoneNumber();
+				break;
 		}
 		phone.appendLog(message);
 	}
@@ -133,15 +145,17 @@ public class Line implements ILine {
 		this.state = LineState.BUSY;
 
 		if (!this.isRinging) {
+			System.out.println("---Line pickup: " + this.phoneNumber);
 			// Sends the message to the concentrator
 			this.concentrator.receiveMessage(new Message(MessageType.PICKUP,
 					this.phoneNumber));
 		} else {
+			System.out.println("---Line pickup " + this.phoneNumber + " as recipient of " + this.phoneNumber);
 			// Stops the ring
 			this.isRinging = false;
 			// Sends the message to the concentrator
 			this.concentrator.receiveMessage(new Message(
-					MessageType.RECIPIENT_PICKUP, null, this.phoneNumber));
+					MessageType.RECIPIENT_PICKUP, this.ringingNumber, this.phoneNumber));
 		}
 	}
 
@@ -156,10 +170,11 @@ public class Line implements ILine {
 		}
 
 		this.state = LineState.FREE;
-
+		
+		System.out.println("---Line hangup: " + this.phoneNumber);
 		// Sends the message to the concentrator
 		this.concentrator.receiveMessage(new Message(MessageType.HANGUP,
-				this.phoneNumber));
+				this.phoneNumber, this.ringingNumber));
 	}
 
 	/**
@@ -184,10 +199,11 @@ public class Line implements ILine {
 	 */
 
 	public void sendMessage(String content) {
+		System.out.println("---Line sent content : " + content);
 		// Sends the message to the concentrator
 		this.concentrator.receiveMessage(new Message(
-				MessageType.VOICE_EXCHANGE, this.getPhoneNumber(), null,
-				content));
+			MessageType.VOICE_EXCHANGE, this.phoneNumber, this.ringingNumber, content
+		));
 	}
 
 	/**

@@ -75,6 +75,9 @@ public class DirectoryService extends Thread implements IService {
 			 * We need to know if the number is in the directory
 			 */
 			case PHONE_NUMBER_REQUEST:
+				
+				//System.out.println("Request CN : " + event.getAttributeValue(ExchangeAttributeNames.CALLER_PHONE_NUMBER)
+				//		+ " / RN : " + event.getAttributeValue(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER));
 				// Get the phone number
 				phoneNumber = event
 						.getAttributeValue(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER);
