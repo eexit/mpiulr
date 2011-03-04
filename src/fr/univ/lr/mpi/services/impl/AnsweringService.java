@@ -12,6 +12,8 @@ import fr.univ.lr.mpi.exchanges.IEvent;
 import fr.univ.lr.mpi.exchanges.impl.Event;
 import fr.univ.lr.mpi.exchanges.impl.EventType;
 import fr.univ.lr.mpi.exchanges.impl.ExchangeAttributeNames;
+import fr.univ.lr.mpi.exchanges.impl.Message;
+import fr.univ.lr.mpi.exchanges.impl.MessageType;
 import fr.univ.lr.mpi.services.IService;
 
 /**
@@ -28,7 +30,7 @@ public class AnsweringService extends Thread implements IService {
 
 	private List<AnsweringMachineMessage> messages;
 
-	private String receptionMessage;
+	private String receptionMessage = "Merci de laisser un message après le bip... *BIIP*";
 
 	private Stack<IEvent> eventStack;
 
@@ -51,70 +53,56 @@ public class AnsweringService extends Thread implements IService {
 	}
 
 	private void processEvent() {
-		// TODO
-		IEvent event = this.eventStack.pop();
-		switch (event.getEventType()) {
+		IEvent stack_event = this.eventStack.pop();
+		
+		final String callerPhoneNumber = stack_event.getAttributeValue(ExchangeAttributeNames.CALLER_PHONE_NUMBER);
+		final String recipientPhoneNumber = stack_event.getAttributeValue(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER);
+		
+		switch (stack_event.getEventType()) {
 
-		case GET_ANSWERING_MACHINE_WELCOME:
-			// en envoi le message d'acceuil
-			IEvent e1 = new Event(EventType.ANSWERING_MACHINE_MESSAGE);
-			e1.addAttribute("message", receptionMessage);
-			e1
-					.addAttribute(
-							event
-									.getAttributeValue(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER),
-							receptionMessage);
-			AutoCommutator.getInstance().receiveEvent(e1);
+		// When the answering machine is called to push a message
+		case UNAVAILABLE_RECIPIENT:
+			IEvent answ_push_event = new Event(EventType.ANSWERING_MACHINE_WELCOME_MESSAGE);
+			answ_push_event.addAttribute(ExchangeAttributeNames.CALLER_PHONE_NUMBER, callerPhoneNumber);
+			answ_push_event.addAttribute(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER, recipientPhoneNumber);
+			answ_push_event.addAttribute(ExchangeAttributeNames.MESSAGE, this.receptionMessage);
+			AutoCommutator.getInstance().receiveEvent(answ_push_event);
 			break;
-
-		case GET_ANSWERING_MACHINE_MESSAGE:
-			// cas lecture des message
-			IEvent e2;
-			for (AnsweringMachineMessage l : messages) {
-				if ((event
-						.getAttributeValue(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER))
-						.equals(l.getOwnerPhoneNumber())) {
-
-					e2 = new Event(EventType.ANSWERING_MACHINE_MESSAGE);
-					e2
-							.addAttribute(
-									event
-											.getAttributeValue(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER),
-									receptionMessage);
-					e2.addAttribute("message", l.getMessage().toString());
+		
+		// When then answering machine is called to pull messages
+		case ANSWERING_MACHINE_PULL_MESSAGE:
+			// Creates an event which will contain all messages
+			IEvent answ_content_event = new Event(EventType.ANSWERING_MESSAGE);
+			answ_content_event.addAttribute(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER, callerPhoneNumber);
+			
+			for (AnsweringMachineMessage message_entry : messages) {
+				if (message_entry.getOwnerPhoneNumber().equals(callerPhoneNumber)) {
+					String message_content = "Message de la part de " + message_entry.getPosterPhoneNumber() + " : " + message_entry.getMessage().toString();
+					answ_content_event.addAttribute(ExchangeAttributeNames.MESSAGE, message_content);
+					answ_content_event.addAttribute(ExchangeAttributeNames.CALLER_PHONE_NUMBER, message_entry.getPosterPhoneNumber());
 				}
 			}
+			
+			AutoCommutator.getInstance().receiveEvent(answ_content_event);			
 			break;
-
-		case ANSWERING_MACHINE_MESSAGE:
-			// on ajoute le message
-			// Get the caller phone Number and the recipient phone number
-			String callerPhoneNumber = event
-					.getAttributeValue(ExchangeAttributeNames.CALLER_PHONE_NUMBER);
-			String recipientPhoneNumber = event
-					.getAttributeValue(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER);
-
-			// Get the message
-			String message = event
-					.getAttributeValue(ExchangeAttributeNames.MESSAGE);
-
-			// Get the date
-			String dateString = event
-					.getAttributeValue(ExchangeAttributeNames.DATE);
+		
+		// When the answering machine records a new message
+		case ANSWERING_MACHINE_PUSH_MESSAGE:
+			String message = stack_event.getAttributeValue(ExchangeAttributeNames.MESSAGE);
+			String message_date = stack_event.getAttributeValue(ExchangeAttributeNames.DATE);
 			DateFormat df = DateFormat.getDateInstance();
 			Date date;
 
 			try {
-				date = df.parse(dateString);
-
-				this.messages.add(new AnsweringMachineMessage(date,
-						recipientPhoneNumber, callerPhoneNumber, message));
+				date = df.parse(message_date);
+				this.messages.add(new AnsweringMachineMessage(
+					date, recipientPhoneNumber, callerPhoneNumber, message
+				));
+				System.out.println("---------AnsweringService added message : " + message);
 			} catch (ParseException e) {
-
 				e.printStackTrace();
 			}
 			break;
-
 		}
 
 	}

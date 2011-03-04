@@ -64,7 +64,7 @@ public class Event implements IEvent {
 
 	@Override
 	public String toString() {
-		return "Event [attributes=" + attributes + ", type=" + type + "]";
+		return "Event [type=" + type + ", attributes=" + attributes + "]";
 	}
 
 }
