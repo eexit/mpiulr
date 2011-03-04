@@ -43,11 +43,13 @@ public class SimulationUI {
 		Line l3 = new Line("0304050607");
 		Line l4 = new Line("0405060708");
 
+		
 		List<String> dir = new ArrayList<String>();
 		dir.add(l1.getPhoneNumber());
 		dir.add(l2.getPhoneNumber());
 		dir.add(l3.getPhoneNumber());
 		dir.add(l4.getPhoneNumber());
+		dir.add("3103");
 		List<Line> lines = new ArrayList<Line>();
 		lines.add(l1);
 		lines.add(l2);
