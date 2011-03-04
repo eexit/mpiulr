@@ -2,7 +2,6 @@ package fr.univ.lr.mpi.commutator.impl;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Map.Entry;

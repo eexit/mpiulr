@@ -7,6 +7,8 @@ package fr.univ.lr.mpi.exceptions;
  */
 public class PhoneNumberValidatorException extends Exception {
 	
+	
+	private static final long serialVersionUID = 1L;
 	/**
 	 * Error message when the phone number doesn't respect the good format
 	 */

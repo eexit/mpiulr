@@ -218,6 +218,11 @@ public class Line implements ILine {
 		return this.state;
 	}
 
+	/**
+	 * 
+	 * @param toPhoneNumber
+	 */
+
 	public void addTransfertRules(String toPhoneNumber) {
 		IEvent event = new Event(EventType.TRANSFER_CREATE);
 		event.addAttribute(ExchangeAttributeNames.CALLER_PHONE_NUMBER,
@@ -226,6 +231,10 @@ public class Line implements ILine {
 				toPhoneNumber);
 		AutoCommutator.getInstance().sendEvent(event);
 	}
+
+	/**
+	 * 
+	 */
 
 	public void removeTransfertRules() {
 		IEvent event = new Event(EventType.TRANSFER_REMOVE);
