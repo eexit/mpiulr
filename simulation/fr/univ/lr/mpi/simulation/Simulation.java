@@ -47,7 +47,7 @@ public class Simulation {
 		lines.add(l3);
 		lines.add(l4);
 
-		IEvent event = new Event(EventType.CREATE_TRANSFER);
+		IEvent event = new Event(EventType.TRANSFER_CREATE);
 		event.addAttribute(ExchangeAttributeNames.CALLER_PHONE_NUMBER, "0203040506");
 		event.addAttribute(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER, "0304050607");
 		commutator.sendEvent(event);
