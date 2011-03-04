@@ -358,9 +358,11 @@ public class Connection extends Thread implements IConnection {
 			final IEvent kill_event = new Event(EventType.CONNECTION_DESTROY);
 			kill_event.addAttribute(ExchangeAttributeNames.CALLER_PHONE_NUMBER, this.callerPhoneNumber);
 			
+
 			//System.out.println("Kill event :" + kill_event);
 			
 			if (this.isConnected()) {
+
 				this.endTime = Calendar.getInstance();
 				final Long duration = endTime.getTimeInMillis() - startTime.getTimeInMillis() / 1000;
 				
@@ -402,6 +404,7 @@ public class Connection extends Thread implements IConnection {
 							AutoCommutator.getInstance().sendMessage(callerPhoneNumber, new Message(
 								MessageType.CONNECTION_CLOSED, callerPhoneNumber
 							));
+
 							
 							// Kills the connection
 							AutoCommutator.getInstance().receiveEvent(kill_event);
@@ -424,6 +427,8 @@ public class Connection extends Thread implements IConnection {
 				AutoCommutator.getInstance().sendMessage(this.callerPhoneNumber, new Message(
 					MessageType.CONNECTION_CLOSED, this.callerPhoneNumber
 				));
+				AutoCommutator.getInstance().sendMessage(calledPhoneNumber,
+						new Message(MessageType.CONNECTION_CLOSED,callerPhoneNumber));
 				AutoCommutator.getInstance().receiveEvent(kill_event);
 			}
 			break;
