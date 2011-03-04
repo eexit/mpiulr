@@ -339,4 +339,20 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 		System.out.println("------Commutator sent message : " + message);
 		concentrator.sendMessage(phoneNumber, message);
 	}
+	
+	
+	public boolean isConnected(String phoneNumber){
+		boolean connected = false;
+		
+		for(int i = 0 ; i<this.connections.size() && !connected; i++){
+			IConnection c = this.connections.get(i);
+			if((c.getCalledPhoneNumber().equals(phoneNumber)  || c.getCallerPhoneNumber().equals(phoneNumber)) && c.isConnected())
+			{
+				System.out.println("---CONNECTION----\n"+c+"------------");
+				connected = true;
+			}
+		}
+		return connected;
+	}
+	
 }

@@ -13,4 +13,21 @@ import fr.univ.lr.mpi.handlers.MessageHandler;
  */
 public interface IConnection extends MessageHandler, EventHandler {
 
+	/**
+	 * 
+	 * @return the called Phone number
+	 */
+	public String getCalledPhoneNumber();
+	
+	/**
+	 * 
+	 * @return the caller phone number
+	 */
+	public String getCallerPhoneNumber();
+	
+	/**
+	 * 
+	 * @return if the connection is established
+	 */
+	public boolean isConnected();
 }
