@@ -1,7 +1,12 @@
 package fr.univ.lr.mpi.lines.impl;
 
+import fr.univ.lr.mpi.commutator.impl.AutoCommutator;
 import fr.univ.lr.mpi.commutator.impl.Concentrator;
+import fr.univ.lr.mpi.exchanges.IEvent;
 import fr.univ.lr.mpi.exchanges.IMessage;
+import fr.univ.lr.mpi.exchanges.impl.Event;
+import fr.univ.lr.mpi.exchanges.impl.EventType;
+import fr.univ.lr.mpi.exchanges.impl.ExchangeAttributeNames;
 import fr.univ.lr.mpi.exchanges.impl.Message;
 import fr.univ.lr.mpi.exchanges.impl.MessageType;
 import fr.univ.lr.mpi.exchanges.impl.PhoneNumberValidator;
@@ -193,5 +198,21 @@ public class Line implements ILine {
 	 */
 	public LineState getState() {
 		return this.state;
+	}
+	
+	
+	public void addTransfertRules(String toPhoneNumber)
+	{
+		IEvent event = new Event(EventType.CREATE_TRANSFER);
+		event.addAttribute(ExchangeAttributeNames.CALLER_PHONE_NUMBER, this.phoneNumber);
+		event.addAttribute(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER, toPhoneNumber);
+		AutoCommutator.getInstance().sendEvent(event);
+	}
+	
+	public void removeTransfertRules()
+	{
+		IEvent event = new Event(EventType.REMOVE_TRANSFER);
+		event.addAttribute(ExchangeAttributeNames.PHONE_NUMBER, this.phoneNumber);
+		AutoCommutator.getInstance().sendEvent(event);
 	}
 }
