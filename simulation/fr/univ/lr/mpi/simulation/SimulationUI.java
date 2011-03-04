@@ -82,10 +82,10 @@ public class SimulationUI {
 
 				x = 10;
 				if (i != 0)
-					y += 310;
+					y += 350;
 
 			} else {
-				x = 180;
+				x = 185;
 			}
 
 			QWidget phone = new PhoneWidget(windows, lines.get(i), dir);

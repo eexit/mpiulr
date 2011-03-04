@@ -215,18 +215,14 @@ public class PhoneWidget extends QWidget {
 
 	public void askForTransfert() {
 
-		String transfer = QInputDialog.getItem(this, "Transfert",
-				"Select the  recipient number :", this.directory, 0, false);
-
+		String transfer = QInputDialog.getItem(this, "Transfert", "Select the  recipient number :", this.directory, 0, false);
 		if (transfer != null) {
-			// Envoyer un message transfert
-			this.logBrowser.append("Transfert" + transfer);
-			
+			this.line.addTransfertRules(transfer);
+			this.logBrowser.append("Add transfer to " + transfer);
 
 		} else {
-			this.logBrowser.append("Sup Transfert");
-			
-			
+			this.line.removeTransfertRules();
+			this.logBrowser.append("Remove transfer rule");
 		}
 
 	}
