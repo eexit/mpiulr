@@ -81,7 +81,7 @@ public class PhoneWidget extends QWidget {
 		clearButton = new QPushButton(this);
 		clearButton.setText("Clear log");
 
-		transfertButton = new QPushButton("Make a transfert rule", this);
+		transfertButton = new QPushButton("Transfer rule", this);
 
 		timer = new QTimer(this);
 		timer.setInterval(500);
@@ -215,7 +215,7 @@ public class PhoneWidget extends QWidget {
 
 	public void askForTransfert() {
 
-		String transfer = QInputDialog.getItem(this, "Transfert", "Select the  recipient number :", this.directory, 0, false);
+		String transfer = QInputDialog.getItem(this, "Transfer", "Select the  recipient number :", this.directory, 0, false);
 		if (transfer != null) {
 			this.line.addTransfertRules(transfer);
 			this.logBrowser.append("Add transfer to " + transfer);

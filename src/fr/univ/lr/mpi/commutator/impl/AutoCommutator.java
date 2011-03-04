@@ -181,6 +181,7 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 		// When the connection timed out and needs to be killed
 		case CONNECTION_DESTROY:
 			Connection connection = ((Connection) getConnection(event.getAttributeValue(ExchangeAttributeNames.CALLER_PHONE_NUMBER)));
+			connection.endConnection();
 			connection.stop();
 			System.out.println("------Connection killed for number: " + event.getAttributeValue(ExchangeAttributeNames.CALLER_PHONE_NUMBER) + " (" + connection + ")");
 			connections.remove(connection);

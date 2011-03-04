@@ -406,6 +406,7 @@ public class Connection extends Thread implements IConnection {
 							
 							// Kills the connection
 							AutoCommutator.getInstance().receiveEvent(kill_event);
+							
 						}
 					}, hang_expire);
 					
@@ -428,5 +429,9 @@ public class Connection extends Thread implements IConnection {
 			}
 			break;
 		}
+	}
+	
+	public void endConnection(){
+		this.timer.cancel();
 	}
 }
