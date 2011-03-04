@@ -138,6 +138,8 @@ public class PhoneWidget extends QWidget {
 		
 		case CONNECTION_CLOSED:
 			this.hangUpButton.pressed.emit();
+			this.stopBlink.emit();
+			pickUpButton.setIcon(new QIcon(new QPixmap("content/pick_up.png")));
 			this.logBrowser.append(message.getMessageType().toString());
 			break;
 
