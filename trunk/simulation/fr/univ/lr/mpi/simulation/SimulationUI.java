@@ -51,6 +51,7 @@ public class SimulationUI {
 
 
 		
+		
 		List<String> dir = new ArrayList<String>();
 		dir.add(l1.getPhoneNumber());
 		dir.add(l2.getPhoneNumber());
@@ -149,4 +150,5 @@ public class SimulationUI {
 		System.out.println(returns);
 		return returns;
 	}
+	
 }
