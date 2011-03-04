@@ -180,7 +180,7 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 		case CONNECTION_DESTROY:
 			Connection connection = ((Connection) getConnection(event
 					.getAttributeValue(ExchangeAttributeNames.CALLER_PHONE_NUMBER)));
-			if (connection==null) {
+			if (connection == null) {
 				return;
 			}
 			connection.endConnection();
