@@ -63,4 +63,18 @@ public interface ILine extends MessageHandler {
 	 * @throws LineException 
 	 */
 	public void dialTo(String phoneNumber) throws PhoneNumberValidatorException, LineException;
+	
+	
+	public void sendMessage(String content);
+	
+	/**
+	 * To create a transfer rule
+	 * @param toPhoneNumber
+	 */
+	public void addTransfertRules(String toPhoneNumber);
+	
+	/**
+	 * To remove a transfer rule
+	 */
+	public void removeTransfertRules();
 }
