@@ -3,7 +3,9 @@ package fr.univ.lr.mpi.simulation;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.trolltech.qt.core.QRect;
 import com.trolltech.qt.gui.QApplication;
+import com.trolltech.qt.gui.QGridLayout;
 import com.trolltech.qt.gui.QWidget;
 
 import fr.univ.lr.mpi.commutator.impl.AutoCommutator;
@@ -42,6 +44,11 @@ public class SimulationUI {
 		Line l2 = new Line("0203040506");
 		Line l3 = new Line("0304050607");
 		Line l4 = new Line("0405060708");
+		Line l5 = new Line("0506070809");
+		Line l6 = new Line("0107080910");
+		Line l7 = new Line("0208091011");
+		Line l8 = new Line("0309101112");
+
 
 		
 		List<String> dir = new ArrayList<String>();
@@ -49,12 +56,20 @@ public class SimulationUI {
 		dir.add(l2.getPhoneNumber());
 		dir.add(l3.getPhoneNumber());
 		dir.add(l4.getPhoneNumber());
+		dir.add(l5.getPhoneNumber());
+		dir.add(l6.getPhoneNumber());
+		dir.add(l7.getPhoneNumber());
+		dir.add(l8.getPhoneNumber());
 		dir.add("3103");
 		List<Line> lines = new ArrayList<Line>();
 		lines.add(l1);
 		lines.add(l2);
 		lines.add(l3);
 		lines.add(l4);
+		lines.add(l5);
+		lines.add(l6);
+		lines.add(l7);
+		lines.add(l8);
 
 		Concentrator concentrator = new Concentrator();
 		commutator.setConcentrator(concentrator);
@@ -63,6 +78,10 @@ public class SimulationUI {
 		concentrator.registerLine(l2);
 		concentrator.registerLine(l3);
 		concentrator.registerLine(l4);
+		concentrator.registerLine(l5);
+		concentrator.registerLine(l6);
+		concentrator.registerLine(l7);
+		concentrator.registerLine(l8);
 
 		/**
 		 * Windows instanciation
@@ -74,29 +93,28 @@ public class SimulationUI {
 		 * Differents phone instanciation
 		 */
 
+		QGridLayout layout = new QGridLayout();
 		List<QWidget> phones = new ArrayList();
-		int x = 10;
-		int y = 10;
-
+		int x = 0;
+		int y = 0;
+		
 		for (int i = 0; i < lines.size(); i++) {
-
-			if (i % 2 == 0) {
-
-				x = 10;
-				if (i != 0)
-					y += 350;
-
-			} else {
-				x = 185;
-			}
-
 			QWidget phone = new PhoneWidget(windows, lines.get(i), dir);
-			phone.setGeometry(x, y, phone.width(), phone.height());
 			lines.get(i).setPhone((PhoneWidget) phone);
-			phone.show();
 			phones.add(phone);
+			if (i % 2 == 0) {
+				y = 1;
+			} else {
+				y = 0;
+			}
+			phone.setGeometry(0, 0, 180, 355);
+			layout.addWidget(phone, y, x, 1, 1);
+			if(i % 2 != 0) {
+				x++;
+			}
 		}
-
+		windows.setLayout(layout);
+		windows.setGeometry(50, 50,x*180,2*355);
 		/**
 		 * Log Instanciation
 		 */
