@@ -19,6 +19,7 @@ import fr.univ.lr.mpi.services.impl.AnsweringService;
 import fr.univ.lr.mpi.services.impl.BillingService;
 import fr.univ.lr.mpi.services.impl.CallTransferService;
 import fr.univ.lr.mpi.services.impl.DirectoryService;
+import fr.univ.lr.mpi.simulation.MessageObserver;
 
 /**
  * The AutoCommunicator Object, the central point of communications between
@@ -73,9 +74,9 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 		callTransfer.start();
 		registerService(callTransfer);
 
-		// MessageObserver messageObserver = new MessageObserver();
-		// messageObserver.start();
-		// registerService(messageObserver);
+		MessageObserver messageObserver = new MessageObserver();
+		messageObserver.start();
+		registerService(messageObserver);
 
 		/* Adding answering machine number */
 		IEvent event = new Event(EventType.LINE_CREATION);
@@ -217,7 +218,8 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 		// Recipient phone number
 		final String recipientPhoneNumber = message.getRecipientPhoneNumber();
 
-		System.out.println("Com CN : "+ callerPhoneNumber + " / RN :" + recipientPhoneNumber);
+		System.out.println("Com CN : " + callerPhoneNumber + " / RN :"
+				+ recipientPhoneNumber);
 
 		switch (message.getMessageType()) {
 		// When a line is picked up
@@ -339,27 +341,27 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 		System.out.println("------Commutator sent message : " + message);
 		concentrator.sendMessage(phoneNumber, message);
 	}
-	
-	
-	public boolean isConnected(String phoneNumber){
+
+	public boolean isConnected(String phoneNumber) {
 		boolean connected = false;
-		
-		for(int i = 0 ; i<this.connections.size() && !connected; i++){
+
+		for (int i = 0; i < this.connections.size() && !connected; i++) {
 			IConnection c = this.connections.get(i);
-			if(c != null)
-			{
+			if (c != null) {
 				String called = c.getCalledPhoneNumber();
 				String caller = c.getCallerPhoneNumber();
 				boolean connect = c.isConnected();
-			
-				if((called != null && caller != null) && (called.equals(phoneNumber)  || caller.equals(phoneNumber)) && connect)
-				{
-					System.out.println("---CONNECTION----\n"+c+"------------");
+
+				if ((called != null && caller != null)
+						&& (called.equals(phoneNumber) || caller
+								.equals(phoneNumber)) && connect) {
+					System.out.println("---CONNECTION----\n" + c
+							+ "------------");
 					connected = true;
 				}
 			}
 		}
 		return connected;
 	}
-	
+
 }
