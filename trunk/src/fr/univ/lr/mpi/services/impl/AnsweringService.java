@@ -29,10 +29,12 @@ public class AnsweringService extends Thread implements IService {
 	private List<AnsweringMachineMessage> messages;
 
 	private String receptionMessage = "Merci de laisser un message après le bip... *BIIP*";
+	
+	final private String noMessage = "Vous n'avez aucun nouveau message";
 
 	private Stack<IEvent> eventStack;
 
-	public static final String ANSWERING_MACHINE_PHONENUMBER = "3103";
+	public static final String ANSWERING_MACHINE_PHONE_NUMBER = "3103";
 
 	/**
 	 * Constructor of an Answering Service
@@ -69,19 +71,29 @@ public class AnsweringService extends Thread implements IService {
 		
 		// When then answering machine is called to pull messages
 		case ANSWERING_MACHINE_PULL_MESSAGE:
+			
+			//System.out.println("PULL CN : "+ callerPhoneNumber + " / RN :" + recipientPhoneNumber);
+			
 			// Creates an event which will contain all messages
 			IEvent answ_content_event = new Event(EventType.ANSWERING_MESSAGE);
+			answ_content_event.addAttribute(ExchangeAttributeNames.CALLER_PHONE_NUMBER, callerPhoneNumber);
 			answ_content_event.addAttribute(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER, callerPhoneNumber);
+
 			
-			for (AnsweringMachineMessage message_entry : messages) {
-				if (message_entry.getOwnerPhoneNumber().equals(callerPhoneNumber)) {
-					String message_content = "Message de la part de " + message_entry.getPosterPhoneNumber() + " : " + message_entry.getMessage().toString();
-					answ_content_event.addAttribute(ExchangeAttributeNames.MESSAGE, message_content);
-					answ_content_event.addAttribute(ExchangeAttributeNames.CALLER_PHONE_NUMBER, message_entry.getPosterPhoneNumber());
+			if (!messages.isEmpty()) {
+				for (AnsweringMachineMessage message_entry : messages) {
+					if (message_entry.getOwnerPhoneNumber().equals(callerPhoneNumber)) {
+						String message_content = "Message de la part de " + message_entry.getPosterPhoneNumber() + " : " + message_entry.getMessage().toString();
+						answ_content_event.addAttribute(ExchangeAttributeNames.MESSAGE, message_content);
+						System.out.println("Pull message event : " + answ_content_event);
+						AutoCommutator.getInstance().receiveEvent(answ_content_event);
+					}
 				}
+			} else {
+				System.out.println("Pull no message event : " + answ_content_event);
+				answ_content_event.addAttribute(ExchangeAttributeNames.MESSAGE, this.noMessage);
+				AutoCommutator.getInstance().receiveEvent(answ_content_event);
 			}
-			
-			AutoCommutator.getInstance().receiveEvent(answ_content_event);			
 			break;
 		
 		// When the answering machine records a new message
