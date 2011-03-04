@@ -30,7 +30,7 @@ public class Line implements ILine {
 	 * @author Joris Berthelot <joris.berthelot@gmail.com>
 	 */
 	private String phoneNumber;
-	
+
 	/**
 	 * The caller phone number while the line is ringing
 	 */
@@ -118,17 +118,17 @@ public class Line implements ILine {
 	public void receiveMessage(IMessage message) {
 		System.out.println("---Line received message : " + message);
 		switch (message.getMessageType()) {
-			case RINGING:
-				this.ringingNumber = message.getCallerPhoneNumber();
-				this.isRinging = true;
-				break;
-			case STOP_RINGING:
-				this.ringingNumber = null;
-				this.isRinging = false;
+		case RINGING:
+			this.ringingNumber = message.getCallerPhoneNumber();
+			this.isRinging = true;
 			break;
-			default:
-				this.ringingNumber = message.getCallerPhoneNumber();
-				break;
+		case STOP_RINGING:
+			this.ringingNumber = null;
+			this.isRinging = false;
+			break;
+		default:
+			this.ringingNumber = message.getCallerPhoneNumber();
+			break;
 		}
 		phone.appendLog(message);
 	}
@@ -150,12 +150,14 @@ public class Line implements ILine {
 			this.concentrator.receiveMessage(new Message(MessageType.PICKUP,
 					this.phoneNumber));
 		} else {
-			System.out.println("---Line pickup " + this.phoneNumber + " as recipient of " + this.phoneNumber);
+			System.out.println("---Line pickup " + this.phoneNumber
+					+ " as recipient of " + this.phoneNumber);
 			// Stops the ring
 			this.isRinging = false;
 			// Sends the message to the concentrator
 			this.concentrator.receiveMessage(new Message(
-					MessageType.RECIPIENT_PICKUP, this.ringingNumber, this.phoneNumber));
+					MessageType.RECIPIENT_PICKUP, this.ringingNumber,
+					this.phoneNumber));
 		}
 	}
 
@@ -170,7 +172,7 @@ public class Line implements ILine {
 		}
 
 		this.state = LineState.FREE;
-		
+
 		System.out.println("---Line hangup: " + this.phoneNumber);
 		// Sends the message to the concentrator
 		this.concentrator.receiveMessage(new Message(MessageType.HANGUP,
@@ -202,8 +204,8 @@ public class Line implements ILine {
 		System.out.println("---Line sent content : " + content);
 		// Sends the message to the concentrator
 		this.concentrator.receiveMessage(new Message(
-			MessageType.VOICE_EXCHANGE, this.phoneNumber, this.ringingNumber, content
-		));
+				MessageType.VOICE_EXCHANGE, this.phoneNumber,
+				this.ringingNumber, content));
 	}
 
 	/**
@@ -215,20 +217,20 @@ public class Line implements ILine {
 	public LineState getState() {
 		return this.state;
 	}
-	
-	
-	public void addTransfertRules(String toPhoneNumber)
-	{
-		IEvent event = new Event(EventType.CREATE_TRANSFER);
-		event.addAttribute(ExchangeAttributeNames.CALLER_PHONE_NUMBER, this.phoneNumber);
-		event.addAttribute(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER, toPhoneNumber);
+
+	public void addTransfertRules(String toPhoneNumber) {
+		IEvent event = new Event(EventType.TRANSFER_CREATE);
+		event.addAttribute(ExchangeAttributeNames.CALLER_PHONE_NUMBER,
+				this.phoneNumber);
+		event.addAttribute(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER,
+				toPhoneNumber);
 		AutoCommutator.getInstance().sendEvent(event);
 	}
-	
-	public void removeTransfertRules()
-	{
-		IEvent event = new Event(EventType.REMOVE_TRANSFER);
-		event.addAttribute(ExchangeAttributeNames.PHONE_NUMBER, this.phoneNumber);
+
+	public void removeTransfertRules() {
+		IEvent event = new Event(EventType.TRANSFER_REMOVE);
+		event.addAttribute(ExchangeAttributeNames.PHONE_NUMBER,
+				this.phoneNumber);
 		AutoCommutator.getInstance().sendEvent(event);
 	}
 }
