@@ -1,6 +1,7 @@
 package fr.univ.lr.mpi.commutator.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import fr.univ.lr.mpi.commutator.IConnection;
@@ -74,9 +75,9 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 		callTransfer.start();
 		registerService(callTransfer);
 
-		MessageObserver messageObserver = new MessageObserver();
-		messageObserver.start();
-		registerService(messageObserver);
+		// MessageObserver messageObserver = new MessageObserver();
+		// messageObserver.start();
+		// registerService(messageObserver);
 
 		/* Adding answering machine number */
 		IEvent event = new Event(EventType.LINE_CREATION);
@@ -109,6 +110,8 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 		Connection connection = new Connection(callerPhoneNumber);
 		connection.start();
 		connections.add(connection);
+		System.out.println("------Connection registered for number: "
+				+ callerPhoneNumber + " (" + connection + ")");
 	}
 
 	/**
@@ -161,6 +164,7 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 	 */
 
 	public void sendEvent(IEvent event) {
+		System.out.println("------Commutator forwarded event : " + event);
 		for (IService service : this.services) {
 			service.receiveEvent(event);
 		}
@@ -170,111 +174,98 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 	 * Receives an event from all registered service
 	 * 
 	 * @param event
-	 *            The received event
 	 */
-
 	@Override
 	public synchronized void receiveEvent(IEvent event) {
 		switch (event.getEventType()) {
-		case CONNECTION_DESTROYED:
-			Connection c = ((Connection) getConnection(event
-					.getAttributeValue(ExchangeAttributeNames.CALLER_PHONE_NUMBER)));
-			c.stop();
-			connections.remove(c);
+		// When the connection timed out and needs to be killed
+		case CONNECTION_DESTROY:
+			Connection connection = ((Connection) getConnection(event.getAttributeValue(ExchangeAttributeNames.CALLER_PHONE_NUMBER)));
+			connection.stop();
+			System.out.println("------Connection killed for number: " + event.getAttributeValue(ExchangeAttributeNames.CALLER_PHONE_NUMBER) + " (" + connection + ")");
+			connections.remove(connection);
 			break;
 		default:
-			getConnection(
-					event
-							.getAttributeValue(ExchangeAttributeNames.CALLER_PHONE_NUMBER))
-					.receiveEvent(event);
+			Connection conn = (Connection) getConnection(event.getAttributeValue(ExchangeAttributeNames.CALLER_PHONE_NUMBER));
+			if(conn==null){
+				return;
+			}
+			conn.receiveEvent(event);
 		}
-
 	}
 
 	/**
 	 * Receives a message from lines (during the connection establishment)
 	 * 
 	 * @param message
-	 *            The message sent by lines
 	 */
 
 	@Override
 	public synchronized void receiveMessage(IMessage message) {
-		String callerPhoneNumber = message.getCallerPhoneNumber();
+		// Connection handler
+		Connection connection = null;
+		// Caller phone number
+		final String callerPhoneNumber = message.getCallerPhoneNumber();
+		// Recipient phone number
+		final String recipientPhoneNumber = message.getRecipientPhoneNumber();
+
+		// System.out.println("Com CN : "+ callerPhoneNumber + " / RN :" +
+		// recipientPhoneNumber);
+
 		switch (message.getMessageType()) {
+		// When a line is picked up
 		case PICKUP:
-			// When pickup from caller => send a tone to it to notify the
-			// connection
-			if (callerPhoneNumber == null) {
-				return;
-			}
-			/* If too many connections have been established */
-			if (connections.size() > MAX_CONNECTIONS) {
+			System.out
+					.println("------Commutator received message : " + message);
+			connection = (Connection) this.recoverConnection(callerPhoneNumber);
+			if (null != connection) {
+				connection.receiveMessage(new Message(
+						MessageType.RECIPIENT_PICKUP, callerPhoneNumber,
+						recipientPhoneNumber));
+			} else {
+				// If too many connections have been established
+				if (connections.size() > MAX_CONNECTIONS) {
+					this.concentrator.sendMessage(callerPhoneNumber,
+							new Message(MessageType.TOO_MANY_CONNECTIONS,
+									callerPhoneNumber));
+					return;
+				}
 
-				this.concentrator.sendMessage(callerPhoneNumber, new Message(
-						MessageType.TOO_MANY_CONNECTIONS, callerPhoneNumber,
-						null));
-				return;
+				// Creates a new connection
+				this.launchConnection(callerPhoneNumber);
 			}
+			break;
 
-			launchConnection(callerPhoneNumber);
-			this.concentrator.sendMessage(callerPhoneNumber, new Message(
-					MessageType.BACKTONE, callerPhoneNumber, null));
-			break;
-		/* When checking about the recipient line state before ring to his phone */
-		case RING:
-			String recipientNumber = message.getRecipientPhoneNumber();
-			if (concentrator.getActiveLine(recipientNumber).getState().equals(
-					LineState.BUSY)) {
-				return;
-			}
-			if (callerPhoneNumber != null) {
-				getConnection(callerPhoneNumber).receiveMessage(
-						new Message(MessageType.RINGING, callerPhoneNumber,
-								recipientNumber));
-			} else if (recipientNumber != null) {
-				getConnection(recipientNumber).receiveMessage(
-						new Message(MessageType.RINGING, callerPhoneNumber,
-								recipientNumber));
-			}
-			break;
-		case VOICE_EXCHANGE:
-			String sender = message.getCallerPhoneNumber();
-			Connection con = ((Connection) getConnection(sender));
-			if (con == null) {
-				return;
-			}
-			String recipient = null;
-			if (con.getCallerPhoneNumber().equals(sender)) {
-				recipient = con.getRecipientPhoneNumber();
-			} else if (con.getRecipientPhoneNumber().equals(sender)) {
-				recipient = con.getCallerPhoneNumber();
-			}
-			// if (!((Connection) getConnection(recipient)).isConnected()) {
-			// return;
-			// }
-			System.out.println("MESSAGE TRANSFER (from " + sender + ") to ("
-					+ recipient + ")");
-			concentrator.sendMessage(recipient, message);
-			break;
-		default:
-			/*
-			 * By default the message is dispatched to the concerned connection
-			 * service
+		// When the connection wants to ring a line
+		case IS_BUSY:
+			System.out
+					.println("------Commutator received message : " + message);
+			// The line is busy
+			/**
+			 * TODO avoid to ask the line state, just check a connection
+			 * existence
 			 */
-			if (message.getCallerPhoneNumber() != null) {
-				Connection connection = (Connection) getConnection(message
-						.getCallerPhoneNumber());
-				if (connection == null) {
-					return;
-				}
-				connection.receiveMessage(message);
-			} else if (message.getRecipientPhoneNumber() != null) {
-				Connection connection = (Connection) getConnection(message
-						.getRecipientPhoneNumber());
-				if (connection == null) {
-					return;
-				}
+			if (concentrator.getActiveLine(recipientPhoneNumber).getState()
+					.equals(LineState.BUSY)) {
+				this.getConnection(callerPhoneNumber).receiveMessage(
+						new Message(MessageType.BUSY, callerPhoneNumber,
+								recipientPhoneNumber));
+				return;
+			}
+
+			this.getConnection(callerPhoneNumber).receiveMessage(
+					new Message(MessageType.RINGING, callerPhoneNumber,
+							recipientPhoneNumber));
+			break;
+		// All others messages
+		default:
+			connection = (Connection) getConnection(callerPhoneNumber);
+
+			if (null == connection && null != recipientPhoneNumber) {
+				connection = (Connection) getConnection(recipientPhoneNumber);
+			}
+
+			if (null != connection) {
 				connection.receiveMessage(message);
 			}
 			break;
@@ -282,18 +273,38 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 	}
 
 	/**
+	 * Tries to find an existing connection identified by the caller phonenumber
 	 * 
 	 * @param phoneNumber
 	 * @return
 	 */
-
 	public IConnection getConnection(String phoneNumber) {
 		for (IConnection connection : connections) {
 			String caller = ((Connection) connection).getCallerPhoneNumber();
-			String recipient = ((Connection) connection)
-					.getRecipientPhoneNumber();
-			if ((caller != null && caller.equals(phoneNumber))
-					| (recipient != null && recipient.equals(phoneNumber))) {
+			if (caller.equals(phoneNumber)) {
+				System.out.println("------Connection retrieved by number: "
+						+ phoneNumber + " (" + connection + ")");
+				return connection;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Tries to recover an existing connection following a fast hang up and pick
+	 * up
+	 * 
+	 * @author Joris Berthelot <joris.berthelot@gmail.com>
+	 * @param phoneNumber
+	 * @return
+	 */
+	public IConnection recoverConnection(String phoneNumber) {
+		for (IConnection connection : connections) {
+			String called = ((Connection) connection).getCalledPhoneNumber();
+			if (((Connection) connection).isConnected()
+					&& called.equals(phoneNumber)) {
+				System.out.println("------Connection recovered by number: "
+						+ phoneNumber + " (" + connection + ")");
 				return connection;
 			}
 		}
@@ -318,6 +329,7 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 	 */
 
 	public synchronized void sendMessage(String phoneNumber, IMessage message) {
+		System.out.println("------Commutator sent message : " + message);
 		concentrator.sendMessage(phoneNumber, message);
 	}
 }
