@@ -1,14 +1,14 @@
 package fr.univ.lr.mpi.exchanges.impl;
 
 /**
+ * EventType.java
+ * 
  * An enumerated type. Represents all event type (connections between
  * AutoCommutator and all registered services).
  * 
  * @author Elian ORIOU <elian.oriou@gmail.com>
  */
-
 public enum EventType {
-
 	/**
 	 * When a line is created
 	 */

@@ -4,6 +4,8 @@ import java.util.Map;
 import fr.univ.lr.mpi.exchanges.impl.EventType;
 
 /**
+ * IEvent.java
+ * 
  * @author Tony FAUCHER
  */
 public interface IEvent {

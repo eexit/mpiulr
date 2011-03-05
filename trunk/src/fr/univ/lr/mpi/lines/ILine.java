@@ -6,15 +6,11 @@ import fr.univ.lr.mpi.exceptions.PhoneNumberValidatorException;
 import fr.univ.lr.mpi.handlers.MessageHandler;
 
 /**
- * 
- * MPI_PROJECT/fr.univ.lr.mpi.lines/ILine.java
+ * ILine.java
  *
  * @author Joris Berthelot <joris.berthelot@gmail.com>
- * @date Mar 1, 2011
- *
  */
 public interface ILine extends MessageHandler {
-	
 	/**
 	 * Gets the line phone number
 	 * 
@@ -64,11 +60,16 @@ public interface ILine extends MessageHandler {
 	 */
 	public void dialTo(String phoneNumber) throws PhoneNumberValidatorException, LineException;
 	
-	
+	/**
+	 * Line message sender
+	 * 
+	 * @param content
+	 */
 	public void sendMessage(String content);
 	
 	/**
 	 * To create a transfer rule
+	 * 
 	 * @param toPhoneNumber
 	 */
 	public void addTransfertRules(String toPhoneNumber);

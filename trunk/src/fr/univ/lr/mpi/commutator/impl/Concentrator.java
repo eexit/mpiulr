@@ -10,19 +10,29 @@ import fr.univ.lr.mpi.exchanges.impl.ExchangeAttributeNames;
 import fr.univ.lr.mpi.lines.ILine;
 
 /**
+ * Concentrator.java
  * 
  * @author Elian ORIOU <elian.oriou@gmail.com>
- * 
  */
-
 public class Concentrator {
-
+	
+	/**
+	 * List of lines
+	 */
 	private List<ILine> lines;
-
+	
+	/**
+	 * Class constructor
+	 */
 	public Concentrator() {
 		this.lines = new ArrayList<ILine>();
 	}
-
+	
+	/**
+	 * Line registerer
+	 * 
+	 * @param line
+	 */
 	public void registerLine(ILine line) {
 		lines.add(line);
 		line.setConcentrator(this);
@@ -32,7 +42,13 @@ public class Concentrator {
 				.getPhoneNumber());
 		AutoCommutator.getInstance().sendEvent(e);
 	}
-
+	
+	/**
+	 * Line unregisterer
+	 * 
+	 * @param numberLine
+	 * @return
+	 */
 	public int unregisterLine(String numberLine) {
 		for (int i = 0; i < lines.size(); i++) {
 			if (lines.get(i).getPhoneNumber() == numberLine) {
@@ -44,14 +60,20 @@ public class Concentrator {
 	}
 
 	/**
+	 * Active line getter
 	 * 
 	 * @return
 	 */
-
 	public List<ILine> getActiveLines() {
 		return this.lines;
 	}
-
+	
+	/**
+	 * Active line getter by phone number
+	 * 
+	 * @param phoneNumber
+	 * @return
+	 */
 	public ILine getActiveLine(String phoneNumber) {
 		for (ILine line : lines) {
 			if (line.getPhoneNumber().equals(phoneNumber)) {
@@ -62,11 +84,11 @@ public class Concentrator {
 	}
 
 	/**
+	 * Message dispatcher
 	 * 
 	 * @param phoneNumber
 	 * @param message
 	 */
-
 	public void sendMessage(String phoneNumber, IMessage message) {
 		for (ILine l : lines) {
 			if (l.getPhoneNumber().equals(phoneNumber)) {
@@ -77,10 +99,10 @@ public class Concentrator {
 	}
 
 	/**
+	 * Message listener
 	 * 
 	 * @param message
 	 */
-
 	public void receiveMessage(IMessage message) {
 		AutoCommutator.getInstance().receiveMessage(message);
 	}

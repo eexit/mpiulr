@@ -15,7 +15,6 @@ import fr.univ.lr.mpi.services.IService;
  * Billing Service
  * 
  * @author FAUCHER Tony <faucher.tony85@gmail.com>
- * 
  */
 public class BillingService extends Thread implements IService {
 
@@ -25,11 +24,13 @@ public class BillingService extends Thread implements IService {
 	 */
 	private List<BillingEntry> entries;
 
+	/**
+	 * Event stack
+	 */
 	private Stack<IEvent> eventStack;
 
 	/**
 	 * Constructor
-	 * 
 	 */
 	public BillingService() {
 		this.entries = new ArrayList<BillingEntry>();
@@ -37,9 +38,8 @@ public class BillingService extends Thread implements IService {
 	}
 
 	/**
-	 * 
+	 * Class runner
 	 */
-
 	public void run() {
 		while (true) {
 			if (this.eventStack.isEmpty()) {
@@ -51,33 +51,40 @@ public class BillingService extends Thread implements IService {
 					}
 				}
 			}
+			
+			/**
+			 * TODO export the following code into a dedicated method
+			 */
 			IEvent event = this.eventStack.pop();
 			switch (event.getEventType()) {
 			case CONNECTION_CLOSED:
 				// Get the caller phone Number and the recipient phone number
-				String callerPhoneNumber = event
-						.getAttributeValue(ExchangeAttributeNames.CALLER_PHONE_NUMBER);
-				String recipientPhoneNumber = event
-						.getAttributeValue(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER);
+				String callerPhoneNumber = event.getAttributeValue(ExchangeAttributeNames.CALLER_PHONE_NUMBER);
+				String recipientPhoneNumber = event.getAttributeValue(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER);
 
 				// Get the duration
-				Double duration = Double
-						.parseDouble(event
-								.getAttributeValue(ExchangeAttributeNames.CONNECTION_DURATION));
+				Double duration = Double.parseDouble(event.getAttributeValue(ExchangeAttributeNames.CONNECTION_DURATION));
 
 				// Get the date
-				String dateString = event
-						.getAttributeValue(ExchangeAttributeNames.DATE);
+				String dateString = event.getAttributeValue(ExchangeAttributeNames.DATE);
 				DateFormat df = DateFormat.getDateTimeInstance();
 				Date date;
 				try {
 					date = df.parse(dateString);
 					// Add a billing entry in the array
-					this.entries.add(new BillingEntry(callerPhoneNumber,
-							recipientPhoneNumber, date, duration));
+					this.addEntry(callerPhoneNumber, recipientPhoneNumber, date, duration);
+					
+					System.out.println("---------BillingServive added call entry for ended communication between "
+						+ callerPhoneNumber
+						+ " and "
+						+ recipientPhoneNumber
+						+ " on "
+						+ date
+						+ " which lates "
+						+ duration
+						+ " seconds");
 
 				} catch (ParseException e) {
-
 					e.printStackTrace();
 				}
 				break;
@@ -95,10 +102,12 @@ public class BillingService extends Thread implements IService {
 	 */
 	public void addEntry(String callerPhoneNumber, String recipientPhoneNumber,
 			Date date, double duration) {
-		this.entries.add(new BillingEntry(callerPhoneNumber,
-				recipientPhoneNumber, date, duration));
+		this.entries.add(new BillingEntry(callerPhoneNumber, recipientPhoneNumber, date, duration));
 	}
-
+	
+	/**
+	 * Event listener
+	 */
 	@Override
 	public synchronized void receiveEvent(IEvent event) {
 		this.eventStack.add(event);

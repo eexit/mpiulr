@@ -3,28 +3,61 @@ package fr.univ.lr.mpi.exchanges.impl;
 import fr.univ.lr.mpi.exchanges.IMessage;
 
 /**
+ * Message.java
  * 
  * @author FAUCHER Tony
- * 
  */
 public class Message implements IMessage {
 
-	// attributs
+	/**
+	 * Message type
+	 */
 	private MessageType type;
+	
+	/**
+	 * Caller phone number
+	 */
 	private String callerPhoneNumber;
+	
+	/**
+	 * Recipient phone number
+	 */
 	private String recipientPhoneNumber;
+	
+	/**
+	 * Message content
+	 */
 	private String content;
 
-	// constructor
+	/**
+	 * Class constructor
+	 * 
+	 * @param type
+	 * @param callerPhoneNumber
+	 */
 	public Message(MessageType type, String callerPhoneNumber) {
 		this(type, callerPhoneNumber, null, null);
 	}
 	
+	/**
+	 * Class constructor
+	 * 
+	 * @param type
+	 * @param callerPhoneNumber
+	 * @param recipientPhoneNumber
+	 */
 	public Message(MessageType type, String callerPhoneNumber, String recipientPhoneNumber) {
 		this(type, callerPhoneNumber, recipientPhoneNumber, null);
 	}
 
-	
+	/**
+	 * Class constructor
+	 * 
+	 * @param type
+	 * @param callerPhoneNumber
+	 * @param recipientPhoneNumber
+	 * @param content
+	 */
 	public Message(MessageType type, String callerPhoneNumber,
 			String recipientPhoneNumber, String content) {
 		this.type = type;
@@ -33,31 +66,38 @@ public class Message implements IMessage {
 		this.content = content;
 	}
 
-	// getter and setter
-
 	/**
-	 * @return the message type
+	 * Message type getter
+	 * 
+	 * @return
 	 */
 	public MessageType getMessageType() {
 		return this.type;
 	}
 
+	/**
+	 * Message content getter
+	 * 
+	 * @return
+	 */
 	public String getContent()
 	{
 		return this.content;
 	}
 	
-	// called phone number
 	/**
-	 * @return caller phone number
+	 * Caller phone number getter
+	 * 
+	 * @return
 	 */
 	public String getCallerPhoneNumber() {
 		return this.callerPhoneNumber;
 	}
 
-	// recipient phone number
 	/**
-	 * @return the recipient phone number
+	 * Recipient phone number getter
+	 * 
+	 * @return
 	 */
 	public String getRecipientPhoneNumber() {
 		return recipientPhoneNumber;

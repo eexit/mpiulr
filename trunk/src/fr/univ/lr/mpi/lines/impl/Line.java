@@ -15,12 +15,9 @@ import fr.univ.lr.mpi.lines.LineState;
 import fr.univ.lr.mpi.simulation.PhoneWidget;
 
 /**
- * 
- * MPI_PROJECT/fr.univ.lr.mpi.lines/Line.java
+ * Line.java
  * 
  * @author Joris Berthelot <joris.berthelot@gmail.com>
- * @date Mar 1, 2011
- * 
  */
 public class Line implements ILine {
 
@@ -35,6 +32,11 @@ public class Line implements ILine {
 	 * The caller phone number while the line is ringing
 	 */
 	private String ringingNumber;
+	
+	/**
+	 * The recipient phone number
+	 */
+	private String recipientNumber;
 
 	/**
 	 * Line current state
@@ -110,25 +112,41 @@ public class Line implements ILine {
 	}
 
 	/**
-	 * Message receiver of commutator
+	 * Message listener
 	 * 
 	 * @author Joris Berthelot <joris.berthelot@gmail.com>
 	 * @param message
 	 */
 	public void receiveMessage(IMessage message) {
-		System.out.println("---Line received message : " + message);
+		
+		System.out.println("---Line " + this.phoneNumber + " received message : " + message);
+		
 		switch (message.getMessageType()) {
-		case RINGING:
-			this.ringingNumber = message.getCallerPhoneNumber();
-			this.isRinging = true;
-			break;
-		case STOP_RINGING:
-			this.ringingNumber = null;
-			this.isRinging = false;
-			break;
-		default:
-			this.ringingNumber = message.getCallerPhoneNumber();
-			break;
+			case SEARCH:
+				this.recipientNumber = message.getRecipientPhoneNumber();
+				break;
+			case RINGING:
+				this.ringingNumber = message.getCallerPhoneNumber();
+				this.isRinging = true;
+				break;
+			case STOP_RINGING:
+				this.ringingNumber = null;
+				this.isRinging = false;
+				break;
+			case CONNECTION_ESTABLISHED:
+				this.state = LineState.BUSY;
+				this.recipientNumber = message.getRecipientPhoneNumber();
+				break;
+			case CONNECTION_CLOSED:
+				this.recipientNumber = null;
+				break;
+			default:
+				// Set the recipient number for all message only if the messages comes
+				// from a real recipient (not services)
+				if (!this.phoneNumber.equals(message.getCallerPhoneNumber())) {
+					this.recipientNumber = message.getCallerPhoneNumber();
+				}
+				break;
 		}
 		phone.appendLog(message);
 	}
@@ -139,25 +157,34 @@ public class Line implements ILine {
 	 * @author Joris Berthelot <joris.berthelot@gmail.com>
 	 */
 	public void pickUp() {
-		if (this.state != null && !this.state.equals(LineState.FREE)) {
+		if (this.state.equals(LineState.BUSY)) {
 			return;
 		}
+		
 		this.state = LineState.BUSY;
-
+		
 		if (!this.isRinging) {
+			
 			System.out.println("---Line pickup: " + this.phoneNumber);
-			// Sends the message to the concentrator
-			this.concentrator.receiveMessage(new Message(MessageType.PICKUP,
-					this.phoneNumber));
-		} else {
-			System.out.println("---Line pickup " + this.phoneNumber
-					+ " as recipient of " + this.phoneNumber);
-			// Stops the ring
-			this.isRinging = false;
+			
 			// Sends the message to the concentrator
 			this.concentrator.receiveMessage(new Message(
-					MessageType.RECIPIENT_PICKUP, this.ringingNumber,
-					this.phoneNumber));
+				MessageType.PICKUP, this.phoneNumber, this.recipientNumber
+			));
+		} else {
+			
+			System.out.println("---Line pickup " + this.phoneNumber + " as recipient of " + this.ringingNumber);
+			
+			// Stops the ring
+			this.isRinging = false;
+			
+			// Sets the recipient
+			this.recipientNumber = this.ringingNumber;
+			
+			// Sends the message to the concentrator
+			this.concentrator.receiveMessage(new Message(
+				MessageType.RECIPIENT_PICKUP, this.ringingNumber, this.phoneNumber
+			));
 		}
 	}
 
@@ -174,9 +201,14 @@ public class Line implements ILine {
 		this.state = LineState.FREE;
 
 		System.out.println("---Line hangup: " + this.phoneNumber);
+		
 		// Sends the message to the concentrator
-		this.concentrator.receiveMessage(new Message(MessageType.HANGUP,
-				this.phoneNumber, this.ringingNumber));
+		// We put the last ringing phone in case where we want to recover the connection
+		this.concentrator.receiveMessage(new Message(
+			MessageType.HANGUP, this.phoneNumber, this.ringingNumber
+		));
+		
+		this.recipientNumber = null;
 	}
 
 	/**
@@ -186,26 +218,40 @@ public class Line implements ILine {
 	 * @param phoneNumber
 	 */
 	public void dialTo(String phoneNumber) {
-		if (!this.state.equals(LineState.BUSY)) {
+		// The line must be piked up and not within a communication to dial
+		if (this.state.equals(LineState.FREE) || null != this.recipientNumber) {
+			System.out.println("---Line " + this.phoneNumber + " can't dial because not FREE or already in a communication");
 			return;
 		}
-
+		
 		// Sends the message to the concentrator
-		this.concentrator.receiveMessage(new Message(MessageType.NUMBERING,
-				this.phoneNumber, phoneNumber));
+		this.concentrator.receiveMessage(new Message(
+			MessageType.NUMBERING, this.phoneNumber, phoneNumber
+		));
+		
+		this.ringingNumber = phoneNumber;
 	}
 
 	/**
+	 * Sends a message
 	 * 
+	 * @author Joris Berthelot <joris.berthelot@gmail.com>
 	 * @param content
 	 */
-
 	public void sendMessage(String content) {
-		System.out.println("---Line sent content : " + content);
+		
+		// Can't send any message if the line is not picked up
+		if (this.state.equals(LineState.FREE)) {
+			System.out.println("---Line " + this.phoneNumber + " can't send message because not connected");
+			return;
+		}
+		
+		System.out.println("---Line " + this.phoneNumber + " sent content : " + content);
+		
 		// Sends the message to the concentrator
 		this.concentrator.receiveMessage(new Message(
-				MessageType.VOICE_EXCHANGE, this.phoneNumber,
-				this.ringingNumber, content));
+			MessageType.VOICE_EXCHANGE, this.phoneNumber, this.recipientNumber, content
+		));
 	}
 
 	/**
@@ -219,27 +265,26 @@ public class Line implements ILine {
 	}
 
 	/**
+	 * Adds a transfer rule
 	 * 
+	 * @author Tony FAUCHER
 	 * @param toPhoneNumber
 	 */
-
 	public void addTransfertRules(String toPhoneNumber) {
 		IEvent event = new Event(EventType.TRANSFER_CREATE);
-		event.addAttribute(ExchangeAttributeNames.CALLER_PHONE_NUMBER,
-				this.phoneNumber);
-		event.addAttribute(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER,
-				toPhoneNumber);
+		event.addAttribute(ExchangeAttributeNames.CALLER_PHONE_NUMBER, this.phoneNumber);
+		event.addAttribute(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER, toPhoneNumber);
 		AutoCommutator.getInstance().sendEvent(event);
 	}
 
 	/**
+	 * Removes all transfer rules
 	 * 
+	 * @author Tony FAUCHER
 	 */
-
 	public void removeTransfertRules() {
 		IEvent event = new Event(EventType.TRANSFER_REMOVE);
-		event.addAttribute(ExchangeAttributeNames.PHONE_NUMBER,
-				this.phoneNumber);
+		event.addAttribute(ExchangeAttributeNames.PHONE_NUMBER, this.phoneNumber);
 		AutoCommutator.getInstance().sendEvent(event);
 	}
 }

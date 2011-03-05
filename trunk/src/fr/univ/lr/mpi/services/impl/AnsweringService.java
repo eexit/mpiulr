@@ -19,21 +19,31 @@ import fr.univ.lr.mpi.services.IService;
  * 
  * @author FAUCHER Tony <faucher.tony85@gmail.com>
  */
-
 public class AnsweringService extends Thread implements IService {
 
 	/**
 	 * List of different message from an answering Machine
 	 */
-
 	private List<AnsweringMachineMessage> messages;
-
+	
+	/**
+	 * Default welcome message
+	 */
 	private String receptionMessage = "Merci de laisser un message après le bip... *BIIP*";
 	
+	/**
+	 * Default empty message
+	 */
 	final private String noMessage = "Vous n'avez aucun nouveau message";
-
+	
+	/**
+	 * Event stack
+	 */
 	private Stack<IEvent> eventStack;
 
+	/**
+	 * Answering service phone number
+	 */
 	public static final String ANSWERING_MACHINE_PHONE_NUMBER = "3103";
 
 	/**
@@ -44,14 +54,27 @@ public class AnsweringService extends Thread implements IService {
 		this.eventStack = new Stack<IEvent>();
 	}
 
+	/**
+	 * Welcome message getter
+	 * 
+	 * @return
+	 */
 	public String getReceptionMessage() {
 		return this.receptionMessage;
 	}
-
+	
+	/**
+	 * Welcome message setter
+	 * 
+	 * @param message
+	 */
 	public void setReceptionMessage(String message) {
 		receptionMessage = message;
 	}
-
+	
+	/**
+	 * Logical code to be executed by stacked events
+	 */
 	private void processEvent() {
 		IEvent stack_event = this.eventStack.pop();
 		
@@ -71,26 +94,29 @@ public class AnsweringService extends Thread implements IService {
 		
 		// When then answering machine is called to pull messages
 		case ANSWERING_MACHINE_PULL_MESSAGE:
-			
-			//System.out.println("PULL CN : "+ callerPhoneNumber + " / RN :" + recipientPhoneNumber);
-			
 			// Creates an event which will contain all messages
 			IEvent answ_content_event = new Event(EventType.ANSWERING_MESSAGE);
 			answ_content_event.addAttribute(ExchangeAttributeNames.CALLER_PHONE_NUMBER, callerPhoneNumber);
 			answ_content_event.addAttribute(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER, callerPhoneNumber);
-
 			
-			if (!messages.isEmpty()) {
-				for (AnsweringMachineMessage message_entry : messages) {
+			/**
+			 * TODO must remove message from message list once pulled
+			 */
+			if (!this.getMessages().isEmpty()) {
+				for (AnsweringMachineMessage message_entry : this.getMessages()) {
 					if (message_entry.getOwnerPhoneNumber().equals(callerPhoneNumber)) {
 						String message_content = "Message de la part de " + message_entry.getPosterPhoneNumber() + " : " + message_entry.getMessage().toString();
 						answ_content_event.addAttribute(ExchangeAttributeNames.MESSAGE, message_content);
-						System.out.println("Pull message event : " + answ_content_event);
+						
+						System.out.println("---------AnsweringService pulled message from " + callerPhoneNumber + " : " + message_content);
+						
 						AutoCommutator.getInstance().receiveEvent(answ_content_event);
 					}
 				}
 			} else {
-				System.out.println("Pull no message event : " + answ_content_event);
+				
+				System.out.println("---------AnsweringService pulled message from " + callerPhoneNumber + " : " + this.noMessage);
+				
 				answ_content_event.addAttribute(ExchangeAttributeNames.MESSAGE, this.noMessage);
 				AutoCommutator.getInstance().receiveEvent(answ_content_event);
 			}
@@ -108,15 +134,19 @@ public class AnsweringService extends Thread implements IService {
 				this.messages.add(new AnsweringMachineMessage(
 					date, recipientPhoneNumber, callerPhoneNumber, message
 				));
-				System.out.println("---------AnsweringService added message : " + message);
+				
+				System.out.println("---------AnsweringService pushed message from " + callerPhoneNumber +" to " + recipientPhoneNumber + " : " + message);
+			
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
 			break;
 		}
-
 	}
-
+	
+	/**
+	 * Service runner
+	 */
 	public void run() {
 		while (true) {
 			if (this.eventStack.isEmpty()) {
@@ -128,7 +158,6 @@ public class AnsweringService extends Thread implements IService {
 					}
 				}
 			}
-			// traitement des events
 			processEvent();
 		}
 	}
@@ -137,7 +166,6 @@ public class AnsweringService extends Thread implements IService {
 	 * Add an Answering Machine Message
 	 * 
 	 * @param AnsweringMachineMessage
-	 * 
 	 */
 	public void postMessage(AnsweringMachineMessage asm) {
 		this.messages.add(asm);
@@ -153,9 +181,8 @@ public class AnsweringService extends Thread implements IService {
 	}
 
 	/**
-	 * 
+	 * Event listener
 	 */
-
 	@Override
 	public synchronized void receiveEvent(IEvent event) {
 		this.eventStack.add(event);

@@ -1,12 +1,12 @@
 package fr.univ.lr.mpi.exchanges.impl;
 
 /**
+ * MessageType.java
+ * 
  * An enumerated type. Contains all messages exchanged within our system.
  * 
  * @author Elian ORIOU <elian.oriou@gmail.com>
- * 
  */
-
 public enum MessageType {
 	/**
 	 * When the caller picks up his phone

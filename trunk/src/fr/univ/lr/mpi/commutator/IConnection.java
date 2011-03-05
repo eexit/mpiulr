@@ -4,28 +4,28 @@ import fr.univ.lr.mpi.handlers.EventHandler;
 import fr.univ.lr.mpi.handlers.MessageHandler;
 
 /**
- * 
- * MPI_PROJECT/fr.univ.lr.mpi.commutator/IConnection.java
+ * IConnection.java
  *
  * @author Joris Berthelot <joris.berthelot@gmail.com>
- * @date Mar 1, 2011
- *
  */
 public interface IConnection extends MessageHandler, EventHandler {
 
 	/**
+	 * Called phone number getter
 	 * 
 	 * @return the called Phone number
 	 */
 	public String getCalledPhoneNumber();
 	
 	/**
+	 * Caller phone number getter
 	 * 
 	 * @return the caller phone number
 	 */
 	public String getCallerPhoneNumber();
 	
 	/**
+	 * Connection connected state getter
 	 * 
 	 * @return if the connection is established
 	 */

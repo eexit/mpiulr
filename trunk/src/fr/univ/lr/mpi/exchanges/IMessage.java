@@ -3,6 +3,8 @@ package fr.univ.lr.mpi.exchanges;
 import fr.univ.lr.mpi.exchanges.impl.MessageType;
 
 /**
+ * IMessage.java
+ * 
  * @author Tony FAUCHER
  */
 public interface IMessage {
@@ -31,6 +33,11 @@ public interface IMessage {
 	 */
 	public String getRecipientPhoneNumber();
 
+	/**
+	 * Message content getter
+	 * 
+	 * @return
+	 */
 	public String getContent();
 	
 }
