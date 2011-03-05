@@ -1,9 +1,9 @@
 package fr.univ.lr.mpi.exceptions;
 
 /**
+ * LineException.java
  * 
  * @author Joris Berthelot <joris.berthelot@gmail.com>
- *
  */
 public class LineException extends Exception {
 	

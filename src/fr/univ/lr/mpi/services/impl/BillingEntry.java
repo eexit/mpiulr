@@ -6,12 +6,11 @@ import java.util.Date;
  * Billing Entry
  * 
  * @author FAUCHER Tony <faucher.tony85@gmail.com>
- * 
  */
 public class BillingEntry {
 
 	/**
-	 * the caller and recipient phone number
+	 * The caller and recipient phone number
 	 */
 	private String callerPhoneNumber, recipientPhoneNumber;
 
@@ -42,6 +41,8 @@ public class BillingEntry {
 	}
 
 	/**
+	 * Caller phone number getter
+	 * 
 	 * @return phone number called
 	 */
 	public String getCallerPhoneNumber() {
@@ -49,6 +50,8 @@ public class BillingEntry {
 	}
 
 	/**
+	 * Recipient phone number getter
+	 * 
 	 * @return phone number recipient
 	 */
 	public String getRecipientPhoneNumber() {
@@ -56,6 +59,8 @@ public class BillingEntry {
 	}
 
 	/**
+	 * Call duration getter
+	 * 
 	 * @return call duration
 	 */
 	public double getDuration() {
@@ -63,6 +68,8 @@ public class BillingEntry {
 	}
 
 	/**
+	 * Call date getter
+	 * 
 	 * @return call date
 	 */
 	public Date getDate() {

@@ -6,19 +6,24 @@ import java.util.Map;
 import fr.univ.lr.mpi.exchanges.IEvent;
 
 /**
- * Event Class
+ * Event.java
  * 
- * @author FAUCHER Tony
- * 
+ * @author FAUCHER Tony 
  */
 public class Event implements IEvent {
 
-	// attributes
+	/**
+	 * Event type
+	 */
 	private EventType type;
+	
+	/**
+	 * Event attributes container
+	 */
 	private Map<String, String> attributes;
 
 	/**
-	 * Constructor
+	 * Class constructor
 	 * 
 	 * @param type
 	 */
@@ -29,6 +34,7 @@ public class Event implements IEvent {
 	}
 
 	/**
+	 * Event type getter
 	 * 
 	 * @return the event type
 	 */
@@ -37,6 +43,7 @@ public class Event implements IEvent {
 	}
 
 	/**
+	 * Event attribute getter by attribute name
 	 * 
 	 * @param attributeName
 	 * @return the value of the attribute
@@ -46,6 +53,7 @@ public class Event implements IEvent {
 	}
 
 	/**
+	 * Event attributes getter
 	 * 
 	 * @return the list of the attribute and their value
 	 */
@@ -54,6 +62,7 @@ public class Event implements IEvent {
 	}
 
 	/**
+	 * Event attribute setter
 	 * 
 	 * @param attributeName
 	 * @param attributeValue

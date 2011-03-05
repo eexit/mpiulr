@@ -3,11 +3,10 @@ package fr.univ.lr.mpi.services.impl;
 import java.util.Date;
 
 /**
+ * AnsweringService.java
  * 
  * @author FAUCHER Tony <faucher.tony85@gmail.com>
- * 
  */
-
 public class AnsweringMachineMessage {
 
 	/**
@@ -30,8 +29,8 @@ public class AnsweringMachineMessage {
 	 */
 	private Object message;
 
-	// Constructor
 	/**
+	 * Class constructor
 	 * 
 	 * @param postDate
 	 * @param posterPhoneNumber
@@ -45,9 +44,9 @@ public class AnsweringMachineMessage {
 		this.message = message;
 	}
 
-	// méthodes
-
 	/**
+	 * Post date getter
+	 * 
 	 * @return Post Date
 	 */
 	public Date getPostDate() {
@@ -55,6 +54,7 @@ public class AnsweringMachineMessage {
 	}
 
 	/**
+	 * Poster phone number getter
 	 * 
 	 * @return Phone number poster
 	 */
@@ -63,6 +63,7 @@ public class AnsweringMachineMessage {
 	}
 
 	/**
+	 * Answering machine owner phone number getter
 	 * 
 	 * @return Phone number owner
 	 */
@@ -71,11 +72,11 @@ public class AnsweringMachineMessage {
 	}
 
 	/**
+	 * Message content getter
 	 * 
 	 * @return The message
 	 */
 	public Object getMessage() {
 		return message;
 	}
-
 }

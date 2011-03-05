@@ -15,7 +15,6 @@ import fr.univ.lr.mpi.services.IService;
  * The directory service
  * 
  * @author FAUCHER Tony <faucher.tony85@gmail.com>
- * 
  */
 public class DirectoryService extends Thread implements IService {
 
@@ -24,10 +23,13 @@ public class DirectoryService extends Thread implements IService {
 	 */
 	private List<String> directory;
 
+	/**
+	 * Event stack
+	 */
 	private Stack<IEvent> eventStack;
 
 	/**
-	 * Constructor
+	 * Class constructor
 	 * 
 	 */
 	public DirectoryService() {
@@ -35,6 +37,9 @@ public class DirectoryService extends Thread implements IService {
 		this.eventStack = new Stack<IEvent>();
 	}
 
+	/**
+	 * Class runner
+	 */
 	@Override
 	public void run() {
 		while (true) {
@@ -48,6 +53,10 @@ public class DirectoryService extends Thread implements IService {
 					}
 				}
 			}
+			
+			/**
+			 * TODO export the following code into a dedicated method
+			 */
 			IEvent event = eventStack.pop();
 			switch (event.getEventType()) {
 
@@ -55,79 +64,81 @@ public class DirectoryService extends Thread implements IService {
 			 * Case of line creation
 			 */
 			case LINE_CREATION:
-				// Get the phone number
-				phoneNumber = event
-						.getAttributeValue(ExchangeAttributeNames.CALLER_PHONE_NUMBER);
-				this.directory.add(phoneNumber);
+				phoneNumber = event.getAttributeValue(ExchangeAttributeNames.CALLER_PHONE_NUMBER);
+				this.addPhoneNumber(phoneNumber);	
 				break;
 
 			/**
 			 * Case of line deletion
 			 */
 			case LINE_DELETION:
-				// Get the phone number
-				phoneNumber = event
-						.getAttributeValue(ExchangeAttributeNames.CALLER_PHONE_NUMBER);
-				this.directory.remove(phoneNumber);
+				phoneNumber = event.getAttributeValue(ExchangeAttributeNames.CALLER_PHONE_NUMBER);
+				this.removePhoneNumber(phoneNumber);				
 				break;
 
 			/**
 			 * We need to know if the number is in the directory
 			 */
 			case PHONE_NUMBER_REQUEST:
-				
-				//System.out.println("Request CN : " + event.getAttributeValue(ExchangeAttributeNames.CALLER_PHONE_NUMBER)
-				//		+ " / RN : " + event.getAttributeValue(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER));
-				// Get the phone number
-				phoneNumber = event
-						.getAttributeValue(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER);
+				phoneNumber = event.getAttributeValue(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER);
 
 				// if the phone number is in the directory, we return true, else
 				// we return false
 
 				// Create a new event
 				Event newEvent = new Event(EventType.PHONE_NUMBER_RESPONSE);
-				// add caller phone number
-				newEvent
-						.addAttribute(
-								ExchangeAttributeNames.CALLER_PHONE_NUMBER,
-								event
-										.getAttributeValue(ExchangeAttributeNames.CALLER_PHONE_NUMBER));
-				// add recipient phone number
-				newEvent.addAttribute(
-						ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER,
-						phoneNumber);
-
-				// add boolean
-
-				newEvent.addAttribute(ExchangeAttributeNames.EXISTS, Boolean
-						.toString(this.exist(phoneNumber)));
+				newEvent.addAttribute(ExchangeAttributeNames.CALLER_PHONE_NUMBER, event.getAttributeValue(ExchangeAttributeNames.CALLER_PHONE_NUMBER));
+				newEvent.addAttribute(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER, phoneNumber);
+				newEvent.addAttribute(ExchangeAttributeNames.EXISTS, Boolean.toString(this.exist(phoneNumber)));
 
 				// Send to the autocommutator the event
 				AutoCommutator.getInstance().receiveEvent(newEvent);
-
 				break;
 			}
 		}
 	}
 
 	/**
-	 * Add a phone number in the directory
+	 * Adds a phone number in the directory
 	 * 
 	 * @param phoneNumber
 	 */
 	public void addPhoneNumber(String phoneNumber) {
 		this.directory.add(phoneNumber);
+		
+		System.out.println("---------DirectoryService added line for phone number : " + phoneNumber);
+	}
+	
+	/**
+	 * Removes a phone number in the directory
+	 * 
+	 * @param phoneNumber
+	 */
+	public void removePhoneNumber(String phoneNumber) {
+		if (this.exist(phoneNumber)) {
+			this.directory.remove(phoneNumber);
+			
+			System.out.println("---------DirectoryService removed line for phone number : " + phoneNumber);
+			
+		}
 	}
 
 	/**
+	 * Tests if a phone number exists
+	 * 
 	 * @param phoneNumber
 	 * @return if the phone number is in the directory or not
 	 */
 	public boolean exist(String phoneNumber) {
+		
+		System.out.println("---------DirectoryService requested for phone number : " + phoneNumber);
+		
 		return this.directory.contains(phoneNumber);
 	}
 
+	/**
+	 * Event listener
+	 */
 	@Override
 	public synchronized void receiveEvent(IEvent event) {
 		this.eventStack.add(event);
