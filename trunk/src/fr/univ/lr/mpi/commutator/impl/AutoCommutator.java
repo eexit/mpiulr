@@ -286,7 +286,7 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 				connection.receiveMessage(message);
 			} else {
 				
-				System.out.println("------Commutator didn't found any connection for caller : "  + callerPhoneNumber);
+				System.err.println("------Commutator didn't found any connection for caller : "  + callerPhoneNumber);
 			
 			}
 			break;

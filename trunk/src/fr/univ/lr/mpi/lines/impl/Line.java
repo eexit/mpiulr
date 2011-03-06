@@ -148,7 +148,9 @@ public class Line implements ILine {
 				}
 				break;
 		}
-		phone.appendLog(message);
+		if (null != this.phone) {
+			this.phone.appendLog(message);
+		}	
 	}
 
 	/**
@@ -220,7 +222,7 @@ public class Line implements ILine {
 	public void dialTo(String phoneNumber) {
 		// The line must be piked up and not within a communication to dial
 		if (this.state.equals(LineState.FREE) || null != this.recipientNumber) {
-			System.out.println("---Line " + this.phoneNumber + " can't dial because not FREE or already in a communication");
+			System.err.println("---Line " + this.phoneNumber + " can't dial because not FREE or already in a communication");
 			return;
 		}
 		
@@ -242,7 +244,7 @@ public class Line implements ILine {
 		
 		// Can't send any message if the line is not picked up
 		if (this.state.equals(LineState.FREE)) {
-			System.out.println("---Line " + this.phoneNumber + " can't send message because not connected");
+			System.err.println("---Line " + this.phoneNumber + " can't send message because not connected");
 			return;
 		}
 		
