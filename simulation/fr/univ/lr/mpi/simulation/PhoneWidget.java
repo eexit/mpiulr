@@ -9,6 +9,7 @@ import fr.univ.lr.mpi.exchanges.IMessage;
 import fr.univ.lr.mpi.lines.impl.Line;
 
 public class PhoneWidget extends QWidget {
+	
 	public QGroupBox groupBox;
 	public QGridLayout gridLayout;
 	public QPushButton pickUpButton;
@@ -23,14 +24,38 @@ public class PhoneWidget extends QWidget {
 	public QTextBrowser logBrowser;
 	public QTimer timer;
 
+	/**
+	 * The phone number
+	 */
 	private String phoneNumber;
+	/**
+	 * The line which is represent by the phoneWidget
+	 */
 	private Line line;
+	/**
+	 * A list who contain all the different phone numbers
+	 */
 	private List<String> directory;
+	/**
+	 * This boolean is used in blink()
+	 */
 	private Boolean defaultColor;
 
+	/**
+	 * This signal start the timer
+	 */
 	public Signal0 startBlink = new Signal0();
+	/**
+	 * Thi signal stop the timer
+	 */
 	public Signal0 stopBlink = new Signal0();
 
+	/**
+	 * Class constructor
+	 * @param parent
+	 * @param line
+	 * @param dir
+	 */
 	public PhoneWidget(QWidget parent, Line line, List<String> dir) {
 		super(parent);
 		this.resize(175, 350);
@@ -38,12 +63,16 @@ public class PhoneWidget extends QWidget {
 		this.line = line;
 		this.line.setPhone(this);
 		this.phoneNumber = this.line.getPhoneNumber();
+		
+		// Set the directory, and remove the phone number of the phoneWidget in the list
 		this.directory = new ArrayList<String>();
 		for (int i = 0; i < dir.size(); i++) {
 			if (!this.phoneNumber.equals(dir.get(i))) {
 				this.directory.add(dir.get(i));
 			}
 		}
+		
+		// Initialisation of  the different widget :
 		groupBox = new QGroupBox(this.phoneNumber, this);
 		groupBox.setGeometry(0, 0, 175, 350);
 
@@ -88,6 +117,7 @@ public class PhoneWidget extends QWidget {
 
 		gridLayout = new QGridLayout(this);
 
+		// Add the different widget to the layout :
 		gridLayout.addWidget(pickUpButton, 0, 0, 1, 1);
 		gridLayout.addWidget(hangUpButton, 0, 1, 1, 1);
 		gridLayout.addWidget(dialLabel, 1, 0, 1, 2);
@@ -105,6 +135,9 @@ public class PhoneWidget extends QWidget {
 
 	}
 
+	/**
+	 * This function made the connections between the slots and the different signals
+	 */
 	private void connection() {
 		this.pickUpButton.pressed.connect(this, "pickUpThePhone()");
 		this.hangUpButton.pressed.connect(this, "hangUpThePhone()");
@@ -117,6 +150,10 @@ public class PhoneWidget extends QWidget {
 		this.transfertButton.pressed.connect(this, "askForTransfert()");
 	}
 
+	/**
+	 * This function write the messages received by the Line in the textBrowser
+	 * @param message
+	 */
 	public void appendLog(IMessage message) {
 		switch (message.getMessageType()) {
 		case VOICE_EXCHANGE:
@@ -124,31 +161,40 @@ public class PhoneWidget extends QWidget {
 					+ "] : " + message.getContent());
 			break;
 
+		// When the message type is BUSY or RINGING, the signal startBlink is emitted
 		case BUSY:
 		case RINGING:
 			this.startBlink.emit();
 			this.logBrowser.append(message.getMessageType().toString());
 			break;
 
+		// When the line receive a STOP_RINGING message, the signal stopBlink is emitted and we set the default icon 
+		// on the button Pick up
 		case STOP_RINGING:
     			this.stopBlink.emit();
 				pickUpButton.setIcon(new QIcon(new QPixmap("content/pick_up.png")));
 				this.defaultColor = true;
     			break;
 		
+    	// When the line receive a CONNECTION_CLOSED message, the signal stopBlink is emitted and we set the default icon 
+    	// on the button Hang up
 		case CONNECTION_CLOSED:
-			//this.hangUpButton.pressed.emit();
 			this.stopBlink.emit();
 			pickUpButton.setIcon(new QIcon(new QPixmap("content/pick_up.png")));
 			this.logBrowser.append(message.getMessageType().toString());
 			break;
+			
 		default:
 			this.logBrowser.append(message.getMessageType().toString());
 			break;
 		}
 	}
 
+	/**
+	 * This slot is called when the user press the PickUpButton
+	 */
 	public void pickUpThePhone() {
+		// The signal stopBlink is emitted, and the default icon is set
 		this.stopBlink.emit();
 		pickUpButton.setIcon(new QIcon(new QPixmap("content/pick_up.png")));
 		this.defaultColor = true;
@@ -157,6 +203,9 @@ public class PhoneWidget extends QWidget {
 		this.line.pickUp();
 	}
 
+	/**
+	 * This slot is called when the HangUpButton is pressed
+	 */
 	public void hangUpThePhone() {
 		this.stopBlink.emit();
 		hangUpButton.setIcon(new QIcon(new QPixmap("content/hang_up.png")));
@@ -166,11 +215,18 @@ public class PhoneWidget extends QWidget {
 		this.line.hangUp();
 	}
 
+	/**
+	 * This slot is called when the user choose a phone number in the comboBox
+	 * @param number
+	 */
 	public void dialing(String number) {
 		this.line.dialTo(number);
 		this.logBrowser.append(number);
 	}
 
+	/**
+	 * The slot sendMessage() is called when the button Send is called
+	 */
 	public void sendMessage() {
 		String message = this.messageEdit.toPlainText();
 		if (!message.equals("")) {
@@ -179,14 +235,20 @@ public class PhoneWidget extends QWidget {
 		}
 	}
 
+	/**
+	 * This function is called when the button clear is pressed. This function erase the content of the textBrowser
+	 */
 	public void clearTheLog() {
 		this.logBrowser.clear();
 	}
 
+	/**
+	 * This slot is called when the timer emit the signal timerOut
+	 * When the line is free, the pickUp button blink, and when the line is busy, the hangUp button blink
+	 */
 	public void blink() {
 		switch (this.line.getState()) {
 		case FREE:
-			this.logBrowser.append("RING!!");
 			if (this.defaultColor) {
 				pickUpButton.setIcon(new QIcon(new QPixmap(
 						"content/pick_up_blink.png")));
@@ -199,7 +261,6 @@ public class PhoneWidget extends QWidget {
 			break;
 
 		case BUSY:
-			this.logBrowser.append("Recipient is busy, please hang up!");
 			if (this.defaultColor) {
 				hangUpButton.setIcon(new QIcon(new QPixmap(
 						"content/hang_up_blink.png")));
@@ -214,6 +275,11 @@ public class PhoneWidget extends QWidget {
 		this.timer.start();
 	}
 
+	/**
+	 * This slot is called when the button Transfer is pressed
+	 * We create a DialogWindow, and if the user press "OK", we add a transfer rule, 
+	 * and if he press "Cancel", we remove the transfer rule
+	 */
 	public void askForTransfert() {
 
 		String transfer = QInputDialog.getItem(this, "Transfer", "Select the  recipient number :", this.directory, 0, false);
