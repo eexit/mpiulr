@@ -181,13 +181,13 @@ public class Connection extends Thread implements IConnection {
 				AutoCommutator.getInstance().sendMessage(this.callerPhoneNumber, new Message(
 					MessageType.UNKNOWN_NUMBER, this.callerPhoneNumber, this.recipientPhoneNumber
 				));
+			} else {
+				// Sends a call transfer exist request
+				IEvent call_trans_event = new Event(EventType.CALL_TRANSFER_REQUEST);
+				call_trans_event.addAttribute(ExchangeAttributeNames.CALLER_PHONE_NUMBER, this.callerPhoneNumber);
+				call_trans_event.addAttribute(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER, this.recipientPhoneNumber);
+				AutoCommutator.getInstance().sendEvent(call_trans_event);
 			}
-
-			// Sends a call transfer exist request
-			IEvent call_trans_event = new Event(EventType.CALL_TRANSFER_REQUEST);
-			call_trans_event.addAttribute(ExchangeAttributeNames.CALLER_PHONE_NUMBER, this.callerPhoneNumber);
-			call_trans_event.addAttribute(ExchangeAttributeNames.RECIPIENT_PHONE_NUMBER, this.recipientPhoneNumber);
-			AutoCommutator.getInstance().sendEvent(call_trans_event);
 			break;
 
 		// When the call transfer returns a number
