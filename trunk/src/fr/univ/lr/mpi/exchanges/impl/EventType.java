@@ -76,13 +76,5 @@ public enum EventType {
 	/**
 	 * When the answering machine sends message to the answering machine owner
 	 */
-	ANSWERING_MESSAGE,
-	/**
-	 * when need answering machine home message
-	 */
-	DIALING,
-	/**
-	 * Send a message
-	 */
-	MESSAGE_TRANSFER;
+	ANSWERING_MESSAGE;
 }
