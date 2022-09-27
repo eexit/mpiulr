@@ -3,9 +3,9 @@
 *Imported from Google Code / SVN*
 
 ## Author
- - Elian Oriou elian.oriou@gmail.com
- - Joris Berthelot admin@eexit.net
- - Etienne Ragonneau etienne.ragonneau@gmail.com
- - Tony Faucher faucher.tony85@gmail.com
- - Laurent Le Moine laurent.le.moine17@gmail.com
+ - Elian Oriou
+ - Joris Berthelot
+ - Etienne Ragonneau
+ - Tony Faucher
+ - Laurent Le Moine
  
