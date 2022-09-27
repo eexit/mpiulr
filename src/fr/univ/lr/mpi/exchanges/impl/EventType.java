@@ -6,7 +6,7 @@ package fr.univ.lr.mpi.exchanges.impl;
  * An enumerated type. Represents all event type (connections between
  * AutoCommutator and all registered services).
  * 
- * @author Elian ORIOU <elian.oriou@gmail.com>
+ * @author Elian ORIOU
  */
 public enum EventType {
 	/**

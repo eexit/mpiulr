@@ -17,7 +17,7 @@ import fr.univ.lr.mpi.services.IService;
 /**
  * Answering Service
  * 
- * @author FAUCHER Tony <faucher.tony85@gmail.com>
+ * @author FAUCHER Tony
  */
 public class AnsweringService extends Thread implements IService {
 

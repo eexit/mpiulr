@@ -14,7 +14,7 @@ import fr.univ.lr.mpi.services.IService;
 /**
  * Billing Service
  * 
- * @author FAUCHER Tony <faucher.tony85@gmail.com>
+ * @author FAUCHER Tony
  */
 public class BillingService extends Thread implements IService {
 

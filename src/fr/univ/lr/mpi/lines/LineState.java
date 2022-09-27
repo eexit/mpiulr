@@ -5,7 +5,7 @@ package fr.univ.lr.mpi.lines;
  * 
  * An enumerated type. Contains all of possibles line states.
  * 
- * @author Elian ORIOU <elian.oriou@gmail.com>
+ * @author Elian ORIOU
  */
 public enum LineState {
 	/**

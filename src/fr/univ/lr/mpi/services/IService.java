@@ -6,7 +6,7 @@ import fr.univ.lr.mpi.handlers.EventHandler;
 /**
  * IService.java
  * 
- * @author FAUCHER Tony <faucher.tony85@gmail.com>
+ * @author FAUCHER Tony
  */
 public interface IService extends EventHandler {
 	

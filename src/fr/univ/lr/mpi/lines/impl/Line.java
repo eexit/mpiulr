@@ -17,14 +17,14 @@ import fr.univ.lr.mpi.simulation.PhoneWidget;
 /**
  * Line.java
  * 
- * @author Joris Berthelot <joris.berthelot@gmail.com>
+ * @author Joris Berthelot
  */
 public class Line implements ILine {
 
 	/**
 	 * Phone number assigned to the line
 	 * 
-	 * @author Joris Berthelot <joris.berthelot@gmail.com>
+	 * @author Joris Berthelot
 	 */
 	private String phoneNumber;
 
@@ -41,35 +41,35 @@ public class Line implements ILine {
 	/**
 	 * Line current state
 	 * 
-	 * @author Joris Berthelot <joris.berthelot@gmail.com>
+	 * @author Joris Berthelot
 	 */
 	private LineState state;
 
 	/**
 	 * Concentrator container
 	 * 
-	 * @author Joris Berthelot <joris.berthelot@gmail.com>
+	 * @author Joris Berthelot
 	 */
 	private Concentrator concentrator;
 
 	/**
 	 * Phone widget containter
 	 * 
-	 * @author Joris Berthelot <joris.berthelot@gmail.com>
+	 * @author Joris Berthelot
 	 */
 	private PhoneWidget phone;
 
 	/**
 	 * Boolean value of the ringing state of the line
 	 * 
-	 * @author Joris Berthelot <joris.berthelot@gmail.com>
+	 * @author Joris Berthelot
 	 */
 	private Boolean isRinging;
 
 	/**
 	 * Line contructor
 	 * 
-	 * @author Joris Berthelot <joris.berthelot@gmail.com>
+	 * @author Joris Berthelot
 	 * @param number
 	 */
 	public Line(String number) {
@@ -84,7 +84,7 @@ public class Line implements ILine {
 	/**
 	 * Phone widget setter
 	 * 
-	 * @author Joris Berthelot <joris.berthelot@gmail.com>
+	 * @author Joris Berthelot
 	 * @param phone
 	 */
 	public void setPhone(PhoneWidget phone) {
@@ -94,7 +94,7 @@ public class Line implements ILine {
 	/**
 	 * Concentrator setter
 	 * 
-	 * @author Joris Berthelot <joris.berthelot@gmail.com>
+	 * @author Joris Berthelot
 	 * @param concentrator
 	 */
 	public void setConcentrator(Concentrator concentrator) {
@@ -104,7 +104,7 @@ public class Line implements ILine {
 	/**
 	 * Gets the line phone number
 	 * 
-	 * @author Joris Berthelot <joris.berthelot@gmail.com>
+	 * @author Joris Berthelot
 	 * @return
 	 */
 	public String getPhoneNumber() {
@@ -114,7 +114,7 @@ public class Line implements ILine {
 	/**
 	 * Message listener
 	 * 
-	 * @author Joris Berthelot <joris.berthelot@gmail.com>
+	 * @author Joris Berthelot
 	 * @param message
 	 */
 	public void receiveMessage(IMessage message) {
@@ -156,7 +156,7 @@ public class Line implements ILine {
 	/**
 	 * Line pick up action:
 	 * 
-	 * @author Joris Berthelot <joris.berthelot@gmail.com>
+	 * @author Joris Berthelot
 	 */
 	public void pickUp() {
 		if (this.state.equals(LineState.BUSY)) {
@@ -193,7 +193,7 @@ public class Line implements ILine {
 	/**
 	 * Line hang up action
 	 * 
-	 * @author Joris Berthelot <joris.berthelot@gmail.com>
+	 * @author Joris Berthelot
 	 */
 	public void hangUp() {
 		if (this.state.equals(LineState.FREE)) {
@@ -216,7 +216,7 @@ public class Line implements ILine {
 	/**
 	 * Dial action
 	 * 
-	 * @author Joris Berthelot <joris.berthelot@gmail.com>
+	 * @author Joris Berthelot
 	 * @param phoneNumber
 	 */
 	public void dialTo(String phoneNumber) {
@@ -237,7 +237,7 @@ public class Line implements ILine {
 	/**
 	 * Sends a message
 	 * 
-	 * @author Joris Berthelot <joris.berthelot@gmail.com>
+	 * @author Joris Berthelot
 	 * @param content
 	 */
 	public void sendMessage(String content) {
@@ -259,7 +259,7 @@ public class Line implements ILine {
 	/**
 	 * Gets the current line state
 	 * 
-	 * @author Joris Berthelot <joris.berthelot@gmail.com>
+	 * @author Joris Berthelot
 	 * @return
 	 */
 	public LineState getState() {

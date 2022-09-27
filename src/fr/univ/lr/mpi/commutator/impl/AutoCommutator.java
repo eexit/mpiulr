@@ -24,7 +24,7 @@ import fr.univ.lr.mpi.simulation.MessageObserver;
 /**
  * AutoCommutator.java
  * 
- * @author Elian ORIOU <elian.oriou@gmail.com>
+ * @author Elian ORIOU
  */
 public class AutoCommutator implements MessageHandler, EventHandler {
 	
@@ -316,7 +316,7 @@ public class AutoCommutator implements MessageHandler, EventHandler {
 	 * Tries to recover an existing connection following a fast hang up and pick
 	 * up
 	 * 
-	 * @author Joris Berthelot <joris.berthelot@gmail.com>
+	 * @author Joris Berthelot
 	 * @param phoneNumber
 	 * @return
 	 */

@@ -17,7 +17,7 @@ import fr.univ.lr.mpi.lines.impl.Line;
 
 /**
  * 
- * @author Elian ORIOU <elian.oriou@gmail.com>
+ * @author Elian ORIOU
  * 
  */
 

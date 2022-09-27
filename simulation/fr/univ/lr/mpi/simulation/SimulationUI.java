@@ -17,7 +17,7 @@ import fr.univ.lr.mpi.lines.impl.Line;
 
 /**
  * 
- * @author FAUCHER Tony <faucher.tony85@gmail.com>
+ * @author FAUCHER Tony
  * 
  */
 

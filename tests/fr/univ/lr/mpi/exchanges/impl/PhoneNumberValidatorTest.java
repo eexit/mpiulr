@@ -8,7 +8,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 /**
- * @author Joris Berthelot <joris.berthelot@gmail.com>
+ * @author Joris Berthelot
  *
  */
 public class PhoneNumberValidatorTest {

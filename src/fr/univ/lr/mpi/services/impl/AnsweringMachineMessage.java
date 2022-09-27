@@ -5,7 +5,7 @@ import java.util.Date;
 /**
  * AnsweringService.java
  * 
- * @author FAUCHER Tony <faucher.tony85@gmail.com>
+ * @author FAUCHER Tony
  */
 public class AnsweringMachineMessage {
 

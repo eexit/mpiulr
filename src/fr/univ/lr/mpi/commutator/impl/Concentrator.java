@@ -12,7 +12,7 @@ import fr.univ.lr.mpi.lines.ILine;
 /**
  * Concentrator.java
  * 
- * @author Elian ORIOU <elian.oriou@gmail.com>
+ * @author Elian ORIOU
  */
 public class Concentrator {
 	

@@ -6,7 +6,7 @@ import fr.univ.lr.mpi.handlers.MessageHandler;
 /**
  * IConnection.java
  *
- * @author Joris Berthelot <joris.berthelot@gmail.com>
+ * @author Joris Berthelot
  */
 public interface IConnection extends MessageHandler, EventHandler {
 

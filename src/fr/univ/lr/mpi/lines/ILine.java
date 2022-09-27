@@ -8,13 +8,13 @@ import fr.univ.lr.mpi.handlers.MessageHandler;
 /**
  * ILine.java
  *
- * @author Joris Berthelot <joris.berthelot@gmail.com>
+ * @author Joris Berthelot
  */
 public interface ILine extends MessageHandler {
 	/**
 	 * Gets the line phone number
 	 * 
-	 * @author Joris Berthelot <joris.berthelot@gmail.com>
+	 * @author Joris Berthelot
 	 * @return
 	 */
 	public String getPhoneNumber();
@@ -22,7 +22,7 @@ public interface ILine extends MessageHandler {
 	/**
 	 * Sets a new connection to the line
 	 * 
-	 * @author Joris Berthelot <joris.berthelot@gmail.com>
+	 * @author Joris Berthelot
 	 * @param connection
 	 */
 	public void setConcentrator(Concentrator c);
@@ -30,7 +30,7 @@ public interface ILine extends MessageHandler {
 	/**
 	 * Gets the current line state
 	 * 
-	 * @author Joris Berthelot <joris.berthelot@gmail.com>
+	 * @author Joris Berthelot
 	 * @return
 	 */
 	public LineState getState();
@@ -38,7 +38,7 @@ public interface ILine extends MessageHandler {
 	/**
 	 * Line pick up action:
 	 * 
-	 * @author Joris Berthelot <joris.berthelot@gmail.com>
+	 * @author Joris Berthelot
 	 * @throws LineException 
 	 */
 	public void pickUp() throws LineException;
@@ -46,14 +46,14 @@ public interface ILine extends MessageHandler {
 	/**
 	 * Line hang up action
 	 * 
-	 * @author Joris Berthelot <joris.berthelot@gmail.com>
+	 * @author Joris Berthelot
 	 */
 	public void hangUp();
 	
 	/**
 	 * Dial action
 	 * 
-	 * @author Joris Berthelot <joris.berthelot@gmail.com>
+	 * @author Joris Berthelot
 	 * @param phoneNumber
 	 * @throws PhoneNumberValidatorException 
 	 * @throws LineException 

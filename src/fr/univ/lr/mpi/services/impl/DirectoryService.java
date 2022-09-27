@@ -14,7 +14,7 @@ import fr.univ.lr.mpi.services.IService;
 /**
  * The directory service
  * 
- * @author FAUCHER Tony <faucher.tony85@gmail.com>
+ * @author FAUCHER Tony
  */
 public class DirectoryService extends Thread implements IService {
 

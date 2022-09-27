@@ -18,70 +18,70 @@ import fr.univ.lr.mpi.exchanges.impl.MessageType;
 /**
  * Connection.java
  * 
- * @author Joris Berthelot <joris.berthelot@gmail.com>
+ * @author Joris Berthelot
  */
 public class Connection extends Thread implements IConnection {
 
 	/**
 	 * Hang up timer delay value (in seconds)
 	 * 
-	 * @author Joris Berthelot <joris.berthelot@gmail.com>
+	 * @author Joris Berthelot
 	 */
 	final public static int HANGUP_TIMEOUT = 3;
 
 	/**
 	 * Answering machine timer delay (in seconds)
 	 * 
-	 * @author Joris Berthelot <joris.berthelot@gmail.com>
+	 * @author Joris Berthelot
 	 */
 	final public static int ANSWERING_MACHINE_TIMEOUT = 8;
 
 	/**
 	 * Answering machine phone number
 	 * 
-	 * @author Joris Berthelot <joris.berthelot@gmail.com>
+	 * @author Joris Berthelot
 	 */
 	public static final String ANSWERING_MACHINE_PHONE_NUMBER = "3103";
 
 	/**
 	 * Caller line
 	 * 
-	 * @author Joris Berthelot <joris.berthelot@gmail.com>
+	 * @author Joris Berthelot
 	 */
 	private String callerPhoneNumber;
 
 	/**
 	 * Called line
 	 * 
-	 * @author Joris Berthelot <joris.berthelot@gmail.com>
+	 * @author Joris Berthelot
 	 */
 	private String calledPhoneNumber;
 
 	/**
 	 * Message/Event issuer
 	 * 
-	 * @author Joris Berthelot <joris.berthelot@gmail.com>
+	 * @author Joris Berthelot
 	 */
 	private String issuerPhoneNumber;
 
 	/**
 	 * Message/Event recipient
 	 * 
-	 * @author Joris Berthelot <joris.berthelot@gmail.com>
+	 * @author Joris Berthelot
 	 */
 	private String recipientPhoneNumber;
 
 	/**
 	 * Connection start time
 	 * 
-	 * @author Joris Berthelot <joris.berthelot@gmail.com>
+	 * @author Joris Berthelot
 	 */
 	private Calendar startTime;
 
 	/**
 	 * Connection end time
 	 * 
-	 * @author Joris Berthelot <joris.berthelot@gmail.com>
+	 * @author Joris Berthelot
 	 */
 	private Calendar endTime;
 
@@ -89,21 +89,21 @@ public class Connection extends Thread implements IConnection {
 	 * Connection timer which will be launch when one of the connection lines
 	 * hang up. When to timer reaches it limit, the connection is destroyed.
 	 * 
-	 * @author Joris Berthelot <joris.berthelot@gmail.com>
+	 * @author Joris Berthelot
 	 */
 	private Timer timer;
 
 	/**
 	 * Connection state (established or not with the recipient)
 	 * 
-	 * @author Joris Berthelot <joris.berthelot@gmail.com>
+	 * @author Joris Berthelot
 	 */
 	private Boolean connected;
 
 	/**
 	 * Class constructor
 	 * 
-	 * @author Joris Berthelot <joris.berthelot@gmail.com>
+	 * @author Joris Berthelot
 	 * @param callerLine
 	 */
 	public Connection(String callerPhoneNumber) {
@@ -128,7 +128,7 @@ public class Connection extends Thread implements IConnection {
 	 * Returns the state of the connection (is it established with the recipient
 	 * or not)
 	 * 
-	 * @author Joris Berthelot <joris.berthelot@gmail.com>
+	 * @author Joris Berthelot
 	 * @return
 	 */
 	public boolean isConnected() {
@@ -138,7 +138,7 @@ public class Connection extends Thread implements IConnection {
 	/**
 	 * Gets the caller line
 	 * 
-	 * @author Joris Berthelot <joris.berthelot@gmail.com>
+	 * @author Joris Berthelot
 	 * @return
 	 */
 	public String getCallerPhoneNumber() {
@@ -148,7 +148,7 @@ public class Connection extends Thread implements IConnection {
 	/**
 	 * Gets the called line
 	 * 
-	 * @author Joris Berthelot <joris.berthelot@gmail.com>
+	 * @author Joris Berthelot
 	 * @return
 	 */
 	public String getCalledPhoneNumber() {
@@ -158,7 +158,7 @@ public class Connection extends Thread implements IConnection {
 	/**
 	 * Event listener
 	 * 
-	 * @author Joris Berthelot <joris.berthelot@gmail.com>
+	 * @author Joris Berthelot
 	 * @param event
 	 */
 	public void receiveEvent(IEvent event) {
@@ -222,7 +222,7 @@ public class Connection extends Thread implements IConnection {
 	/**
 	 * Message listener
 	 * 
-	 * @author Joris Berthelot <joris.berthelot@gmail.com>
+	 * @author Joris Berthelot
 	 */
 	public void receiveMessage(IMessage message) {
 		
@@ -444,7 +444,7 @@ public class Connection extends Thread implements IConnection {
 	/**
 	 * Timer killer caller from AutoCommutator
 	 * 
-	 * @author Joris Berthelot <joris.berthelot@gmail.com>
+	 * @author Joris Berthelot
 	 */
 	public void killsTimer() {
 		if (this.isConnected() && null != this.timer) {

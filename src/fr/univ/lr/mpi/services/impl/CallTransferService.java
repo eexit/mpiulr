@@ -14,7 +14,7 @@ import fr.univ.lr.mpi.services.IService;
 /**
  * CallTransfertService.java
  * 
- * @author FAUCHER Tony <faucher.tony85@gmail.com>
+ * @author FAUCHER Tony
  */
 public class CallTransferService extends Thread implements IService {
 

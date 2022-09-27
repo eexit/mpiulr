@@ -6,7 +6,7 @@ package fr.univ.lr.mpi.exchanges.impl;
  * Class that contains only constants. These constants concerns attribute name
  * into Event and Message Exchange Units.
  * 
- * @author Elian ORIOU <elian.oriou@gmail.com>
+ * @author Elian ORIOU
  */
 public class ExchangeAttributeNames {
 	/**

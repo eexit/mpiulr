@@ -5,7 +5,7 @@ import java.util.Date;
 /**
  * Billing Entry
  * 
- * @author FAUCHER Tony <faucher.tony85@gmail.com>
+ * @author FAUCHER Tony
  */
 public class BillingEntry {
 

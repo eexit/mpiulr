@@ -5,7 +5,7 @@ package fr.univ.lr.mpi.exchanges.impl;
  * 
  * An enumerated type. Contains all messages exchanged within our system.
  * 
- * @author Elian ORIOU <elian.oriou@gmail.com>
+ * @author Elian ORIOU
  */
 public enum MessageType {
 	/**

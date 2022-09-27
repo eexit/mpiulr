@@ -11,7 +11,7 @@ import org.junit.Test;
 /**
  * MPI_PROJECT/fr.univ.lr.mpi.services.impl/BillingEntryTest.java
  *
- * @author Joris Berthelot <joris.berthelot@gmail.com>
+ * @author Joris Berthelot
  * @date Mar 1, 2011
  *
  */
